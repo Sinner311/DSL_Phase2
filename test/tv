@@ -1,0 +1,143 @@
+<template>
+  <div id="app">
+    <header>
+      <div class="header-content">
+        <img src="./assets/logo.jpg" alt="Logo" class="logo" />
+        <h1>MFU DSL EQUEUE</h1>
+        <button class="logout-button">Logout</button>
+      </div>
+    </header>
+    <main>
+      <section class="booking-info">
+        <h2>คิวหมายเลข 44</h2>
+        <h3>ช่องบริการ 1</h3>
+        <div class="queue-info">
+          <div class="service-channel">
+            <p>ช่องบริการ</p>
+            <p>1</p>
+          </div>
+          <div class="queue-number">
+            <p>หมายเลขคิว</p>
+            <p>45</p>
+          </div>
+        </div>
+        <div class="queue-status">
+          <p>จำนวนคนรอคิว: 8</p>
+        </div>
+        <p class="note alert">เจ้าหน้าที่ที่พักกลางวัน จะกลับมาให้บริการ เวลา 13.00 PM</p>
+      </section>
+    </main>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "App",
+};
+</script>
+
+<style scoped>
+#app {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+.logo {
+  width: 100px;
+}
+
+header {
+  background-color: #4a90e2;
+  color: white;
+  padding: 20px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0 20px;
+}
+
+.logout-button {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #c9302c;
+}
+
+main {
+  padding: 20px;
+}
+
+.booking-info {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.queue-info {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.service-channel, .queue-number {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 45%;
+}
+
+.note {
+  color: red;
+  margin: 10px 0;
+}
+
+.alert {
+  font-weight: bold;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+footer {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+</style>
