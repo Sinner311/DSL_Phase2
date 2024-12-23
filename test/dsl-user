@@ -4,7 +4,7 @@
       <div class="header-content">
         <img src="./assets/logo.jpg" alt="Logo" class="logo" />
         <h1>MFU DSL EQUEUE</h1>
-        <button class="logout-button">Logout</button>
+        <button class="logout-button">ออกจากระบบ</button>
       </div>
     </header>
     <main>
