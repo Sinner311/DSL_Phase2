@@ -19,7 +19,7 @@
           <p>8.00 AM - 16.30 PM</p>
         </div>
         <p class="note">ยังไม่ถึงวันนัดหมายของคุณ</p>
-        <p class="note">คุณสามารถกดจองคิวเพื่อติดตามได้เท่านั้น</p>
+        <p class="note">คุณสามารถกดจองคิวเพื่อติดต่อด้เท่านั้น</p>
         <div class="dropdown">
           <select v-model="selectedOption">
             <option disabled value="">โปรดเลือกเรื่องที่ต้องการติดต่อ...</option>
