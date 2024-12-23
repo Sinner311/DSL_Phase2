@@ -18,7 +18,27 @@
           </div>
           <div class="queue-number">
             <p>หมายเลขคิว</p>
-            <p>45</p>
+            <p>44</p>
+          </div>
+        </div>
+        <div class="queue-info">
+          <div class="service-channel">
+            <p>ช่องบริการ</p>
+            <p>2</p>
+          </div>
+          <div class="queue-number">
+            <p>หมายเลขคิว</p>
+            <p>43</p>
+          </div>
+        </div>
+        <div class="queue-info">
+          <div class="service-channel">
+            <p>ช่องบริการ</p>
+            <p>3</p>
+          </div>
+          <div class="queue-number">
+            <p>หมายเลขคิว</p>
+            <p>42</p>
           </div>
         </div>
         <div class="queue-status">
