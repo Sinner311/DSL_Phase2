@@ -108,3 +108,31 @@ model web_settings {
 
   @@ignore
 }
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum QueueType {
+  ONE
+  TWO
+  OTHER
+}
+enum Channel {
+  WAIT
+  ONE
+  TWO
+  THREE
+}
+
+enum QueueStatus {
+  WAIT
+  PROCESS
+  FINISH
+  SKIP
+  STOP
+  CANCEL
+  RESET
+}
