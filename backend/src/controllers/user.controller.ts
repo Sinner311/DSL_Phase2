@@ -7,6 +7,7 @@ import {
   addUser,
   getSpecificuser,
   editSpecificuser,
+  getStaff,
 } from "../services/user";
 
 module.exports.userlist = asynchandler(async (req: any, res: any) => {
@@ -97,4 +98,16 @@ export const usereditSpecificuser = asynchandler(async (req: any, res: any) => {
     data: data,
   });
   res.status(200).send(getusereditSpecificuser);
+});
+
+
+
+
+
+
+
+
+export const admingetStaff = asynchandler(async (req: any, res: any) => {
+  const users = await getStaff();
+  res.send(users);
 });

@@ -37,5 +37,8 @@
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.46",
     "passport": "^0.7.0"
-  }
+  },
+  "prisma": {
+  "schema": "src/prisma/schema.prisma"
+}
 }

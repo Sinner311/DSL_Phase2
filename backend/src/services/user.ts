@@ -8,7 +8,7 @@ export async function addUser(users: {
   email: string;
   name: string;
   role: users_role;
-  channel: string | null;
+  channel: number | null;
 }) {
   const res = await prisma.users.create({ data: users });
   return res;
@@ -34,7 +34,7 @@ export async function editSpecificuser(users: {
     name?: string;
     studentid?: string;
     role?: users_role;
-    channel?: string;
+    channel?: number;
     refresh?: string;
   };
 }) {
@@ -45,4 +45,18 @@ export async function editSpecificuser(users: {
     data: users.data,
   });
   return update_user;
+}
+
+
+
+
+
+export async function getStaff() {
+  return await prisma.users.findMany({
+    where: {
+      role: {
+        in: ["ADMIN", "TEACHER"],
+      },
+    },
+  });
 }

@@ -1,48 +1,56 @@
-<script setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import { useCookies } from "vue3-cookies";
+
+const { cookies } = useCookies();
+const accesstoken = cookies.get("accesstoken");
 
 const staffs = ref([]);
 const showAddCard = ref(false);
 const showChangeCard = ref(false);
 const showDeleteCard = ref(false);
 const newEmail = ref('');
-const selectedServiceNumber = ref(null);
+const newChannel = ref<number | null>(null);
+const newEditChannel = ref<number | null>(null);
 const selectedStaffIndex = ref(null);
-let serviceNumber = 1;
+
+function parseJwt(token: string) {
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+const validatePositiveNumber = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (Number(target.value) < 0) {
+    target.value = ''; // ล้างค่าถ้าเป็นค่าลบ
+    newChannel.value = null; // หรือกำหนดค่า `null`
+    alert('Please enter a positive number!');
+  }
+};
 
 const openAddCard = () => {
     showAddCard.value = true;
 };
 
-const confirmAddStaff = () => {
-    if (newEmail.value) {
-        staffs.value.push({
-            email: newEmail.value,
-            serviceNumber: serviceNumber++
-        });
-        newEmail.value = '';
-        showAddCard.value = false;
-        alert('Staff added successfully!');
-    }
-};
-
 const cancelAddStaff = () => {
     newEmail.value = '';
+    newChannel.value = '';
     showAddCard.value = false;
-    alert('Staff addition cancelled.');
 };
 
 const openChangeServiceCard = (index) => {
     selectedStaffIndex.value = index;
     showChangeCard.value = true;
-};
-
-const confirmChangeService = () => {
-    if (selectedServiceNumber.value) {
-        staffs.value[selectedStaffIndex.value].serviceNumber = selectedServiceNumber.value;
-        showChangeCard.value = false;
-        alert('Service channel updated!');
-    }
 };
 
 const cancelChangeService = () => {
@@ -54,40 +62,173 @@ const openDeleteCard = (index) => {
     showDeleteCard.value = true;
 };
 
-const confirmDeleteStaff = () => {
-    staffs.value.splice(selectedStaffIndex.value, 1);
-    showDeleteCard.value = false;
-    alert('Staff removed successfully.');
-};
-
 const cancelDelete = () => {
     showDeleteCard.value = false;
 };
+// ฟังก์ชันดึงข้อมูล Staff จาก backend
+async function getStaff() {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/users/getAllstaff`, {
+      headers: {
+        Authorization: `Bearer ${accesstoken}`,
+      },
+    });
+
+    if (response.status === 200) {
+      staffs.value = response.data.map((staff: any, index: number) => ({
+        ...staff,
+        serviceNumber: index + 1, // เพิ่ม serviceNumber อัตโนมัติ
+      }));
+    } else {
+      throw new Error('Failed to fetch staff data.');
+    }
+  } catch (error) {
+    console.error('Error fetching staff data:', error);
+  }
+}
+
+// เพิ่ม staff
+const confirmAddStaff = async () => {
+  if (newEmail.value && newChannel.value) {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_IP}/api/users/addTeacher`,
+        { email: newEmail.value ,
+          channel: newChannel.value
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accesstoken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        staffs.value.push({
+          email: newEmail.value,
+          channel: newChannel.value,
+        });
+        newEmail.value = '';
+        newChannel.value = '';
+        showAddCard.value = false;
+      } else {
+        throw new Error('Failed to add staff.');
+      }
+    } catch (error) {
+      console.error('Error adding staff:', error);
+    }
+  }
+};
+
+// ลบ staff
+const confirmDeleteStaff = async () => {
+  console.log(staffs.value[selectedStaffIndex.value].email);
+  try {
+    if(staffs.value[selectedStaffIndex.value].role === "ADMIN"){
+      const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/users/getusereditSpecificuser`,{
+      email:staffs.value[selectedStaffIndex.value].email,
+      data:{
+        channel:0,
+      }
+    })
+    isMonitor.value = false;
+    return;
+    }
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/users/getusereditSpecificuser`,{
+      email:staffs.value[selectedStaffIndex.value].email,
+      data:{
+        channel:0,
+        role:"STUDENT"
+      }
+    })
+    if (res.status !== 200) {
+      throw Error(res.statusText)
+    }
+    staffs.value.splice(selectedStaffIndex.value, 1);
+    showDeleteCard.value = false;
+    await Swal.fire({
+        icon: "success",
+        title: "คุณแก้ไขเจ้าหน้าที่สำเร็จ",
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+    return res.data;
+    
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const confirmEditStaff = async () => {
+  try {
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/users/getusereditSpecificuser`,{
+      email:staffs.value[selectedStaffIndex.value].email,
+      data:{
+        channel:newEditChannel.value
+      }
+    })
+    if (res.status !== 200) {
+      throw Error(res.statusText)
+    }
+    // staffs.value.splice(selectedStaffIndex.value, 1);
+    showChangeCard.value = false;
+    await Swal.fire({
+        icon: "success",
+        title: "เปลี่ยนช่องบริการสำเร็จ",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      getStaff();
+    return res.data;
+
+    
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// เรียกข้อมูลเมื่อคอมโพเนนต์โหลด
+onMounted(() => {
+  getStaff();
+});
 </script>
 
 <template>
   <div class="p-6 text-center">
     <div class="mb-12">
-      <button @click="openAddCard" class="bg-blue-500 text-white px-8 py-4 rounded text-xl hover:bg-blue-700">เพิ่ม Staff</button>
+      <button @click="openAddCard" class="bg-blue-500 text-white px-8 py-4 rounded text-xl hover:bg-blue-700">
+        เพิ่ม Staff
+      </button>
     </div>
 
+    <!-- Add Staff Card -->
     <div v-if="showAddCard" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center">
         <h2 class="text-xl font-bold mb-4">Add New Staff</h2>
-        <input v-model="newEmail" type="email" placeholder="Enter staff email" class="border border-gray-300 p-2 rounded w-full mb-4" />
+        <input v-model="newEmail" type="email" placeholder="Enter email" class="border border-gray-300 p-2 rounded w-full mb-4" />
+        <input
+  v-model.number="newChannel"
+  @input="validatePositiveNumber"
+  type="number"
+  placeholder="Enter channel"
+  class="border border-gray-300 p-2 rounded w-full mb-4"
+/>
+
         <div class="flex justify-around">
-          <button @click="confirmAddStaff" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">เพิ่ม Staff</button>
           <button @click="cancelAddStaff" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">ยกเลิก</button>
+          <button @click="confirmAddStaff" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">เพิ่ม Staff</button>
         </div>
       </div>
     </div>
 
+    <!-- Staff List -->
     <div class="mt-8">
       <h2 class="text-3xl font-bold mb-4 text-red-500">STAFF</h2>
-      <div v-for="(staff, index) in staffs" :key="index" class="inline-block m-4">
-        <div class="border border-gray-300 rounded-lg shadow-lg p-6 w-64 text-center">
+      <div v-for="(staff, index) in staffs" :key="staff.id" class="inline-block m-4">
+        <div class="border border-gray-300 rounded-lg shadow-lg p-6 w-70 text-center">
           <p class="text-lg font-medium">{{ staff.email }}</p>
-          <p class="mt-2">ช่องบริการที่ : <strong>{{ staff.serviceNumber }}</strong></p>
+          <p class="mt-2">ช่องบริการที่ : <strong>{{ staff.channel }}</strong></p>
           <div class="mt-4 flex justify-center space-x-4">
             <button @click="openDeleteCard(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">ลบ</button>
             <button @click="openChangeServiceCard(index)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">เปลี่ยนช่องบริการ</button>
@@ -96,33 +237,36 @@ const cancelDelete = () => {
       </div>
     </div>
 
-    <div v-if="showChangeCard" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center">
-        <h2 class="text-xl font-bold mb-4">เปลี่ยนช่องบริการ</h2>
-        <select v-model="selectedServiceNumber" class="border border-gray-300 p-2 rounded w-full mb-4">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-        <div class="flex justify-around">
-          <button @click="confirmChangeService" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">ยืนยัน</button>
-          <button @click="cancelChangeService" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">ยกเลิก</button>
-        </div>
-      </div>
-    </div>
-
+    <!-- Confirm Delete -->
     <div v-if="showDeleteCard" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center">
         <h2 class="text-xl font-bold mb-4">แน่ใจที่จะลบไหม?</h2>
-        <p>แน่ใจที่จะลบไหม?</p>
         <div class="flex justify-around mt-4">
-          <button @click="confirmDeleteStaff" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">ใช่</button>
           <button @click="cancelDelete" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">ไม่</button>
+          <button @click="confirmDeleteStaff" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">ใช่</button>
         </div>
       </div>
     </div>
   </div>
-</template>
 
-<style scoped>
-</style>
+  <div v-if="showChangeCard" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+  <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center">
+    <h2 class="text-xl font-bold mb-4">เปลี่ยนช่องบริการ</h2>
+    <input
+  v-model.number="newEditChannel"
+  @input="validatePositiveNumber"
+  type="number"
+  placeholder="Enter new channel"
+  class="border border-gray-300 p-2 rounded w-full mb-4"
+/>
+    <div class="flex justify-around">
+      <button @click="cancelChangeService" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">
+        ยกเลิก
+      </button>
+      <button @click="confirmEditStaff" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+        ยืนยัน
+      </button>
+    </div>
+  </div>
+</div>
+</template>
