@@ -3,7 +3,7 @@ import "dotenv/config";
 import { jwtValidate } from "./middleware/jwt.middleware";
 import cookie from "cookie-parser";
 import session from "express-session";
-import { resetQueueOrder } from "./services/queueRepository";
+// import { resetQueueOrder } from "./services/queueRepository";
 
 const path = require("path");
 const cors = require("cors");
@@ -11,8 +11,8 @@ const passport = require("passport");
 
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
-const queueRouter = require("./routes/queue.route");
-const historyRouter = require("./routes/history.route");
+// const queueRouter = require("./routes/queue.route");
+// const historyRouter = require("./routes/history.route");
 
 const port = parseInt(process.env.PORT!) || 7777; // Port for the server
 const app = express();
@@ -29,10 +29,10 @@ console.log(new Date().toLocaleString());
 ringout();
 
 // jwtValidate
-app.use("/users", userRouter);
-app.use("/login", authRouter);
-app.use("/queue", queueRouter);
-app.use("/history", historyRouter);
+app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
+// app.use("/api/queue", queueRouter);
+// app.use("/api/history", historyRouter);
 
 app.listen(port, function () {
   console.log("Server is ready at ", port);
@@ -48,7 +48,7 @@ async function ringout() {
       now.getSeconds() >= 0
     ) {
       console.log("Resetting queue order...");
-      await resetQueueOrder();
+      // await resetQueueOrder();
     }
-  }, 1000); // ตรวจสอบทุกๆ 1 วินาที (1000 มิลลิวินาที)
+  }, 5000); // ตรวจสอบทุกๆ 1 วินาที (1000 มิลลิวินาที)
 }

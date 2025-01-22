@@ -1,49 +1,48 @@
 import prisma from "../prisma/client";
-import { Role, User } from "@prisma/client";
+import { users_role, users } from "@prisma/client";
 export async function getUser() {
-  return await prisma.user.findMany();
+  return await prisma.users.findMany();
 }
-export async function addUser(user: {
+export async function addUser(users: {
   studentid: string;
   email: string;
   name: string;
-  role: Role;
-  channel: number;
-  emailVerified?: boolean;
+  role: users_role;
+  channel: string | null;
 }) {
-  const res = await prisma.user.create({ data: user });
+  const res = await prisma.users.create({ data: users });
   return res;
 }
-export async function getSpecificuser(user: {
+export async function getSpecificuser(users: {
   email: string;
   studentid?: string;
 }) {
-  console.log(user.studentid);
-  const res = await prisma.user.findUnique({
+  console.log(users.studentid);
+  const res = await prisma.users.findUnique({
     where: {
-      email: user.email,
-      studentid: user.studentid,
+      email: users.email,
+      studentid: users.studentid,
     },
   });
   return res;
 }
 
-export async function editSpecificuser(user: {
+export async function editSpecificuser(users: {
   email: string;
   data: {
     email?: string;
     name?: string;
     studentid?: string;
-    role?: Role;
-    channel?: number;
+    role?: users_role;
+    channel?: string;
     refresh?: string;
   };
 }) {
-  const update_user = await prisma.user.update({
+  const update_user = await prisma.users.update({
     where: {
-      email: user.email,
+      email: users.email,
     },
-    data: user.data,
+    data: users.data,
   });
   return update_user;
 }

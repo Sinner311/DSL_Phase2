@@ -26,7 +26,7 @@ model days {
 model history_booking {
   historyid     Int       @id @default(autoincrement())
   datetime      DateTime? @db.DateTime(0)
-  studentid     Int?
+  studentid     String?   @db.VarChar(10)
   bookingdateid Int?
   status        String?   @db.VarChar(20)
   type          Int?      @db.TinyInt
@@ -40,7 +40,7 @@ model history_booking {
 model history_queue {
   historyid Int       @id @default(autoincrement())
   datetime  DateTime? @db.DateTime(0)
-  studentid Int?
+  studentid String?   @db.VarChar(10)
   queueid   Int?
   type      Int?      @db.TinyInt
   channel   String?   @db.VarChar(20)
@@ -69,7 +69,7 @@ model list_of_round {
 model queues {
   queueid       Int             @id @default(autoincrement())
   time          DateTime?       @db.Time(0)
-  studentID     Int?
+  studentid     String?         @db.VarChar(10)
   type          Int?            @db.TinyInt
   channel       String?         @db.VarChar(20)
   status        String?         @db.VarChar(20)
@@ -90,49 +90,29 @@ model rounds {
   @@index([Listid], map: "Listid")
 }
 
-model users {
-  id              Int               @id @default(autoincrement())
-  email           String            @unique(map: "email") @db.VarChar(100)
-  studentid       Int?              @unique(map: "studentid")
-  name            String?           @db.VarChar(100)
-  role            String?           @db.VarChar(20)
-  channel         String?           @db.VarChar(20)
-  history_booking history_booking[]
-  history_queue   history_queue[]
-}
-
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model web_settings {
-  web_status Int
-  show_list  String? @db.Text
+  web_status     Int
+  show_list      String? @db.Text
+  web_break_text String  @db.VarChar(50)
 
   @@ignore
 }
 
-enum Role {
+model users {
+  id              Int               @id @default(autoincrement())
+  email           String            @unique(map: "email") @db.VarChar(100)
+  studentid       String?           @unique(map: "studentid") @db.VarChar(10)
+  name            String?           @db.VarChar(100)
+  role            users_role        @default(STUDENT)
+  channel         String?           @db.VarChar(20)
+  refresh         String?           @db.VarChar(1046)
+  history_booking history_booking[]
+  history_queue   history_queue[]
+}
+
+enum users_role {
   STUDENT
   TEACHER
   ADMIN
-}
-
-enum QueueType {
-  ONE
-  TWO
-  OTHER
-}
-enum Channel {
-  WAIT
-  ONE
-  TWO
-  THREE
-}
-
-enum QueueStatus {
-  WAIT
-  PROCESS
-  FINISH
-  SKIP
-  STOP
-  CANCEL
-  RESET
 }

@@ -47,18 +47,18 @@ export const googleauth = asynchandler(
     // ! ------------------------- login or register -------------------------
 
     // ! find user in database
-    const user = await getSpecificuser({ email: userDetails.email });
+    const users = await getSpecificuser({ email: userDetails.email });
 
     // ! if database has current user
-    if (user !== null) {
+    if (users !== null) {
       // ! gen token
-      const token = await genToken({ email: user.email, role: user.role });
-      if (user.role === "TEACHER") {
-        if (user.name === "") {
+      const token = await genToken({ email: users.email, role: users.role });
+      if (users.role === "TEACHER") {
+        if (users.name === "") {
           const editTeacher = await editSpecificuser({
-            email: user.email,
+            email: users.email,
             data: {
-              name: user.name,
+              name: users.name,
               refresh: token.refresh_token,
             },
           });
@@ -66,7 +66,7 @@ export const googleauth = asynchandler(
       } else {
         // ! send refresh token to database
         const refresh_token_user = await editSpecificuser({
-          email: user.email,
+          email: users.email,
           data: { refresh: token.refresh_token },
         });
 
@@ -81,43 +81,7 @@ export const googleauth = asynchandler(
     }
 
     // ! if database hasn't current user
-    // ? --------------------------------- test login admin ---------------------------------
 
-    if (userDetails.email === "6431501102@lamduan.mfu.ac.th" || userDetails.email === "boosaya.cha@mfu.ac.th" ) {
-      // !random studentid for admin
-      const studentid = await randomstudentid("0", userDetails.email);
-      console.log(studentid);
-
-      // ! create user
-      const { email, role } = await addUser({
-        studentid: studentid,
-        email: userDetails.email,
-        name: userDetails.name,
-        role: "ADMIN",
-        channel: 0,
-      });
-
-      // ! gen token
-      const token = await genToken({ email: email, role: role });
-
-      // ! send refresh token to database
-      const refresh_token_user = await editSpecificuser({
-        email: email,
-        data: { refresh: token.refresh_token },
-      });
-
-      if (refresh_token_user === null) {
-        return res.status(500).json({ message: "Database error" });
-      }
-
-      res.cookie("accesstoken", token.access_token, { HttpOnly: true });
-      res.cookie("refeshtoken", token.refresh_token, { HttpOnly: true });
-
-      // ! send accesstoken && refreshtoken to client
-      return res.status(200).json(token);
-
-      // ? --------------------------------- end test login admin ---------------------------------
-    } else {
 
       // ! create user
       const { email, role } = await addUser({
@@ -125,7 +89,7 @@ export const googleauth = asynchandler(
         email: userDetails.email,
         name: userDetails.name,
         role: "STUDENT",
-        channel: 0,
+        channel: null,
       });
 
       // ! gen token
@@ -147,21 +111,21 @@ export const googleauth = asynchandler(
       // ! send accesstoken && refreshtoken to client
       return res.status(200).json(token);
     }
-  }
+  
 );
 
 export const refresh_token = asynchandler(async (req: any, res: any) => {
-  console.log(req.user.email);
-  const user = await getSpecificuser({ email: req.user.email });
-  console.log(user);
-  if (!user) {
+  console.log(req.users.email);
+  const users = await getSpecificuser({ email: req.users.email });
+  console.log(users);
+  if (!users) {
     return res.sendStatus(401);
   }
   // !gen token
-  const token = await genToken({ email: user.email, role: user.role });
+  const token = await genToken({ email: users.email, role: users.role });
   // ! send refresh token to database
   const refresh_token_user = await editSpecificuser({
-    email: req.user.email,
+    email: req.users.email,
     data: { refresh: token.refresh_token },
   });
 

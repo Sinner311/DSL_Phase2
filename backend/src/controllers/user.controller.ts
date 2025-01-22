@@ -10,8 +10,8 @@ import {
 } from "../services/user";
 
 module.exports.userlist = asynchandler(async (req: any, res: any) => {
-  const user = await getUser();
-  res.send(user);
+  const users = await getUser();
+  res.send(users);
 });
 
 export const useraddUser = asynchandler(async (req: any, res: any) => {
@@ -22,7 +22,6 @@ export const useraddUser = asynchandler(async (req: any, res: any) => {
     name: name,
     role: role,
     channel: channel,
-    emailVerified: emailVerified,
   });
   res.status(200).send(getuseraddUser);
 });
