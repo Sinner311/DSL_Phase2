@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/components/user/Navbar.vue';
+import UserBackbutton from '@/components/user/UserBackbutton.vue';
 import { ref } from 'vue';
 
 // Define user data as a reactive reference
@@ -14,6 +15,7 @@ const userData = ref({
 
 <template>
   <Navbar />
+  <UserBackbutton/>
   <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4 relative" 
     style="background-image: url('/src/assets/img/background.jpg'); background-size: cover; background-position: center;">
 
