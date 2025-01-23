@@ -10,7 +10,11 @@
         <a href="#" class="bg-black py-10 rounded-2xl m-5 flex justify-center items-center transition-all hover:bg-indigo-800" >
               <div class="max-w-lg mx-auto text-center px-4 sm:px-6 lg:px-8">
                 <p class="font-bold text-md sm:text-lg md:text-2xl text-white group-hover:text-white">คู่มือการใช้งาน</p>
+                <div>
+                <button class="text-white bg-sky-500 mt-3 rounded-2xl p-2 px-4 hover:bg-yellow-500">คลิก</button>
               </div>
+              </div>
+
         </a>
         <a href="#" class="bg-black py-10 rounded-2xl m-5 flex justify-center items-center transition-all hover:bg-indigo-800">
 
@@ -21,6 +25,7 @@
                 <p class="font-bold text-md sm:text-lg md:text-2xl text-white mt-2 group-hover:text-white">
                   ผู้กู้ยืมอายุ 20 ปีขึ้นไป
                 </p>
+                <button class="text-white bg-sky-500 mt-3 rounded-2xl p-2 px-4 hover:bg-yellow-500">คลิก</button>
               </div>
 
         </a>
