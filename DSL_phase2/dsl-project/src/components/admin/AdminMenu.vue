@@ -31,7 +31,13 @@ const item = reactive({
     image: '/src/assets/img/option_2.jpg',
     icon: 'fas fa-plus', 
     link: '/admin/addstaff' //ไปหน้าไหนมากำหนดตรงนี้
-  }
+  },
+  option_6: {
+    title: 'ตั้งค่าระบบ',
+    image: '/src/assets/img/option_2.jpg',
+    icon: 'fa-solid fa-cog', 
+    link: '/admin/setting' //ไปหน้าไหนมากำหนดตรงนี้
+  },
 });
 </script>
 

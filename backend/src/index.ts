@@ -4,6 +4,9 @@ import { jwtValidate } from "./middleware/jwt.middleware";
 import cookie from "cookie-parser";
 import session from "express-session";
 // import { resetQueueOrder } from "./services/queueRepository";
+import { autoCreateDay } from "./services/round";
+
+
 
 const path = require("path");
 const cors = require("cors");
@@ -51,6 +54,8 @@ async function ringout() {
     ) {
       console.log("Resetting queue order...");
       // await resetQueueOrder();
+      await autoCreateDay();
     }
+    // await autoCreateDay();
   }, 5000); // ตรวจสอบทุกๆ 1 วินาที (1000 มิลลิวินาที)
 }

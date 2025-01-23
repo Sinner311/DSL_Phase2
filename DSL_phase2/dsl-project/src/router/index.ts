@@ -14,8 +14,10 @@ import Daysetting from "../pages/staff/Daysetting.vue";
 import StaffSetting from "../pages/staff/Setting.vue";
 import EditDayRepairdoc from "../pages/staff/EditDayRepairdoc.vue";
 import EditdaysendDoc1 from "../pages/staff/EditdaysendDoc1.vue";
+import EditdaysendDoc2 from "../pages/staff/EditdaysendDoc2.vue";
 import Mainaddmin from "../pages/admin/Mainadmin.vue";
 import Addstaff from "../pages/admin/Addstaff.vue";
+import Adminsetting from "../pages/admin/Adminsetting.vue";
 
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
@@ -80,6 +82,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { role: ["ADMIN"] as string[] },
   },
   {
+    path: "/admin/setting",
+    name: "adminsetting",
+    component: Adminsetting,
+    meta: { role: ["ADMIN"] as string[] },
+  },
+  {
     path: "/staff",
     name: "staff",
     component: Mainstaff,
@@ -104,9 +112,15 @@ const routes: Array<RouteRecordRaw> = [
     meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
   },
   {
-    path: "/staff/daysetting/editday",
-    name: "staffeditday",
+    path: "/staff/daysetting/editday1",
+    name: "staffeditday1",
     component: EditdaysendDoc1,
+    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
+  },
+  {
+    path: "/staff/daysetting/editday2",
+    name: "staffeditday2",
+    component: EditdaysendDoc2,
     meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
   },
   {
