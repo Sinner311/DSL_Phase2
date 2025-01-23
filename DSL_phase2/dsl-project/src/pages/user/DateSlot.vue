@@ -1,6 +1,7 @@
 <script setup>
   import Navbar from "@/components/user/Navbar.vue";
   import AlertCard from "@/components/user/AlertCard.vue";
+  import UserBackbutton from '@/components/user/UserBackbutton.vue';
   import { ref } from "vue";
   
   const selectedSlot = ref(null);
@@ -63,6 +64,7 @@
 <template>
   <div :class="{'blur-background': selectedSlot !== null}">
     <Navbar />
+    <UserBackbutton/>
     <div class="w-full max-w-2xl mx-auto mt-14">
       <div class="bg-white rounded-lg shadow-md p-6">
         <div class="mb-6">

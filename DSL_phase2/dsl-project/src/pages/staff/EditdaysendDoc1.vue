@@ -2,6 +2,7 @@
 import NavbarStaff from '@/components/staff/NavbarStaff.vue';
 import StaffBackbutton from '@/components/staff/StaffBackbutton.vue';
 import StaffsendDoc1 from '@/components/staff/StaffsendDoc1.vue';
+import StaffDateSlot from '@/components/staff/StaffDateSlot.vue';
 
 </script>
 
@@ -9,6 +10,8 @@ import StaffsendDoc1 from '@/components/staff/StaffsendDoc1.vue';
     <NavbarStaff/>
     <StaffBackbutton/>
     <StaffsendDoc1/>
+    <StaffDateSlot/>
+
     
     
 </template>
