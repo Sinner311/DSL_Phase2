@@ -1,7 +1,11 @@
 <script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 function handleBack() {
   console.log("ย้อนกลับ");
-  // เพิ่มการทำงานเมื่อกดปุ่มย้อนกลับ
+  router.push({ path: "/admin" });
 }
 </script>
 

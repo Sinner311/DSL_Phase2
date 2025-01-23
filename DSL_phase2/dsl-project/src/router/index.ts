@@ -11,6 +11,7 @@ import Mainstaff from "../pages/staff/Mainstaff.vue";
 import StaffCallQueue from "../pages/staff/StaffCallQueue.vue";
 import TVshow from "../pages/staff/TVshow.vue";
 import Daysetting from "../pages/staff/Daysetting.vue";
+import StaffSetting from "../pages/staff/Setting.vue";
 import EditDayRepairdoc from "../pages/staff/EditDayRepairdoc.vue";
 import EditdaysendDoc1 from "../pages/staff/EditdaysendDoc1.vue";
 import Mainaddmin from "../pages/admin/Mainadmin.vue";
@@ -112,6 +113,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/staff/dashboard",
     name: "staffdashboard",
     component: TVshow,
+    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
+  },
+  {
+    path: "/staff/setting",
+    name: "staffsetting",
+    component: StaffSetting,
     meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
   },
 ];

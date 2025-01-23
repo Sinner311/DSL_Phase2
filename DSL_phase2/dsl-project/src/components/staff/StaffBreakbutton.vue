@@ -1,14 +1,17 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 // สถานะสำหรับแสดงหรือซ่อน Card
 const showCard = ref(false);
 const showConfirmationCard = ref(false); // ใช้สำหรับแสดง Card ที่ยืนยัน
 const userInput = ref(""); // เก็บข้อความที่ผู้ใช้พิมพ์
 
+
 function handleBack() {
   console.log("ย้อนกลับ");
-  // เพิ่มการทำงานเมื่อกดปุ่มย้อนกลับ
+  router.push({ path: "/staff" });
 }
 
 function handlePauseSystem() {

@@ -5,17 +5,22 @@ const item = reactive({
   option_1: {
     title: 'แบบคำขอกู้ยืม',
     image: '/src/assets/img/option_1.jpg',
-    link: '/StaffCallQueue' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/staff/daysetting/editday' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_2: {
     title: 'สัญญากู้ยืม และ แบบเบิกเงินกู้ยืม',
     image: '/src/assets/img/option_2.jpg',
-    link: '/page2' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/staff/daysetting/editday' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_3: {
     title: 'เปลี่ยนแปลงวันที่สำหรับส่งเอกสารแก้ไข',
     image: '/src/assets/img/option_3.jpg', 
-    link: '/page3' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/staff/daysetting/editdocamendmentday' //ไปหน้าไหนมากำหนดตรงนี้
+  }, 
+  option_4: {
+    title: 'วันที่ทั้งหมด',
+    image: '/src/assets/img/option_1.jpg',
+    link: '/StaffCallQueue' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
 </script>

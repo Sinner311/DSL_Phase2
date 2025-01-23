@@ -11,6 +11,7 @@ const passport = require("passport");
 
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
+const roundRouter = require("./routes/round.route");
 // const queueRouter = require("./routes/queue.route");
 // const historyRouter = require("./routes/history.route");
 
@@ -29,8 +30,9 @@ console.log(new Date().toLocaleString());
 ringout();
 
 // jwtValidate
-app.use("/api/users", userRouter);
+app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/round", roundRouter);
 // app.use("/api/queue", queueRouter);
 // app.use("/api/history", historyRouter);
 

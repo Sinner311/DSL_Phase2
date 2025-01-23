@@ -68,7 +68,7 @@ const cancelDelete = () => {
 // ฟังก์ชันดึงข้อมูล Staff จาก backend
 async function getStaff() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/users/getAllstaff`, {
+    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/user/getAllstaff`, {
       headers: {
         Authorization: `Bearer ${accesstoken}`,
       },
@@ -92,7 +92,7 @@ const confirmAddStaff = async () => {
   if (newEmail.value && newChannel.value) {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_IP}/api/users/addTeacher`,
+        `${import.meta.env.VITE_APP_IP}/api/user/addTeacher`,
         { email: newEmail.value ,
           channel: newChannel.value
         },
@@ -111,6 +111,12 @@ const confirmAddStaff = async () => {
         newEmail.value = '';
         newChannel.value = '';
         showAddCard.value = false;
+        await Swal.fire({
+        icon: "success",
+        title: "เพิ่มเจ้าหน้าที่สำเร็จ",
+        showConfirmButton: false,
+        timer: 1500
+      });
       } else {
         throw new Error('Failed to add staff.');
       }
@@ -125,7 +131,7 @@ const confirmDeleteStaff = async () => {
   console.log(staffs.value[selectedStaffIndex.value].email);
   try {
     if(staffs.value[selectedStaffIndex.value].role === "ADMIN"){
-      const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/users/getusereditSpecificuser`,{
+      const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
       email:staffs.value[selectedStaffIndex.value].email,
       data:{
         channel:0,
@@ -134,7 +140,7 @@ const confirmDeleteStaff = async () => {
     isMonitor.value = false;
     return;
     }
-    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/users/getusereditSpecificuser`,{
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
       email:staffs.value[selectedStaffIndex.value].email,
       data:{
         channel:0,
@@ -148,7 +154,7 @@ const confirmDeleteStaff = async () => {
     showDeleteCard.value = false;
     await Swal.fire({
         icon: "success",
-        title: "คุณแก้ไขเจ้าหน้าที่สำเร็จ",
+        title: "แก้ไขเจ้าหน้าที่สำเร็จ",
         showConfirmButton: false,
         timer: 1500
       });
@@ -162,7 +168,7 @@ const confirmDeleteStaff = async () => {
 
 const confirmEditStaff = async () => {
   try {
-    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/users/getusereditSpecificuser`,{
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
       email:staffs.value[selectedStaffIndex.value].email,
       data:{
         channel:newEditChannel.value
@@ -198,33 +204,33 @@ onMounted(() => {
   <div class="p-6 text-center">
     <div class="mb-12">
       <button @click="openAddCard" class="bg-blue-500 text-white px-8 py-4 rounded text-xl hover:bg-blue-700">
-        เพิ่ม Staff
+        เพิ่มเจ้าหน้าที่
       </button>
     </div>
 
     <!-- Add Staff Card -->
     <div v-if="showAddCard" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center">
-        <h2 class="text-xl font-bold mb-4">Add New Staff</h2>
-        <input v-model="newEmail" type="email" placeholder="Enter email" class="border border-gray-300 p-2 rounded w-full mb-4" />
+        <h2 class="text-xl font-bold mb-4">เพิ่มเจ้าหน้าที่</h2>
+        <input v-model="newEmail" type="email" placeholder="ใส่อีเมล" class="border border-gray-300 p-2 rounded w-full mb-4" />
         <input
   v-model.number="newChannel"
   @input="validatePositiveNumber"
   type="number"
-  placeholder="Enter channel"
+  placeholder="ใส่เลขช่องบริการ"
   class="border border-gray-300 p-2 rounded w-full mb-4"
 />
 
         <div class="flex justify-around">
           <button @click="cancelAddStaff" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">ยกเลิก</button>
-          <button @click="confirmAddStaff" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">เพิ่ม Staff</button>
+          <button @click="confirmAddStaff" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">เพิ่ม</button>
         </div>
       </div>
     </div>
 
     <!-- Staff List -->
     <div class="mt-8">
-      <h2 class="text-3xl font-bold mb-4 text-red-500">STAFF</h2>
+      <h2 class="text-3xl font-bold mb-4 text-red-500">รายชื่อเจ้าหน้าที่</h2>
       <div v-for="(staff, index) in staffs" :key="staff.id" class="inline-block m-4">
         <div class="border border-gray-300 rounded-lg shadow-lg p-6 w-70 text-center">
           <p class="text-lg font-medium">{{ staff.email }}</p>
@@ -256,7 +262,7 @@ onMounted(() => {
   v-model.number="newEditChannel"
   @input="validatePositiveNumber"
   type="number"
-  placeholder="Enter new channel"
+  placeholder="ใส่เลขช่องบริการใหม่"
   class="border border-gray-300 p-2 rounded w-full mb-4"
 />
     <div class="flex justify-around">

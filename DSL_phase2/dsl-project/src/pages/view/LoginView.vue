@@ -122,7 +122,7 @@ function parseJwt(token: string) {
 
 async function getAdmin(access_token_extract:any) {
     try {
-        const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/users/getAlluser`);
+        const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/user/getAlluser`);
         if (res.status !==200) {
             throw Error(res.statusText);
         }

@@ -19,6 +19,12 @@ const item = reactive({
     image: '/src/assets/img/option_3.jpg',
     icon: 'fa-solid fa-tv', 
     link: '/staff/dashboard' //ไปหน้าไหนมากำหนดตรงนี้
+  },  
+  option_4: {
+    title: 'ตั้งค่าระบบ',
+    image: '/src/assets/img/option_2.jpg',
+    icon: 'fa-solid fa-cog', 
+    link: '/staff/setting' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
 </script>

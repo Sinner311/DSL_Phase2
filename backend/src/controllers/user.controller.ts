@@ -16,7 +16,7 @@ module.exports.userlist = asynchandler(async (req: any, res: any) => {
 });
 
 export const useraddUser = asynchandler(async (req: any, res: any) => {
-  const { studentid, email, name, role, channel, emailVerified } = req.body;
+  const { studentid, email, name, role, channel} = req.body;
   const getuseraddUser = await addUser({
     studentid: studentid,
     email: email,

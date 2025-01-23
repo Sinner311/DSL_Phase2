@@ -59,11 +59,12 @@ model history_queue {
 }
 
 model list_of_round {
-  Listid                             Int       @id @default(autoincrement())
-  Document_Amendment_Submission_Date DateTime? @db.Date
-  year                               Int?      @db.Year
-  semester                           String?   @db.VarChar(10)
+  Listid                             Int            @id @default(autoincrement())
+  Document_Amendment_Submission_Date DateTime?      @db.Date
+  year                               Int?           @db.Year
+  semester                           Int?           @db.TinyInt
   rounds                             rounds[]
+  web_settings                       web_settings[]
 }
 
 model queues {
@@ -92,11 +93,13 @@ model rounds {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model web_settings {
+  id             Int            @id @default(autoincrement())
   web_status     Int
-  show_list      String? @db.Text
-  web_break_text String  @db.VarChar(50)
+  show_list      Int?
+  web_break_text String         @db.VarChar(50)
+  list_of_round  list_of_round? @relation(fields: [show_list], references: [Listid], onDelete: Restrict, onUpdate: Restrict, map: "web_settings_ibfk_1")
 
-  @@ignore
+  @@index([show_list], map: "show_list")
 }
 
 model users {
