@@ -11,7 +11,7 @@
             class="mx-auto h-16 w-16 mb-4"
           />
           <h2 class="text-2xl font-bold text-gray-900">MFU DSL EQUEUE</h2>
-          <p class="text-sm text-gray-600">ระบบจองวัน กยศ มหาวิทยาลัยแม่ฟ้าหลวง</p>
+          <p class="text-sm text-gray-600">ระบบจองคิว กยศ มหาวิทยาลัยแม่ฟ้าหลวง</p>
         </div>
     
         <!-- Google Login Button -->
