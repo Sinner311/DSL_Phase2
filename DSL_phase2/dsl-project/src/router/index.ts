@@ -16,6 +16,7 @@ import StaffSetting from "../pages/staff/Setting.vue";
 import EditDayRepairdoc from "../pages/staff/EditDayRepairdoc.vue";
 import EditdaysendDoc1 from "../pages/staff/EditdaysendDoc1.vue";
 import EditdaysendDoc2 from "../pages/staff/EditdaysendDoc2.vue";
+import Editday from "../pages/staff/StaffDateSlot.vue";
 import Mainaddmin from "../pages/admin/Mainadmin.vue";
 import Addstaff from "../pages/admin/Addstaff.vue";
 import Adminsetting from "../pages/admin/Adminsetting.vue";
@@ -134,6 +135,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/staff/dashboard",
     name: "staffdashboard",
     component: TVshow,
+    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
+  },
+  {
+    path: "/staff/editday",
+    name: "staffeditday",
+    component: Editday,
     meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
   },
   {
