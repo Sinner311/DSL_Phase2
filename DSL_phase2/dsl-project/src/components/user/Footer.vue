@@ -29,14 +29,14 @@
         
   
 <!-- MAP -->
-<a href="https://www.google.com/maps/place/D1+Food+Court,+Mae+Fah+Luang+University/@20.0475579,99.8912161,17z/data=!3m1!4b1!4m6!3m5!1s0x30d7014921a40ecd:0xa68c7cc0978242af!8m2!3d20.0475579!4d99.893791!16s%2Fg%2F11q8g7q0s_?entry=ttu&g_ep=EgoyMDI1MDExNS4wIKXMDSoASAFQAw%3D%3D" class="relative overflow-hidden rounded-3xl shadow-xl group m-3">
+        <div class="relative overflow-hidden rounded-3xl shadow-xl group m-3">
           <img 
           src="/src/assets/img/map.jpg" 
             alt="Contract Reservation" 
             class="w-full h-full object-cover = group-hover:scale-105 transition-transform duration-300"
           />
 
-        </a>
+        </div>
   
       </div>
 

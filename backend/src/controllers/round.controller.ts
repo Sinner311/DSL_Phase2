@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 
 import { $Enums } from '@prisma/client';
-import {getListOfRound,addListOfRound,editWebShowList,getAllDate,addRound} from '../services/round';
+import {getListOfRound,addListOfRound,editWebShowList,getAllDate,addRound,getAllRound,SpecificDate,deleteRound} from '../services/round';
 
 
 export const getAllListOfRound= asynchandler(async (req: any, res: any) => {
@@ -56,4 +56,25 @@ export const createListOfRound = asynchandler(async (req: any, res: any) => {
       type: type,
     });
     res.status(200).send(addround);
+  });
+
+  export const getRound= asynchandler(async (req: any, res: any) => {
+    const rounds = await getAllRound();
+    res.send(rounds);
+  });
+
+  export const getSpecificDate = asynchandler(async (req: any, res: any) => {
+    const { roundid } = req.query;
+    const SpecificDay = await SpecificDate({
+      roundid: roundid,
+    });
+    res.status(200).send(SpecificDay);
+  });
+
+  export const DeleteRound = asynchandler(async (req: any, res: any) => {
+    const { roundid } = req.query;
+    const deleteround = await deleteRound({
+      roundid: roundid,
+    });
+    res.status(200).send(deleteround);
   });

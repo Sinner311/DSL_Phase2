@@ -13,6 +13,8 @@ export async function addUser(users: {
   const res = await prisma.users.create({ data: users });
   return res;
 }
+
+
 export async function getSpecificuser(users: {
   email: string;
   studentid?: string;

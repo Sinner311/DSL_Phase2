@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import LoginView from "../pages/view/LoginView.vue";
 import HomeView from "../pages/user/HomeView.vue";
-import AppointmentRound from "../pages/user/AppointmentRound.vue";
+import AppointmentRound1 from "../pages/user/AppointmentRound1.vue";
+import AppointmentRound2 from "../pages/user/AppointmentRound2.vue";
 import DateSlot from "../pages/user/DateSlot.vue";
 import UserAppointment from "../pages/user/UserAppointment.vue";
 import QueueUpView from "../pages/user/QueueUpView.vue";
@@ -38,13 +39,19 @@ const routes: Array<RouteRecordRaw> = [
     meta: { role: ["STUDENT"] as string[] },
   },
   {
-    path: "/user/appointment",
-    name: "userappointment",
-    component: AppointmentRound,
+    path: "/user/appointment1",
+    name: "userappointment1",
+    component: AppointmentRound1,
     meta: { role: ["STUDENT"] as string[] },
   },
   {
-    path: "/user/appointment/selectdate",
+    path: "/user/appointment2",
+    name: "userappointment2",
+    component: AppointmentRound2,
+    meta: { role: ["STUDENT"] as string[] },
+  },
+  {
+    path: "/user/selectdate",
     name: "userselectdate",
     component: DateSlot,
     meta: { role: ["STUDENT"] as string[] },

@@ -109,12 +109,12 @@ const item = reactive({
       title: 'จองวันส่งแบบคำขอกู้ยืม',
       subtitle: 'ผู้กู้ยืมคนใหม่ และ รายเก่าที่เปลี่ยนสถาบัน กรอกข้อมูลประวัติในระบบกยศ.',
       image: '/src/assets/img/option_1.jpg',
-      link: '/user/appointment'
+      link: '/user/appointment1'
     },option_2:{
       title: 'จองวันส่งสัญญากู้ยืม และ แบบเบิกเงินกู้ยืม',
       subtitle: 'ผู้กู้ยืมคนใหม่ และ รายเก่าที่เปลี่ยนสถาบัน กรอกข้อมูลประวัติในระบบกยศ.',
       image: '/src/assets/img/option_2.jpg',
-      link: '/user/appointment'
+      link: '/user/appointment2'
     },option_3:{
         title: 'ตรวจสอบรายการจอง',
       subtitle: 'ตรวจสอบ เปลี่ยนแปลง ยกเลิก รายการจองของคุณ',

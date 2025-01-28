@@ -1,8 +1,5 @@
 <script setup>
 import Navbar from '@/components/user/Navbar.vue';
-import UserBackbutton from '@/components/user/UserBackbutton.vue';
-
-
 
 // Array of rounds
 const rounds = [
@@ -41,9 +38,8 @@ const rounds = [
 
 <template>
   <Navbar />
-  <UserBackbutton/>
   <div class="max-w-4xl mx-auto p-4 mt-10">
-    <h1 class="text-2xl font-bold mb-6 text-center">กรุณาเลือกรอบที่ต้องการส่งแบบคำขอกู้ยืม</h1>
+    <h1 class="text-2xl font-bold mb-6 text-center">กรุณาเลือกรอบที่ต้องการส่งสัญญากู้ยืม และ แบบเบิกเงินกู้ยืม</h1>
     
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <!-- Loop through rounds array -->

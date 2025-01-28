@@ -7,7 +7,7 @@ defineProps({
     default: 'ห้อง กยศ เปิดทำการ วันจันทร์ - ศุกร์'
   },time:{
     type:String,
-    default: '8.30 - 4.00  '
+    default: '8.30 - 16.00  '
   }
   ,subtitle:{
     type:String,
