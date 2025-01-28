@@ -5,6 +5,8 @@ import cookie from "cookie-parser";
 import session from "express-session";
 // import { resetQueueOrder } from "./services/queueRepository";
 import { autoCreateDay } from "./services/round";
+import dashboardRoutes from './routes/dashboard.route';
+
 
 
 
@@ -32,6 +34,7 @@ console.log(new Date().toLocaleString());
 
 ringout();
 
+app.use('/dashboard', dashboardRoutes);
 // jwtValidate
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
