@@ -28,13 +28,13 @@ model days {
 
 model history_booking {
   historyid     Int       @id @default(autoincrement())
-  datetime      DateTime? @db.DateTime(0)
-  studentid     String?   @db.VarChar(10)
+  datetime      DateTime? @default(now()) @db.DateTime(0)
+  studentid     Int?
   bookingdateid Int?
   status        String?   @db.VarChar(20)
   type          Int?      @db.TinyInt
-  users         users?    @relation(fields: [studentid], references: [studentid], onDelete: Restrict, onUpdate: Restrict, map: "history_booking_ibfk_1")
   days          days?     @relation(fields: [bookingdateid], references: [dateid], onDelete: Restrict, onUpdate: Restrict, map: "history_booking_ibfk_2")
+  users         users?    @relation(fields: [studentid], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "history_booking_ibfk_1")
 
   @@index([bookingdateid], map: "bookingdateid")
   @@index([studentid], map: "studentid")
@@ -42,8 +42,8 @@ model history_booking {
 
 model history_queue {
   historyid Int       @id @default(autoincrement())
-  datetime  DateTime? @db.DateTime(0)
-  studentid String?   @db.VarChar(10)
+  datetime  DateTime? @default(now()) @db.DateTime(0)
+  studentid Int?
   queueid   Int?
   type      Int?      @db.TinyInt
   channel   Int?      @db.TinyInt
@@ -54,8 +54,8 @@ model history_queue {
   q3        Boolean?
   q4        Boolean?
   q5        Boolean?
-  users     users?    @relation(fields: [studentid], references: [studentid], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_1")
   queues    queues?   @relation(fields: [queueid], references: [queueid], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_2")
+  users     users?    @relation(fields: [studentid], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_1")
 
   @@index([queueid], map: "queueid")
   @@index([studentid], map: "studentid")
@@ -72,12 +72,15 @@ model list_of_round {
 
 model queues {
   queueid       Int             @id @default(autoincrement())
-  time          DateTime?       @db.Time(0)
-  studentid     String?         @db.VarChar(10)
+  time          DateTime?       @default(now()) @db.Time(0)
+  studentid     Int?
   type          Int?            @db.TinyInt
   channel       Int?            @db.TinyInt
   status        String?         @db.VarChar(20)
   history_queue history_queue[]
+  users         users?          @relation(fields: [studentid], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "queues_ibfk_1")
+
+  @@index([studentid], map: "studentid")
 }
 
 model rounds {
@@ -116,6 +119,7 @@ model users {
   refresh         String?           @db.VarChar(1046)
   history_booking history_booking[]
   history_queue   history_queue[]
+  queues          queues[]
 }
 
 enum users_role {

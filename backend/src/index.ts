@@ -5,8 +5,6 @@ import cookie from "cookie-parser";
 import session from "express-session";
 // import { resetQueueOrder } from "./services/queueRepository";
 import { autoCreateDay } from "./services/round";
-import dashboardRoutes from './routes/dashboard.route';
-
 
 
 
@@ -17,6 +15,7 @@ const passport = require("passport");
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
 const roundRouter = require("./routes/round.route");
+const bookingRouter = require("./routes/booking.route");
 // const queueRouter = require("./routes/queue.route");
 // const historyRouter = require("./routes/history.route");
 
@@ -34,11 +33,11 @@ console.log(new Date().toLocaleString());
 
 ringout();
 
-app.use('/dashboard', dashboardRoutes);
 // jwtValidate
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/round", roundRouter);
+app.use("/api/booking", bookingRouter);
 // app.use("/api/queue", queueRouter);
 // app.use("/api/history", historyRouter);
 

@@ -81,12 +81,12 @@
         {{ formatDate(card.startdate).year }}
       </p>
       <div class="flex flex-col mt-4 space-y-2 w-full">
-        <!-- <button
+        <button
           class="bg-blue-500 text-white font-bold text-base py-2 rounded-lg shadow-lg hover:bg-blue-600"
           @click="selectDateRange(card.roundid)"
         >
           เลือกช่วงวัน
-        </button> -->
+        </button>
         <button
           class="bg-red-500 text-white font-bold text-base py-2 rounded-lg shadow-lg hover:bg-red-600"
           @click="confirmRemoveCard(card.roundid)"
@@ -104,7 +104,9 @@ import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { useCookies } from "vue3-cookies";
+import { useRouter } from 'vue-router'; 
 
+const router = useRouter(); 
 const { cookies } = useCookies();
 const accesstoken = cookies.get("accesstoken");
 const showAddCard = ref(false);
@@ -236,7 +238,12 @@ function formatDate(dateString) {
 }
 
 function selectDateRange(id:number) {
-  console.log("Select date range for:", id);
+  router.push({
+    path: '/staff/editday', // Specify the path of the new page
+    query: { 
+      roundid: id, 
+    },
+  });
 }
 
 async function confirmRemoveCard(id:number) {

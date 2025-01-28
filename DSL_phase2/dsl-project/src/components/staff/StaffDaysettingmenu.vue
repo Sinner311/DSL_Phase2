@@ -20,7 +20,7 @@ const item = reactive({
   option_4: {
     title: 'วันที่ทั้งหมด',
     image: '/src/assets/img/option_1.jpg',
-    link: '#' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/staff/editday' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
 </script>

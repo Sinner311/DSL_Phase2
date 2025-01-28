@@ -1,5 +1,6 @@
 <script setup>
 import axios from "axios";
+import Swal from 'sweetalert2';
 import { ref } from "vue";
 import { useCookies } from "vue3-cookies";
 import { useRoute } from "vue-router";
@@ -30,7 +31,7 @@ async function getAllDate() {
     if (response.status === 200) {
       timeSlots.value = response.data.map((day) => ({
         dateid: day.dateid,
-        type: requestType === 1 ? "แบบคำขอกู้ยืม" : requestType === 2 ? "สัญญากู้ยืม และ แบบเบิกเงินกู้ยืม" : "",
+        type: requestType,
         date: `${new Date(day.date).getDate()} ${formatDate(day.date).month} ${formatDate(day.date).year}`,
         time: `${formatTime(day.starttime)} - ${formatTime(day.endtime)}`,
         remaining: day.maxuser-50, // จำลองข้อมูลผู้ใช้ที่เหลือ
@@ -80,9 +81,56 @@ function handleCancel() {
 }
 
 // ฟังก์ชันยืนยันการเลือก
-function handleConfirm(id) {
-  console.log("ยืนยันการเลือก:", selectedSlot.value,id);
-  // ส่งข้อมูลไป API หรือเปลี่ยนเส้นทางตามต้องการ
+async function handleConfirm(id) {
+  console.log("ยืนยันการเลือก:", selectedSlot.value.type, selectedSlot.value.dateid ,id);
+  if (selectedSlot.value.type&&selectedSlot.value.dateid&&id) {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_IP}/api/booking/makebooking`,
+        { 
+          id: id,
+          type: selectedSlot.value.type,
+          dateid: selectedSlot.value.dateid,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accesstoken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        await Swal.fire({
+          icon: "success",
+          title: "จองคิวล่วงหน้าสำเร็จ",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        getAllDate(); // เรียกฟังก์ชันเพื่ออัปเดตข้อมูลใหม่
+      } else {
+        throw new Error("Failed to add booking.");
+      }
+    } catch (error) {
+      console.error("Error adding booking:", error);
+
+      // ใช้ Swal แสดงข้อความแจ้งเตือนข้อผิดพลาด
+      await Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text:
+          error.response?.data?.message || // แสดงข้อความจาก API (ถ้ามี)
+          "ไม่สามารถจองคิวได้ กรุณาลองใหม่อีกครั้ง", // ข้อความเริ่มต้น
+        showConfirmButton: true,
+      });
+    }
+  } else {
+    await Swal.fire({
+      icon: "warning",
+      title: "ข้อมูลไม่ครบถ้วน",
+      text: "กรุณาเลือกข้อมูลให้ครบก่อนทำการยืนยัน",
+      showConfirmButton: true,
+    });
+  }
   selectedSlot.value = null;
 }
 

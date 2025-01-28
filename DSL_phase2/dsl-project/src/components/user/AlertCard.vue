@@ -67,47 +67,55 @@ function handleConfirm() {
 </script>
 
 <template>
-  <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg">
-    <div class="p-6">
-      <div class="text-center space-y-4">
-        <!-- Header Section -->
-        <div class="space-y-2">
-          <h2 class="font-medium">สรุปรายการจอง</h2>
-          <p class="text-gray-700">คุณ {{ studentinfo.name }}</p> <!-- ใช้ชื่อจาก selectedSlot -->
-          <p class="text-gray-700">รหัสนักศึกษา {{ studentinfo.studentid }}</p> <!-- ใช้รหัสนักศึกษาจาก selectedSlot -->
-        </div>
-
-        <!-- Details Section -->
-        <div class="space-y-2 my-4">
-          <p class="font-medium">เรื่อง {{ selectedSlot.type }}</p> <!-- ใช้เรื่องจาก selectedSlot -->
-          <p>วันที่ {{ selectedSlot.date }}</p> <!-- ใช้วันที่จาก selectedSlot -->
-          <div class="flex items-center justify-center gap-2 text-gray-600">
-            <!-- Clock Icon -->
-            <ClockIcon class="w-4 h-4" />
-            <span>{{ selectedSlot.time }}</span> <!-- ใช้เวลาเริ่มต้นและสิ้นสุดจาก selectedSlot -->
+  <div
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="max-w-md bg-white rounded-lg shadow-lg">
+      <div class="p-6">
+        <div class="text-center space-y-4">
+          <!-- Header Section -->
+          <div class="space-y-2">
+            <h2 class="font-medium">สรุปรายการจอง</h2>
+            <p class="text-gray-700">คุณ {{ studentinfo.name }}</p>
+            <p class="text-gray-700">รหัสนักศึกษา {{ studentinfo.studentid }}</p>
           </div>
-        </div>
 
-        <!-- Warning Section -->
-        <div class="text-red-500 text-sm">
-          <p>หลังจากจองแล้ว</p>
-          <p>กรุณาตรวจสอบที่อีเมล ตรวจรายการจอง</p>
-        </div>
+          <!-- Details Section -->
+          <div class="space-y-2 my-4">
+            <p v-if="selectedSlot.type == 1" class="font-medium">
+              เรื่อง แบบคำขอกู้ยืม
+            </p>
+            <p v-if="selectedSlot.type == 2" class="font-medium">
+              เรื่อง สัญญากู้ยืม และ แบบเบิกเงินกู้ยืม
+            </p>
+            <p>วันที่ {{ selectedSlot.date }}</p>
+            <div class="flex items-center justify-center gap-2 text-gray-600">
+              <ClockIcon class="w-4 h-4" />
+              <span>{{ selectedSlot.time }}</span>
+            </div>
+          </div>
 
-        <!-- Buttons Section -->
-        <div class="flex gap-4 justify-center mt-6">
-          <button
-            @click="$emit('cancel')"
-            class="px-8 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            ยกเลิก
-          </button>
-          <button
-            @click="handleConfirm"
-            class="px-8 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            ยืนยัน
-          </button>
+          <!-- Warning Section -->
+          <div class="text-red-500 text-sm">
+            <!-- <p>หลังจากจองแล้ว</p>
+            <p>กรุณาตรวจสอบที่อีเมล ตรวจรายการจอง</p> -->
+          </div>
+
+          <!-- Buttons Section -->
+          <div class="flex gap-4 justify-center mt-6">
+            <button
+              @click="$emit('cancel')"
+              class="px-8 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              ยกเลิก
+            </button>
+            <button
+              @click="handleConfirm"
+              class="px-8 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              ยืนยัน
+            </button>
+          </div>
         </div>
       </div>
     </div>

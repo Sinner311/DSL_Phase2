@@ -76,7 +76,7 @@ async function sendCodeToBackend(code:string) {
 
         switch (access_token_extract.role) {
           case "STUDENT":
-            router.push({name:"user",replace:true})
+            router.push({name:"userqueue",replace:true})
             break;
           case "ADMIN":
           //  alert( await getAdmin(access_token_extract));

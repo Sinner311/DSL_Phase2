@@ -1,45 +1,42 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
+import { ref, onMounted } from 'vue';
 
 const totalReservations = ref(0);
 const inQueue = ref(0);
 const completed = ref(0);
 const skipped = ref(0);
 
-async function fetchDashboardData() {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/dashboard`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
-      },
-    });
+// ฟังก์ชันจำลองการดึงข้อมูลจากฐานข้อมูล
+async function fetchData() {
+  // จำลองข้อมูลที่มาจาก API หรือฐานข้อมูล
+  const data = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        totalReservations: 300,
+        inQueue: 80,
+        completed: 70,
+        skipped: 5,
+      });
+    }, 1000); 
+  });
 
-    if (response.data.success) {
-      // Update refs with the API response data
-      totalReservations.value = response.data.data.totalReservations;
-      inQueue.value = response.data.data.inQueue;
-      completed.value = response.data.data.completed;
-      skipped.value = response.data.data.skipped;
-    } else {
-      console.error("Failed to fetch dashboard data:", response.data.message);
-    }
-  } catch (error) {
-    console.error("Error fetching dashboard data:", error);
-  }
+  // อัปเดตตัวแปรด้วยข้อมูลที่ได้
+  totalReservations.value = data.totalReservations;
+  inQueue.value = data.inQueue;
+  completed.value = data.completed;
+  skipped.value = data.skipped;
 }
 
-
-// Fetch data on component mount
+// เรียก fetchData เมื่อ component ถูก mount
 onMounted(() => {
-  fetchDashboardData();
+  fetchData();
 });
 </script>
 
 <template>
   <div class="bg-blue-900 text-white font-sans w-full h-[300px] mx-auto py-10 px-4 flex items-center justify-center">
     <div class="max-w-screen-lg mx-auto py-10">
-      <h1 class="text-lg font-bold mb-6">DASHBOARD</h1>
+      <h1 class="text-lg font-bold mb-6">DASHBORD</h1>
       <div class="grid grid-cols-4 gap-4">
         <div class="text-center">
           <p class="text-6xl font-bold">{{ totalReservations }}</p>

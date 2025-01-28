@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2025 at 06:34 AM
+-- Generation Time: Jan 28, 2025 at 09:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -140,8 +140,8 @@ INSERT INTO `days` (`dateid`, `roundid1`, `roundid2`, `status`, `maxuser`, `date
 
 CREATE TABLE `history_booking` (
   `historyid` int(11) NOT NULL,
-  `datetime` datetime DEFAULT NULL,
-  `studentid` varchar(10) DEFAULT NULL,
+  `datetime` datetime DEFAULT current_timestamp(),
+  `studentid` int(11) DEFAULT NULL,
   `bookingdateid` int(11) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `type` tinyint(4) DEFAULT NULL
@@ -155,8 +155,8 @@ CREATE TABLE `history_booking` (
 
 CREATE TABLE `history_queue` (
   `historyid` int(11) NOT NULL,
-  `datetime` datetime DEFAULT NULL,
-  `studentid` varchar(10) DEFAULT NULL,
+  `datetime` datetime DEFAULT current_timestamp(),
+  `studentid` int(11) DEFAULT NULL,
   `queueid` int(11) DEFAULT NULL,
   `type` tinyint(4) DEFAULT NULL,
   `channel` tinyint(20) DEFAULT NULL,
@@ -201,8 +201,8 @@ INSERT INTO `list_of_round` (`Listid`, `Document_Amendment_Submission_Date`, `ye
 
 CREATE TABLE `queues` (
   `queueid` int(11) NOT NULL,
-  `time` time DEFAULT NULL,
-  `studentid` varchar(10) DEFAULT NULL,
+  `time` time DEFAULT current_timestamp(),
+  `studentid` int(11) DEFAULT NULL,
   `type` tinyint(4) DEFAULT NULL,
   `channel` tinyint(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL
@@ -254,8 +254,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `studentid`, `name`, `role`, `channel`, `refresh`) VALUES
 (1, 'nemopop148@gmail.com', NULL, 'JATESADA LEESUWAN', 'ADMIN', 3, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5lbW9wb3AxNDhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM4MDAzNTI0LCJleHAiOjE3MzgwODk5MjR9.fKAjiTIKYjOZ_tpmKiU_sfsDALotG4dgflyDOMeVWQM'),
-(11, 'pimsiri814@gmail.com', '6587864046', '', 'TEACHER', 0, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBpbXNpcmk4MTRAZ21haWwuY29tIiwicm9sZSI6IlRFQUNIRVIiLCJpYXQiOjE3Mzc5OTcwNTYsImV4cCI6MTczODA4MzQ1Nn0.2XhZ-LVCfuN1S0ktJKJ5hiRA9OCOKTJTV4aFPTZDI_o'),
-(12, '6531501141@lamduan.mfu.ac.th', '6531501141', 'JATESADA LEESUWAN', 'STUDENT', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjY1MzE1MDExNDFAbGFtZHVhbi5tZnUuYWMudGgiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTczODAwNDYzMywiZXhwIjoxNzM4MDkxMDMzfQ.VhwotHQbwlp02KMaG4_XiEhskbuFS7WOHopC0MM3QIk');
+(11, 'pimsiri814@gmail.com', '6587864046', '', 'TEACHER', 0, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBpbXNpcmk4MTRAZ21haWwuY29tIiwicm9sZSI6IlRFQUNIRVIiLCJpYXQiOjE3MzgwNzA1NTQsImV4cCI6MTczODE1Njk1NH0.37S5yMNQg55cXWxvNwJ66rodr2QVBYIDyTfWjn0LlvI'),
+(12, '6531501141@lamduan.mfu.ac.th', '6531501141', 'JATESADA LEESUWAN', 'STUDENT', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjY1MzE1MDExNDFAbGFtZHVhbi5tZnUuYWMudGgiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTczODA4Nzg4MiwiZXhwIjoxNzM4MTc0MjgyfQ.gsFVA0InQACcnAvA3MrzM7ejyo9eT0GTIw3XA8vwz18');
 
 -- --------------------------------------------------------
 
@@ -295,8 +295,8 @@ ALTER TABLE `days`
 --
 ALTER TABLE `history_booking`
   ADD PRIMARY KEY (`historyid`),
-  ADD KEY `studentid` (`studentid`),
-  ADD KEY `bookingdateid` (`bookingdateid`);
+  ADD KEY `bookingdateid` (`bookingdateid`),
+  ADD KEY `studentid` (`studentid`);
 
 --
 -- Indexes for table `history_queue`
@@ -316,7 +316,8 @@ ALTER TABLE `list_of_round`
 -- Indexes for table `queues`
 --
 ALTER TABLE `queues`
-  ADD PRIMARY KEY (`queueid`);
+  ADD PRIMARY KEY (`queueid`),
+  ADD KEY `studentid` (`studentid`);
 
 --
 -- Indexes for table `rounds`
@@ -354,7 +355,7 @@ ALTER TABLE `days`
 -- AUTO_INCREMENT for table `history_booking`
 --
 ALTER TABLE `history_booking`
-  MODIFY `historyid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `historyid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `history_queue`
@@ -407,15 +408,21 @@ ALTER TABLE `days`
 -- Constraints for table `history_booking`
 --
 ALTER TABLE `history_booking`
-  ADD CONSTRAINT `history_booking_ibfk_1` FOREIGN KEY (`studentid`) REFERENCES `users` (`studentid`),
-  ADD CONSTRAINT `history_booking_ibfk_2` FOREIGN KEY (`bookingdateid`) REFERENCES `days` (`dateid`);
+  ADD CONSTRAINT `history_booking_ibfk_2` FOREIGN KEY (`bookingdateid`) REFERENCES `days` (`dateid`),
+  ADD CONSTRAINT `history_booking_ibfk_3` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `history_queue`
 --
 ALTER TABLE `history_queue`
-  ADD CONSTRAINT `history_queue_ibfk_1` FOREIGN KEY (`studentid`) REFERENCES `users` (`studentid`),
-  ADD CONSTRAINT `history_queue_ibfk_2` FOREIGN KEY (`queueid`) REFERENCES `queues` (`queueid`);
+  ADD CONSTRAINT `history_queue_ibfk_2` FOREIGN KEY (`queueid`) REFERENCES `queues` (`queueid`),
+  ADD CONSTRAINT `history_queue_ibfk_3` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `queues`
+--
+ALTER TABLE `queues`
+  ADD CONSTRAINT `queues_ibfk_1` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `rounds`

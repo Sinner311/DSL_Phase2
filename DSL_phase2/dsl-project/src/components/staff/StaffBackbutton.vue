@@ -15,6 +15,9 @@ function handleBack() {
   else if (route.path.startsWith("/staff/daysetting/")) {
     router.push({ path: "/staff/daysetting" }); // กลับไปที่ "/staff/daysetting"
   } 
+  else if (route.path.startsWith("/staff/editday")) {
+    router.push({ path: "/staff/daysetting" }); // กลับไปที่ "/staff/daysetting"
+  } 
   // กรณีอื่น ๆ
   else {
     router.push({ path: "/staff" });

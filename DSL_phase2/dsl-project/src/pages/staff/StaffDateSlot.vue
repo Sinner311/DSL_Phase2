@@ -1,6 +1,11 @@
 <script setup>
+import Navbar from "@/components/staff/NavbarStaff.vue";
+import Backbutton from "@/components/staff/StaffBackbutton.vue";
 import { ref } from "vue";
-
+import { useRoute } from "vue-router";
+// ใช้ useRoute เพื่อดึงข้อมูล query parameter
+const route = useRoute();
+const requestRoundid = Number(route.query.roundid);
 const timeSlots = ref([
   { date: "16 สิงหาคม 2567", time: "คิวเต็ม", remaining: 250, isFull: true, isDisabled: false },
   { date: "17 สิงหาคม 2567", time: "8.30 - 4.00", remaining: 250, isFull: false, isDisabled: false },
@@ -32,6 +37,72 @@ const changeQueueNumber = (index) => {
   }
 };
 </script>
+
+
+
+<template>
+      <Navbar />
+      <Backbutton />
+  <div class="w-full max-w-2xl mx-auto mt-14">
+    <div class="flex items-center space-x-4 mb-6">
+  <i class="text-4xl fa-solid fa-cog"></i>
+  <h1 class="text-3xl font-bold text-center">ตั้งค่าวันที่</h1>
+</div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="grid gap-4">
+        <div v-for="(slot, index) in timeSlots" :key="index" class="relative border p-4 rounded-md">
+          <!-- Slot button -->
+          <button
+            :class="[
+              'slot-button',
+              slot.isFull
+                ? 'slot-full'
+                : slot.isDisabled
+                ? 'slot-disabled'
+                : 'hover:bg-green-100 hover:text-black bg-indigo-700 text-white',
+              selectedSlot === index ? 'slot-selected' : 'border-gray-300'
+            ]"
+            :disabled="slot.isFull || slot.isDisabled"
+          >
+            <div class="flex justify-between items-center w-full">
+              <span>{{ slot.date }}</span>
+              <span>{{ slot.time }}</span>
+              <span>เหลือ {{ slot.remaining }} คิว</span>
+            </div>
+          </button>
+          
+          <!-- Enable/Disable button outside the row -->
+          <div class="mt-2 text-right">
+            <button
+              @click="toggleSlot(index)"
+              class="toggle-button mr-2"
+            >
+              {{ slot.isDisabled ? "Enable" : "Disable" }}
+            </button>
+            <!-- Time changing button -->
+            <button
+              @click="changeTime(index)"
+              class="change-time-button"
+            >
+              Change Time
+            </button>
+            <!-- Queue number changing button -->
+            <button
+              @click="changeQueueNumber(index)"
+              class="change-queue-button"
+            >
+              Change Queue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
 
 <style scoped>
 /* Slot button styles */
@@ -117,57 +188,3 @@ const changeQueueNumber = (index) => {
   color: white;
 }
 </style>
-
-<template>
-  <div class="w-full max-w-2xl mx-auto mt-14">
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <div class="grid gap-4">
-        <div v-for="(slot, index) in timeSlots" :key="index" class="relative border p-4 rounded-md">
-          <!-- Slot button -->
-          <button
-            :class="[
-              'slot-button',
-              slot.isFull
-                ? 'slot-full'
-                : slot.isDisabled
-                ? 'slot-disabled'
-                : 'hover:bg-green-100 hover:text-black bg-indigo-700 text-white',
-              selectedSlot === index ? 'slot-selected' : 'border-gray-300'
-            ]"
-            :disabled="slot.isFull || slot.isDisabled"
-          >
-            <div class="flex justify-between items-center w-full">
-              <span>{{ slot.date }}</span>
-              <span>{{ slot.time }}</span>
-              <span>เหลือ {{ slot.remaining }} คิว</span>
-            </div>
-          </button>
-          
-          <!-- Enable/Disable button outside the row -->
-          <div class="mt-2 text-right">
-            <button
-              @click="toggleSlot(index)"
-              class="toggle-button mr-2"
-            >
-              {{ slot.isDisabled ? "Enable" : "Disable" }}
-            </button>
-            <!-- Time changing button -->
-            <button
-              @click="changeTime(index)"
-              class="change-time-button"
-            >
-              Change Time
-            </button>
-            <!-- Queue number changing button -->
-            <button
-              @click="changeQueueNumber(index)"
-              class="change-queue-button"
-            >
-              Change Queue
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>

@@ -23,6 +23,7 @@ import Adminsetting from "../pages/admin/Adminsetting.vue";
 
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
+import LoginQueue from "@/pages/view/LoginQueue.vue";
 
 const { cookies } = useCookies();
 
@@ -31,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "root",
     component: LoginView,
+  },
+  {
+    path: "/queue",
+    name: "queuelogin",
+    component: LoginQueue,
   },
   //User จองวัน
   {
