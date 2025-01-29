@@ -281,7 +281,8 @@ async function confirmRemoveCard(id:number) {
         title: "ลบสำเร็จ!",
         text: "รอบที่เลือกถูกลบเรียบร้อยแล้ว",
         icon: "success",
-        confirmButtonText: "ตกลง",
+        showConfirmButton: false,
+        timer: 2000,
       });
 
       // อัปเดต UI หรือดึงข้อมูลใหม่หลังลบสำเร็จ

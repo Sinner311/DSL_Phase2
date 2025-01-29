@@ -2,11 +2,13 @@
 import Navbar from "@/components/user/Navbar.vue";
 import UserBackbutton from "@/components/user/UserBackbutton.vue";
 import { ref, onMounted } from "vue";
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
+const accesstoken = cookies.get("accesstoken");
 const studentinfo = ref({ id: "", name: "", studentid: "" });
-const bookinginfo = ref({});
+const bookinginfo = ref([]); 
 
 // Define user data as a reactive reference
 function parseJwt(token: string) {
@@ -56,7 +58,7 @@ async function getMybooking(id: number) {
 }
 
 async function getuserinfo() {
-  const accesstoken = cookies.get("accesstoken");
+  bookinginfo.value = [];
   const access_token_extract = parseJwt(accesstoken);
   const studentinfoData = await getMystudentID(access_token_extract.email); // ดึงข้อมูลของ student
   if (studentinfoData) {
@@ -104,6 +106,63 @@ function formatTime(timeString:any, timeZone = "Africa/Abidjan") {
   const formatter = new Intl.DateTimeFormat("en-US", options);
   return formatter.format(new Date(timeString));
 }
+
+async function confirmRemoveCard(id:number) {
+
+try {
+// แสดง SweetAlert เพื่อยืนยันการลบ
+const result = await Swal.fire({
+  title: "คุณแน่ใจหรือไม่?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  cancelButtonText: "ยกเลิก",
+  confirmButtonText: "ยืนยัน",
+  reverseButtons: true,
+});
+
+// ถ้าผู้ใช้กดยืนยัน
+if (result.isConfirmed) {
+  // ส่งคำขอ DELETE ไปยัง API
+  const response = await axios.delete(
+    `${import.meta.env.VITE_APP_IP}/api/booking/DeleteBooking?historyid=${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accesstoken}`,
+      },
+    }
+  );
+
+  // ตรวจสอบสถานะการตอบกลับ
+  if (response.status === 200) {
+    // แสดง SweetAlert สำหรับการลบสำเร็จ
+    Swal.fire({
+      title: "ยกเลิกการจองสำเร็จ!",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
+    // อัปเดต UI หรือดึงข้อมูลใหม่หลังลบสำเร็จ
+    getuserinfo();
+  } else {
+    throw new Error("Failed to delete round.");
+  }
+}
+} catch (error) {
+// แสดง SweetAlert กรณีลบไม่สำเร็จ
+Swal.fire({
+  title: "เกิดข้อผิดพลาด!",
+  text: "ไม่สามารถยกเลิกการจองได้ กรุณาลองใหม่",
+  icon: "error",
+  showConfirmButton: false,
+  timer: 1500,
+});
+console.error("Error deleting round:", error);
+}
+}
+
 
 onMounted(() => {
   getuserinfo(); // เรียกใช้งานเมื่อคอมโพเนนต์ถูก mount
@@ -218,6 +277,7 @@ onMounted(() => {
           </button> -->
           <button
             class="flex-1 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
+            @click="confirmRemoveCard(bookinginfo.historyid)"
           >
             ยกเลิกการจอง
           </button>

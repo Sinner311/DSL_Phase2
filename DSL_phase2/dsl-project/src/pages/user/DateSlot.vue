@@ -17,6 +17,20 @@ const route = useRoute();
 const requestRoundid = Number(route.query.roundid);
 const requestType = Number(route.query.type);
 // ฟังก์ชันดึงข้อมูลวันที่จาก API
+
+async function getBookingCount(dateid) {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/booking/getcountBookingByDate?dateid=${dateid}`
+    );
+    return response.data.total || 0;
+  } catch (error) {
+    console.error("Error fetching booking count:", error);
+    return 0; // ถ้า error ให้ถือว่าไม่มีการจอง
+  }
+}
+
+
 async function getAllDate() {
   try {
     const response = await axios.get(
@@ -29,15 +43,22 @@ async function getAllDate() {
     );
 
     if (response.status === 200) {
-      timeSlots.value = response.data.map((day) => ({
-        dateid: day.dateid,
-        type: requestType,
-        date: `${new Date(day.date).getDate()} ${formatDate(day.date).month} ${formatDate(day.date).year}`,
-        time: `${formatTime(day.starttime)} - ${formatTime(day.endtime)}`,
-        remaining: day.maxuser-50, // จำลองข้อมูลผู้ใช้ที่เหลือ
-        isFull: day.maxuser <= 50, // ถ้าเต็มให้แสดงสถานะเต็ม
-      }));
-      
+      const dateData = response.data;
+      timeSlots.value = await Promise.all(
+        dateData.map(async (day) => {
+          const bookedCount = await getBookingCount(day.dateid); // ดึงจำนวนการจองที่มีอยู่
+          let remaining = day.maxuser - bookedCount - 50;
+          remaining = Math.max(remaining, 0);
+          return {
+            dateid: day.dateid,
+            type: requestType,
+            date: `${new Date(day.date).getDate()} ${formatDate(day.date).month} ${formatDate(day.date).year}`,
+            time: `${formatTime(day.starttime)} - ${formatTime(day.endtime)}`,
+            remaining,
+            isFull: remaining <= 0, // ถ้าเหลือ 0 ให้เป็นเต็ม
+          };
+        })
+      );
     } else {
       throw new Error("Failed to fetch data.");
     }

@@ -59,3 +59,45 @@ export async function myBooking(studentid: number) {
     endtime: dateInfo?.endtime,
   };
 }
+
+export async function countBookingByDate(dateid: number) {
+  const dateidNumber = Number(dateid);
+  if (isNaN(dateidNumber)) {
+    throw new Error("Invalid DateID. Please provide a valid number.");
+  }
+
+  // ใช้ count() เพื่อนับจำนวนการจองที่มี bookingdateid ตรงกับ dateid
+  const bookingCount = await prisma.history_booking.count({
+    where: {
+      bookingdateid: dateidNumber,
+    },
+  });
+
+  return { total: bookingCount };
+}
+
+export async function deleteBooking({ historyid }: { historyid: number }) {
+  try {
+    // ตรวจสอบก่อนว่ามีการจองนี้อยู่หรือไม่
+    const existingBooking = await prisma.history_booking.findUnique({
+      where: {
+        historyid: historyid,
+      },
+    });
+
+    if (!existingBooking) {
+      throw new Error("ไม่พบข้อมูลการจองนี้");
+    }
+
+    await prisma.history_booking.delete({
+      where: {
+        historyid: historyid,
+      },
+    });
+
+    return { message: "ยกเลิกการจองสำเร็จแล้ว" };
+  } catch (error) {
+    console.error("Error in deleteBooking:", error);
+    throw new Error("ไม่สามารถยกเลิกการจองได้");
+  }
+}

@@ -1,7 +1,7 @@
 const asynchandler = require("express-async-handler");
 
 import { $Enums } from "@prisma/client";
-import { addBooking,myBooking } from "../services/booking";
+import { addBooking,myBooking,countBookingByDate,deleteBooking } from "../services/booking";
 
 export const makeBooking = asynchandler(async (req: any, res: any) => {
   const { id, type, dateid } = req.body;
@@ -52,3 +52,40 @@ export const getmyBooking = asynchandler(async (req: any, res: any) => {
     }
   });
   
+
+  
+  export const getcountBookingByDate = asynchandler(async (req: any, res: any) => {
+    const { dateid } = req.query;
+  
+    if (!dateid) {
+      return res.status(400).json({ message: "dateid is required." });
+    }
+  
+    try {
+      const countBooking = await countBookingByDate(dateid);
+      res.status(200).json(countBooking); // เปลี่ยนเป็น .json() เพื่อให้ JSON response ถูกต้อง
+    } catch (error) {
+      console.error("Error fetching count booking:", error);
+      res.status(500).json({ message: "Failed to fetch count booking." });
+    }
+  });
+  
+
+  export const DeleteBooking = asynchandler(async (req: any, res: any) => {
+    try {
+      const { historyid } = req.query;
+  
+      // ตรวจสอบว่าได้รับ historyid มาหรือไม่
+      console.log(historyid)
+      if (!historyid) {
+        return res.status(400).json({ message: "ต้องระบุ historyid" });
+      }
+  
+      const deletebooking = await deleteBooking({ historyid: Number(historyid) });
+  
+      res.status(200).send(deletebooking);
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+      res.status(500).json({ message: "เกิดข้อผิดพลาดในการยกเลิกการจอง" });
+    }
+  });
