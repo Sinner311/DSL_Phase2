@@ -28,24 +28,24 @@
       <!-- ตารางช่องบริการ -->
       <div class="bg-white rounded-xl shadow-md w-[900px] border-2 border-black">
         <!-- Header ตาราง -->
-        <div class="flex justify-between items-center  text-white p-6 rounded-t-xl">
+        <div class="flex justify-around items-center  text-white p-6 rounded-t-xl">
           <p class="font-bold text-5xl text-black">ช่องบริการ</p>
           <p class="font-bold text-5xl text-black">หมายเลขคิว</p>
         </div>
         <!-- เนื้อหาในตาราง -->
         <div class="divide-y divide-gray-600 ">
           <!-- แถว 1 -->
-          <div class="flex justify-between items-center p-6">
+          <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">1</p>
             <p class="text-8xl font-bold text-blue-900">45</p>
           </div>
           <!-- แถว 2 -->
-          <div class="flex justify-between items-center p-6">
+          <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">2</p>
             <p class="text-8xl font-bold text-blue-900">47</p>
           </div>
           <!-- แถว 3 -->
-          <div class="flex justify-between items-center p-6">
+          <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">3</p>
             <p class="text-8xl font-bold text-blue-900">46</p>
           </div>
