@@ -16,5 +16,12 @@ router.post("/addTeacher",addTeacher);
 
 router.get("/getAllstaff",admingetStaff);
 
-
+router.get("/getcurrentdate", (req, res) => {
+    const currentDate = new Date();  
+    // ตั้งค่าเวลาเป็น 00:00:00.000 UTC
+    currentDate.setUTCHours(0, 0, 0, 0);
+    res.status(200).send({
+        "dates": currentDate.toISOString()
+    });
+});
 module.exports = router;

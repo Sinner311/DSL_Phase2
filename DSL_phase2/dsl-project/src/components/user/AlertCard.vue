@@ -90,7 +90,7 @@ function handleConfirm() {
             </p>
             <p>วันที่ {{ selectedSlot.date }}</p>
             <div class="flex items-center justify-center gap-2 text-gray-600">
-              <ClockIcon class="w-4 h-4" />
+              <ClockIcon class="w-4 h-4 me-2" />
               <span>{{ selectedSlot.time }}</span>
             </div>
           </div>

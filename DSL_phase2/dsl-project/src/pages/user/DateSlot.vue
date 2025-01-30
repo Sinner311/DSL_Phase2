@@ -16,6 +16,7 @@ const selectedSlot = ref(null);
 const route = useRoute();
 const requestRoundid = Number(route.query.roundid);
 const requestType = Number(route.query.type);
+const todaydateinfo = ref([]);
 // ฟังก์ชันดึงข้อมูลวันที่จาก API
 
 async function getBookingCount(dateid) {
@@ -30,6 +31,22 @@ async function getBookingCount(dateid) {
   }
 }
 
+async function getTodaydate() {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/round/getTodayDate`
+    );
+    if (res.status !== 200) {
+      throw Error(res.statusText);
+    }
+    if (res.data === null) {
+      throw Error;
+    }
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function getAllDate() {
   try {
@@ -44,11 +61,24 @@ async function getAllDate() {
 
     if (response.status === 200) {
       const dateData = response.data;
+      const todaydateinfoData = await getTodaydate();
+      todaydateinfo.value = todaydateinfoData;
+      
+      // console.log(todaydateinfo.value.date)
       timeSlots.value = await Promise.all(
         dateData.map(async (day) => {
           const bookedCount = await getBookingCount(day.dateid); // ดึงจำนวนการจองที่มีอยู่
           let remaining = day.maxuser - bookedCount - 50;
           remaining = Math.max(remaining, 0);
+           // แปลงวันที่ให้อยู่ในรูปแบบที่ JavaScript เข้าใจได้
+      const dayDate = new Date(day.date);
+      const todayDate = new Date(todaydateinfo.value.date);
+
+      // เพิ่ม 3 วันให้กับ todayDate
+      const threeDaysLater = new Date(todayDate);
+      threeDaysLater.setDate(todayDate.getDate() + 3);
+
+      // ตรวจสอบว่า day.date ผ่านไปแล้วหรือไม่
           return {
             dateid: day.dateid,
             type: requestType,
@@ -56,6 +86,7 @@ async function getAllDate() {
             time: `${formatTime(day.starttime)} - ${formatTime(day.endtime)}`,
             remaining,
             isFull: remaining <= 0, // ถ้าเหลือ 0 ให้เป็นเต็ม
+            isPast: dayDate < threeDaysLater,// ต้องจองล่วงหน้าก่อน3วัน
           };
         })
       );
@@ -191,12 +222,12 @@ getAllDate();
               :key="index"
               :class="[
                 'w-full p-4 border rounded-lg',
-                slot.isFull
+                slot.isFull || slot.isPast
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   : 'hover:bg-green-100 hover:text-black bg-indigo-700 text-white',
                 selectedSlot === slot ? 'bg-green-500 text-white' : 'border-gray-300',
               ]"
-              :disabled="slot.isFull"
+              :disabled="slot.isFull || slot.isPast"
               @click="handleSlotSelection(slot)"
             >
               <div class="flex justify-between items-center w-full">

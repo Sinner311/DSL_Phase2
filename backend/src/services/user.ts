@@ -1,8 +1,10 @@
 import prisma from "../prisma/client";
 import { users_role, users } from "@prisma/client";
+
 export async function getUser() {
   return await prisma.users.findMany();
 }
+
 export async function addUser(users: {
   studentid: string;
   email: string;
@@ -19,7 +21,7 @@ export async function getSpecificuser(users: {
   email: string;
   studentid?: string;
 }) {
-  console.log(users.studentid);
+  // console.log(users.studentid);
   const res = await prisma.users.findUnique({
     where: {
       email: users.email,

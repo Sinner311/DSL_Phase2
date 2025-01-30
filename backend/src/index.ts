@@ -16,8 +16,8 @@ const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
 const roundRouter = require("./routes/round.route");
 const bookingRouter = require("./routes/booking.route");
-// const queueRouter = require("./routes/queue.route");
-// const historyRouter = require("./routes/history.route");
+const queueRouter = require("./routes/queue.route");
+const historyRouter = require("./routes/history.route");
 
 const port = parseInt(process.env.PORT!) || 7777; // Port for the server
 const app = express();
@@ -38,8 +38,8 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/round", roundRouter);
 app.use("/api/booking", bookingRouter);
-// app.use("/api/queue", queueRouter);
-// app.use("/api/history", historyRouter);
+app.use("/api/queue", queueRouter);
+app.use("/api/history", historyRouter);
 
 app.listen(port, function () {
   console.log("Server is ready at ", port);

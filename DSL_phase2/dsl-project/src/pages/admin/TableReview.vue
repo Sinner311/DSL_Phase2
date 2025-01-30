@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import Navbar from '@/components/Navbar.vue';
+import Navbar from '@/components/admin/Navbaradmin.vue';
 
 const tableData = ref([
   { id: '001', datetime: '2025-01-29 12:00', type: 'A', status: 'Completed', score: '5' },

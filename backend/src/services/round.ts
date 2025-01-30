@@ -238,3 +238,13 @@ export async function deleteRound({ roundid }: { roundid: number }) {
 
   return { message: `ลบรอบที่มี ID ${roundid} สำเร็จแล้ว.` };
 }
+
+
+export async function TodayDate(days: { date: string }) {
+  const res = await prisma.days.findUnique({
+    where: {
+      date:days.date
+    },
+  });
+  return res;
+}
