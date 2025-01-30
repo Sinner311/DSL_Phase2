@@ -17,7 +17,7 @@ const updateDateTime = () => {
 
 onMounted(() => {
   updateDateTime();
-  setInterval(updateDateTime, 60000); // อัปเดตทุก 1 นาที (แทน 1 วินาที)
+  setInterval(updateDateTime, 30000); // อัปเดตทุก 1 นาที (แทน 1 วินาที)
 });
 </script>
 

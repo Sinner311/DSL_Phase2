@@ -37,10 +37,19 @@ export async function getDashboardData() {
       }
     });
 
+    const QueueWait = await prisma.queues.count({
+      where: {
+        status: {
+          in: ["wait"], // Count all these statuses
+        },
+      }
+    });
+
     return {
       totalQueues,
       finishedQueues,
       skippedQueues,
+      QueueWait,
       inQueue
     };
   } catch (error) {
