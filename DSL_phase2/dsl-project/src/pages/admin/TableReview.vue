@@ -3,16 +3,16 @@ import { ref } from 'vue';
 import Navbar from '@/components/admin/Navbaradmin.vue';
 
 const tableData = ref([
-  { id: '001', datetime: '2025-01-29 12:00', type: 'A', status: 'Completed', score: '5' },
-  { id: '002', datetime: '2025-01-29 12:30', type: 'B', status: 'Pending', score: '4' },
-  { id: '003', datetime: '2025-01-29 13:00', type: 'C', status: 'In Progress', score: '3' },
-  { id: '004', datetime: '2025-01-29 13:30', type: 'D', status: 'Completed', score: '2' },
-  { id: '005', datetime: '2025-01-29 14:00', type: 'E', status: 'Canceled', score: '1' },
+  { id: '001', datetime: '2025-01-29 12:00', type: '1', status: 'Completed', score: '5', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1' },
+  { id: '002', datetime: '2025-01-29 12:30', type: '2', status: 'Pending', score: '4', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
+  { id: '003', datetime: '2025-01-29 13:00', type: '3', status: 'In Progress', score: '3', q1: '1', q2: '0', q3: '1', q4: '1', q5: '1'  },
+  { id: '004', datetime: '2025-01-29 13:30', type: '1', status: 'Completed', score: '2', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
+  { id: '005', datetime: '2025-01-29 14:00', type: '1', status: 'Canceled', score: '1', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
 ]);
 
 const downloadCSV = () => {
-  const headers = ['เลขประจำตัว', 'วันที่และเวลา', 'ประเภท', 'สถานะ', 'คะแนนประเมิน'];
-  const rows = tableData.value.map(row => [row.id, row.datetime, row.type, row.status, row.score]);
+  const headers = ['เลขประจำตัว', 'วันที่และเวลา', 'ประเภท', 'สถานะ', 'คะแนนประเมิน', 'คุณได้รับความช่วยเหลือที่ต้องการหรือไม่', 'ความรวดเร็วในการตอบคำถาม', 'ความสามารถในการแก้ไขปัญหา', 'ทักษะในการสื่อสาร', 'มารยาทในการสนทนา'];
+  const rows = tableData.value.map(row => [row.id, row.datetime, row.type, row.status, row.score, row.q1, row.q2, row.q3, row.q4, row.q5]);
 
   let csvContent = 'data:text/csv;charset=utf-8,' 
     + [headers, ...rows].map(e => e.join(',')).join('\n');
@@ -41,6 +41,11 @@ const downloadCSV = () => {
             <th class="border border-gray-300 p-2 text-sm font-medium">ประเภท</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">สถานะ</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">คะแนนประเมิน</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">คุณได้รับความช่วยเหลือที่ต้องการหรือไม่</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">ความรวดเร็วในการตอบคำถาม</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">ความสามารถในการแก้ไขปัญหา</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">ทักษะในการสื่อสาร</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">มารยาทในการสนทนา</th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +55,11 @@ const downloadCSV = () => {
             <td class="border border-gray-300 p-2">{{ row.type }}</td>
             <td class="border border-gray-300 p-2">{{ row.status }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.score }}</td>
+            <td class="border border-gray-300 p-2 text-center">{{ row.q1 }}</td>
+            <td class="border border-gray-300 p-2 text-center">{{ row.q2 }}</td>
+            <td class="border border-gray-300 p-2 text-center">{{ row.q3 }}</td>
+            <td class="border border-gray-300 p-2 text-center">{{ row.q4 }}</td>
+            <td class="border border-gray-300 p-2 text-center">{{ row.q5 }}</td>
           </tr>
         </tbody>
       </table>
