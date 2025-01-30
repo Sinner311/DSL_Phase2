@@ -32,6 +32,13 @@ const downloadCSV = () => {
     <div class="p-4 m-10">
       <!-- Section Title -->
       <h2 class="text-lg font-semibold mb-4 text-center">คะแนนประเมิน</h2>
+
+      <!-- Download Button (Aligned to Right) -->
+      <div class="flex justify-end mb-4">
+        <button @click="downloadCSV" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+          Download
+        </button>
+      </div>
   
       <table class="w-full border-collapse border border-gray-300">
         <thead>
@@ -63,13 +70,6 @@ const downloadCSV = () => {
           </tr>
         </tbody>
       </table>
-  
-      <!-- Download Button (Aligned to Right) -->
-      <div class="flex justify-end mt-5">
-        <button @click="downloadCSV" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
-          Download
-        </button>
-      </div>
     </div>
   </template>
   
