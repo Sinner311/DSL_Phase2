@@ -11,7 +11,7 @@ const tableData = ref([
 ]);
 
 const downloadCSV = () => {
-  const headers = ['เลขประจำตัว', 'วันที่และเวลา', 'ประเภท', 'สถานะ', 'คะแนนประเมิน', 'คุณได้รับความช่วยเหลือที่ต้องการหรือไม่', 'ความรวดเร็วในการตอบคำถาม', 'ความสามารถในการแก้ไขปัญหา', 'ทักษะในการสื่อสาร', 'มารยาทในการสนทนา'];
+  const headers = ['รหัสนักศึกษา', 'วันที่และเวลา', 'ประเภท', 'สถานะ', 'คะแนนประเมิน', 'คุณได้รับความช่วยเหลือที่ต้องการหรือไม่', 'ความรวดเร็วในการตอบคำถาม', 'ความสามารถในการแก้ไขปัญหา', 'ทักษะในการสื่อสาร', 'มารยาทในการสนทนา'];
   const rows = tableData.value.map(row => [row.id, row.datetime, row.type, row.status, row.score, row.q1, row.q2, row.q3, row.q4, row.q5]);
 
   let csvContent = 'data:text/csv;charset=utf-8,' 
@@ -36,7 +36,7 @@ const downloadCSV = () => {
       <table class="w-full border-collapse border border-gray-300">
         <thead>
           <tr class="bg-gray-100">
-            <th class="border border-gray-300 p-2 text-sm font-medium">เลขประจำตัว</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">รหัสนักศึกษา</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">วันที่และเวลา</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">ประเภท</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">สถานะ</th>
