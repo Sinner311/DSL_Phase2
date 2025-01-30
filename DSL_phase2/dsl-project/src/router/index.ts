@@ -246,7 +246,7 @@ router.beforeEach(async (to, from, next) => {
   const isAuth = await isAuthenticated();
   const userToken = isAuth ? parseJwt(cookies.get("accesstoken")) : null;
 
-  if (!isAuth && to.name !== "root") {
+  if (!isAuth && to.name !== "root" && to.name !== "queuelogin") {
     console.log("Not authenticated. Redirecting to login.");
     return next({ name: "root" });
   }
