@@ -3,16 +3,16 @@ import { ref } from 'vue';
 import Navbar from '@/components/admin/Navbaradmin.vue';
 
 const tableData = ref([
-  { id: '001', datetime: '2025-01-29 12:00', type: '1', status: 'Completed', score: '5', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1' },
-  { id: '002', datetime: '2025-01-29 12:30', type: '2', status: 'Pending', score: '4', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
-  { id: '003', datetime: '2025-01-29 13:00', type: '3', status: 'In Progress', score: '3', q1: '1', q2: '0', q3: '1', q4: '1', q5: '1'  },
-  { id: '004', datetime: '2025-01-29 13:30', type: '1', status: 'Completed', score: '2', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
-  { id: '005', datetime: '2025-01-29 14:00', type: '1', status: 'Canceled', score: '1', q1: '1', q2: '1', q3: '1', q4: '1', q5: '0'  },
+  { studentid: '071', type: '1', channel: '1', status: 'FINISH', star_rate: '5', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1' },
+  { studentid: '112', type: '2', channel: '1', status: 'SKIP', star_rate: '-', q1: '-', q2: '-', q3: '-', q4: '-', q5: '-'  },
+  { studentid: '203', type: '3', channel: '1', status: 'FINISH', star_rate: '3', q1: '1', q2: '0', q3: '1', q4: '1', q5: '1'  },
+  { studentid: '604', type: '1', channel: '1', status: 'FINISH', star_rate: '2', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
+  { studentid: '105', type: '1', channel: '1', status: 'NOTREVIEW', star_rate: '1', q1: '1', q2: '1', q3: '1', q4: '1', q5: '0'  },
 ]);
 
 const downloadCSV = () => {
-  const headers = ['รหัสนักศึกษา', 'วันที่และเวลา', 'ประเภท', 'สถานะ', 'คะแนนประเมิน', 'คุณได้รับความช่วยเหลือที่ต้องการหรือไม่', 'ความรวดเร็วในการตอบคำถาม', 'ความสามารถในการแก้ไขปัญหา', 'ทักษะในการสื่อสาร', 'มารยาทในการสนทนา'];
-  const rows = tableData.value.map(row => [row.id, row.datetime, row.type, row.status, row.score, row.q1, row.q2, row.q3, row.q4, row.q5]);
+  const headers = ['รหัสนักศึกษา', 'ประเภท', 'ช่องบริการ', 'สถานะ', 'คะแนนประเมิน', 'คุณได้รับความช่วยเหลือที่ต้องการหรือไม่', 'ความรวดเร็วในการตอบคำถาม', 'ความสามารถในการแก้ไขปัญหา', 'ทักษะในการสื่อสาร', 'มารยาทในการสนทนา'];
+  const rows = tableData.value.map(row => [row.studentid, row.type, row.channel, row.status, row.star_rate, row.q1, row.q2, row.q3, row.q4, row.q5]);
 
   let csvContent = 'data:text/csv;charset=utf-8,' 
     + [headers, ...rows].map(e => e.join(',')).join('\n');
@@ -37,8 +37,8 @@ const downloadCSV = () => {
         <thead>
           <tr class="bg-gray-100">
             <th class="border border-gray-300 p-2 text-sm font-medium">รหัสนักศึกษา</th>
-            <th class="border border-gray-300 p-2 text-sm font-medium">วันที่และเวลา</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">ประเภท</th>
+            <th class="border border-gray-300 p-2 text-sm font-medium">ช่องบริการ</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">สถานะ</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">คะแนนประเมิน</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">คุณได้รับความช่วยเหลือที่ต้องการหรือไม่</th>
@@ -50,11 +50,11 @@ const downloadCSV = () => {
         </thead>
         <tbody>
           <tr v-for="(row, index) in tableData" :key="index">
-            <td class="border border-gray-300 p-2">{{ row.id }}</td>
-            <td class="border border-gray-300 p-2">{{ row.datetime }}</td>
+            <td class="border border-gray-300 p-2">{{ row.studentid }}</td>
             <td class="border border-gray-300 p-2">{{ row.type }}</td>
+            <td class="border border-gray-300 p-2">{{ row.channel }}</td>
             <td class="border border-gray-300 p-2">{{ row.status }}</td>
-            <td class="border border-gray-300 p-2 text-center">{{ row.score }}</td>
+            <td class="border border-gray-300 p-2 text-center">{{ row.star_rate }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.q1 }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.q2 }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.q3 }}</td>
