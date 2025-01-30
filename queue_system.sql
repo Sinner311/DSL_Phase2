@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2025 at 09:47 PM
+-- Generation Time: Jan 31, 2025 at 12:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,11 +50,11 @@ INSERT INTO `days` (`dateid`, `roundid1`, `roundid2`, `status`, `maxuser`, `date
 (607, 36, 37, 'normal', 350, '2025-01-29', '08:30:00', '16:00:00'),
 (608, NULL, 37, 'normal', 350, '2025-01-30', '08:30:00', '16:00:00'),
 (609, NULL, NULL, 'normal', 350, '2025-01-31', '08:30:00', '16:00:00'),
-(610, NULL, NULL, 'normal', 350, '2025-02-03', '08:30:00', '16:00:00'),
-(611, NULL, NULL, 'normal', 350, '2025-02-04', '08:30:00', '16:00:00'),
-(612, NULL, NULL, 'normal', 350, '2025-02-05', '08:30:00', '16:00:00'),
-(613, NULL, NULL, 'normal', 350, '2025-02-06', '08:30:00', '16:00:00'),
-(614, NULL, NULL, 'normal', 350, '2025-02-07', '08:30:00', '16:00:00'),
+(610, 38, NULL, 'normal', 350, '2025-02-03', '08:30:00', '16:00:00'),
+(611, 38, NULL, 'normal', 350, '2025-02-04', '08:30:00', '16:00:00'),
+(612, 38, NULL, 'normal', 350, '2025-02-05', '08:30:00', '16:00:00'),
+(613, 38, NULL, 'normal', 350, '2025-02-06', '08:30:00', '16:00:00'),
+(614, 38, NULL, 'normal', 350, '2025-02-07', '08:30:00', '16:00:00'),
 (615, NULL, NULL, 'normal', 350, '2025-02-10', '08:30:00', '16:00:00'),
 (616, NULL, NULL, 'normal', 350, '2025-02-11', '08:30:00', '16:00:00'),
 (617, NULL, NULL, 'normal', 350, '2025-02-12', '08:30:00', '16:00:00'),
@@ -130,7 +130,10 @@ INSERT INTO `days` (`dateid`, `roundid1`, `roundid2`, `status`, `maxuser`, `date
 (3107, NULL, NULL, 'normal', 350, '2025-05-01', '08:30:00', '16:00:00'),
 (3108, NULL, NULL, 'normal', 350, '2025-05-22', '08:30:00', '16:00:00'),
 (3109, NULL, NULL, 'normal', 350, '2025-05-23', '08:30:00', '16:00:00'),
-(3110, NULL, NULL, 'normal', 350, '2025-05-26', '08:30:00', '16:00:00');
+(3110, NULL, NULL, 'normal', 350, '2025-05-26', '08:30:00', '16:00:00'),
+(3111, NULL, NULL, 'normal', 350, '2025-05-27', '08:30:00', '16:00:00'),
+(3112, NULL, NULL, 'normal', 350, '2025-05-28', '08:30:00', '16:00:00'),
+(3113, NULL, NULL, 'normal', 350, '2025-05-29', '08:30:00', '16:00:00');
 
 -- --------------------------------------------------------
 
@@ -147,6 +150,13 @@ CREATE TABLE `history_booking` (
   `type` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `history_booking`
+--
+
+INSERT INTO `history_booking` (`historyid`, `datetime`, `studentid`, `bookingdateid`, `status`, `type`) VALUES
+(6, '2025-01-30 13:48:30', 14, 608, 'normal', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -161,13 +171,22 @@ CREATE TABLE `history_queue` (
   `type` tinyint(4) DEFAULT NULL,
   `channel` tinyint(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
-  `star_rate` tinyint(1) DEFAULT NULL,
+  `star_rate` int(11) DEFAULT NULL,
   `q1` tinyint(1) DEFAULT NULL,
   `q2` tinyint(1) DEFAULT NULL,
   `q3` tinyint(1) DEFAULT NULL,
   `q4` tinyint(1) DEFAULT NULL,
   `q5` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `history_queue`
+--
+
+INSERT INTO `history_queue` (`historyid`, `datetime`, `studentid`, `queueid`, `type`, `channel`, `status`, `star_rate`, `q1`, `q2`, `q3`, `q4`, `q5`) VALUES
+(1, '2025-01-30 17:00:00', 14, 5, 1, 1, 'FINSHIN', 5, 1, 0, 0, 1, 1),
+(2, '2025-01-30 20:07:07', 14, 5, 2, 2, 'FINSHIN', 4, 1, 0, 0, 0, 0),
+(3, '2025-01-31 03:09:07', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -177,7 +196,7 @@ CREATE TABLE `history_queue` (
 
 CREATE TABLE `list_of_round` (
   `Listid` int(11) NOT NULL,
-  `Document_Amendment_Submission_Date` date DEFAULT NULL,
+  `Document_Amendment_Submission_Date` varchar(20) DEFAULT NULL,
   `year` year(4) DEFAULT NULL,
   `semester` tinyint(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -208,6 +227,14 @@ CREATE TABLE `queues` (
   `status` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `queues`
+--
+
+INSERT INTO `queues` (`queueid`, `time`, `studentid`, `type`, `channel`, `status`) VALUES
+(5, '15:05:09', 14, 1, NULL, 'WAIT'),
+(6, '15:07:06', NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -230,7 +257,8 @@ CREATE TABLE `rounds` (
 
 INSERT INTO `rounds` (`roundid`, `startdate`, `enddate`, `Listid`, `roundnumber`, `type`, `status`) VALUES
 (36, '2025-01-28', '2025-01-29', 6, 1, 1, 'normal'),
-(37, '2025-01-29', '2025-01-30', 6, 1, 2, 'normal');
+(37, '2025-01-29', '2025-01-30', 6, 1, 2, 'normal'),
+(38, '2025-02-01', '2025-02-09', 6, 2, 1, 'normal');
 
 -- --------------------------------------------------------
 
@@ -255,7 +283,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `studentid`, `name`, `role`, `channel`, `refresh`) VALUES
 (1, 'nemopop148@gmail.com', NULL, 'JATESADA LEESUWAN', 'ADMIN', 3, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5lbW9wb3AxNDhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM4MDAzNTI0LCJleHAiOjE3MzgwODk5MjR9.fKAjiTIKYjOZ_tpmKiU_sfsDALotG4dgflyDOMeVWQM'),
 (11, 'pimsiri814@gmail.com', '6587864046', '', 'TEACHER', 0, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBpbXNpcmk4MTRAZ21haWwuY29tIiwicm9sZSI6IlRFQUNIRVIiLCJpYXQiOjE3MzgwNzA1NTQsImV4cCI6MTczODE1Njk1NH0.37S5yMNQg55cXWxvNwJ66rodr2QVBYIDyTfWjn0LlvI'),
-(12, '6531501141@lamduan.mfu.ac.th', '6531501141', 'JATESADA LEESUWAN', 'STUDENT', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjY1MzE1MDExNDFAbGFtZHVhbi5tZnUuYWMudGgiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTczODA4Nzg4MiwiZXhwIjoxNzM4MTc0MjgyfQ.gsFVA0InQACcnAvA3MrzM7ejyo9eT0GTIw3XA8vwz18');
+(12, '6531501141@lamduan.mfu.ac.th', '6531501141', 'JATESADA LEESUWAN', 'STUDENT', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjY1MzE1MDExNDFAbGFtZHVhbi5tZnUuYWMudGgiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTczODA4Nzg4MiwiZXhwIjoxNzM4MTc0MjgyfQ.gsFVA0InQACcnAvA3MrzM7ejyo9eT0GTIw3XA8vwz18'),
+(14, '6531501071@lamduan.mfu.ac.th', '6531501071', 'BAWORNLUK SURAWIROJ', 'STUDENT', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjY1MzE1MDEwNzFAbGFtZHVhbi5tZnUuYWMudGgiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTczODI1MTEwNSwiZXhwIjoxNzM4MzM3NTA1fQ.VmqbDB9Y91JeWfSopU7rsgYW328ypHYKNIMyWlPPQO4'),
+(15, 'bawornluk18@gmail.com', NULL, NULL, 'ADMIN', 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhd29ybmx1azE4QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTczODI2OTg5NCwiZXhwIjoxNzM4MzU2Mjk0fQ.SKu9JCYUHdSjYRogIX1U5-YSmjaCN1LM9tRFCw14GrA');
 
 -- --------------------------------------------------------
 
@@ -349,19 +379,19 @@ ALTER TABLE `web_settings`
 -- AUTO_INCREMENT for table `days`
 --
 ALTER TABLE `days`
-  MODIFY `dateid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3111;
+  MODIFY `dateid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3114;
 
 --
 -- AUTO_INCREMENT for table `history_booking`
 --
 ALTER TABLE `history_booking`
-  MODIFY `historyid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `historyid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `history_queue`
 --
 ALTER TABLE `history_queue`
-  MODIFY `historyid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `historyid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `list_of_round`
@@ -373,19 +403,19 @@ ALTER TABLE `list_of_round`
 -- AUTO_INCREMENT for table `queues`
 --
 ALTER TABLE `queues`
-  MODIFY `queueid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `queueid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `rounds`
 --
 ALTER TABLE `rounds`
-  MODIFY `roundid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `roundid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `web_settings`
@@ -408,15 +438,15 @@ ALTER TABLE `days`
 -- Constraints for table `history_booking`
 --
 ALTER TABLE `history_booking`
-  ADD CONSTRAINT `history_booking_ibfk_2` FOREIGN KEY (`bookingdateid`) REFERENCES `days` (`dateid`),
-  ADD CONSTRAINT `history_booking_ibfk_3` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `history_booking_ibfk_1` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `history_booking_ibfk_2` FOREIGN KEY (`bookingdateid`) REFERENCES `days` (`dateid`);
 
 --
 -- Constraints for table `history_queue`
 --
 ALTER TABLE `history_queue`
-  ADD CONSTRAINT `history_queue_ibfk_2` FOREIGN KEY (`queueid`) REFERENCES `queues` (`queueid`),
-  ADD CONSTRAINT `history_queue_ibfk_3` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `history_queue_ibfk_1` FOREIGN KEY (`studentid`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `history_queue_ibfk_2` FOREIGN KEY (`queueid`) REFERENCES `queues` (`queueid`);
 
 --
 -- Constraints for table `queues`
