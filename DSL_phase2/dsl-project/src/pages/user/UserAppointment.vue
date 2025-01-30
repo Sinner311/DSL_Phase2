@@ -2,13 +2,14 @@
 import Navbar from "@/components/user/Navbar.vue";
 import UserBackbutton from "@/components/user/UserBackbutton.vue";
 import { ref, onMounted } from "vue";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import axios from "axios";
+import { ClockIcon } from "lucide-vue-next";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
 const accesstoken = cookies.get("accesstoken");
 const studentinfo = ref({ id: "", name: "", studentid: "" });
-const bookinginfo = ref([]); 
+const bookinginfo = ref([]);
 
 // Define user data as a reactive reference
 function parseJwt(token: string) {
@@ -73,7 +74,6 @@ async function getuserinfo() {
   }
 }
 
-
 function formatDate(dateString) {
   const date = new Date(dateString);
   const monthNames = [
@@ -96,7 +96,7 @@ function formatDate(dateString) {
   return { month, year };
 }
 
-function formatTime(timeString:any, timeZone = "Africa/Abidjan") {
+function formatTime(timeString: any, timeZone = "Africa/Abidjan") {
   const options = {
     hour: "2-digit",
     minute: "2-digit",
@@ -107,62 +107,62 @@ function formatTime(timeString:any, timeZone = "Africa/Abidjan") {
   return formatter.format(new Date(timeString));
 }
 
-async function confirmRemoveCard(id:number) {
+async function confirmRemoveCard(id: number) {
+  try {
+    // แสดง SweetAlert เพื่อยืนยันการลบ
+    const result = await Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+      reverseButtons: true,
+    });
 
-try {
-// แสดง SweetAlert เพื่อยืนยันการลบ
-const result = await Swal.fire({
-  title: "คุณแน่ใจหรือไม่?",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  cancelButtonText: "ยกเลิก",
-  confirmButtonText: "ยืนยัน",
-  reverseButtons: true,
-});
+    // ถ้าผู้ใช้กดยืนยัน
+    if (result.isConfirmed) {
+      // ส่งคำขอ DELETE ไปยัง API
+      const response = await axios.delete(
+        `${
+          import.meta.env.VITE_APP_IP
+        }/api/booking/DeleteBooking?historyid=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accesstoken}`,
+          },
+        }
+      );
 
-// ถ้าผู้ใช้กดยืนยัน
-if (result.isConfirmed) {
-  // ส่งคำขอ DELETE ไปยัง API
-  const response = await axios.delete(
-    `${import.meta.env.VITE_APP_IP}/api/booking/DeleteBooking?historyid=${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accesstoken}`,
-      },
+      // ตรวจสอบสถานะการตอบกลับ
+      if (response.status === 200) {
+        // แสดง SweetAlert สำหรับการลบสำเร็จ
+        Swal.fire({
+          title: "ยกเลิกการจองสำเร็จ!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        // อัปเดต UI หรือดึงข้อมูลใหม่หลังลบสำเร็จ
+        getuserinfo();
+      } else {
+        throw new Error("Failed to delete round.");
+      }
     }
-  );
-
-  // ตรวจสอบสถานะการตอบกลับ
-  if (response.status === 200) {
-    // แสดง SweetAlert สำหรับการลบสำเร็จ
+  } catch (error) {
+    // แสดง SweetAlert กรณีลบไม่สำเร็จ
     Swal.fire({
-      title: "ยกเลิกการจองสำเร็จ!",
-      icon: "success",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถยกเลิกการจองได้ กรุณาลองใหม่",
+      icon: "error",
       showConfirmButton: false,
       timer: 1500,
     });
-
-    // อัปเดต UI หรือดึงข้อมูลใหม่หลังลบสำเร็จ
-    getuserinfo();
-  } else {
-    throw new Error("Failed to delete round.");
+    console.error("Error deleting round:", error);
   }
 }
-} catch (error) {
-// แสดง SweetAlert กรณีลบไม่สำเร็จ
-Swal.fire({
-  title: "เกิดข้อผิดพลาด!",
-  text: "ไม่สามารถยกเลิกการจองได้ กรุณาลองใหม่",
-  icon: "error",
-  showConfirmButton: false,
-  timer: 1500,
-});
-console.error("Error deleting round:", error);
-}
-}
-
 
 onMounted(() => {
   getuserinfo(); // เรียกใช้งานเมื่อคอมโพเนนต์ถูก mount
@@ -197,7 +197,10 @@ onMounted(() => {
       <!-- Main Content -->
       <div class="p-4">
         <!-- ถ้ามีข้อมูลการจอง -->
-        <div v-if="Object.keys(bookinginfo).length > 0" class="flex border border-gray-200 rounded-lg overflow-hidden">
+        <div
+          v-if="Object.keys(bookinginfo).length > 0"
+          class="flex border border-gray-200 rounded-lg overflow-hidden"
+        >
           <!-- Left Section - User Info -->
           <div
             class="w-1/2 p-4 flex flex-col items-center justify-center border-r"
@@ -243,21 +246,10 @@ onMounted(() => {
             </p>
 
             <div class="flex items-center text-gray-600">
-              <svg
-                class="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <ClockIcon class="w-4 h-4 me-2" />
               <span v-if="bookinginfo.starttime && bookinginfo.endtime">
-                {{ formatTime(bookinginfo.starttime) }} - {{ formatTime(bookinginfo.endtime) }}
+                {{ formatTime(bookinginfo.starttime) }} -
+                {{ formatTime(bookinginfo.endtime) }}
               </span>
               <span v-else>ข้อมูลเวลาไม่พร้อมใช้งาน</span>
             </div>
