@@ -7,7 +7,7 @@ const tableData = ref([
   { id: '002', datetime: '2025-01-29 12:30', type: '2', status: 'Pending', score: '4', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
   { id: '003', datetime: '2025-01-29 13:00', type: '3', status: 'In Progress', score: '3', q1: '1', q2: '0', q3: '1', q4: '1', q5: '1'  },
   { id: '004', datetime: '2025-01-29 13:30', type: '1', status: 'Completed', score: '2', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
-  { id: '005', datetime: '2025-01-29 14:00', type: '1', status: 'Canceled', score: '1', q1: '1', q2: '1', q3: '1', q4: '1', q5: '1'  },
+  { id: '005', datetime: '2025-01-29 14:00', type: '1', status: 'Canceled', score: '1', q1: '1', q2: '1', q3: '1', q4: '1', q5: '0'  },
 ]);
 
 const downloadCSV = () => {

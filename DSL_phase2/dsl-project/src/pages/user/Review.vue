@@ -1,6 +1,6 @@
 <script setup>
-import Navbar from '@/components/Navbar.vue'
-import ReviewForm from '@/components/ReviewForm.vue'
+import Navbar from '@/components/user/Navbar.vue'
+import ReviewForm from '@/components/user/ReviewForm.vue'
 
 </script>
 
