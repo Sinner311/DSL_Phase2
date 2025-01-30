@@ -6,7 +6,9 @@ import session from "express-session";
 // import { resetQueueOrder } from "./services/queueRepository";
 import { autoCreateDay } from "./services/round";
 import { getDashboardData } from "./services/dashboard";
+import { getHistoryQueueData } from "./services/review";
 import dashboardRouter from "./routes/dashboard.route"; // 👈 Import dashboard route
+import reviewRouter from "./routes/review.route"; // 👈 Import dashboard route
 
 const path = require("path");
 const cors = require("cors");
@@ -40,6 +42,7 @@ app.use("/api/round", roundRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/queue", queueRouter);
 app.use("/api/history", historyRouter);
+app.use("/api/review", reviewRouter);
 app.use("/api/dashboard", dashboardRouter); // 👈 Register the dashboard route
 
 app.listen(port, function () {
