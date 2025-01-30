@@ -8,7 +8,7 @@ import { autoCreateDay } from "./services/round";
 import { getDashboardData } from "./services/dashboard";
 import { getHistoryQueueData } from "./services/review";
 import dashboardRouter from "./routes/dashboard.route"; // 👈 Import dashboard route
-import reviewRouter from "./routes/review.route"; // 👈 Import dashboard route
+import reviewRouter from "./routes/review.route"; // 👈 Import review route
 
 const path = require("path");
 const cors = require("cors");

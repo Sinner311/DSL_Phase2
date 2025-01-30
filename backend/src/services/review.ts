@@ -14,15 +14,15 @@ export async function getHistoryQueueData() {
 
         const formattedData = queueData.map(item => ({
             studentid: item.users?.studentid || "N/A",
-            type: item.type || 0,
-            channel: item.channel || 0,
-            status: item.status || "UNKNOWN",
-            star_rate: item.star_rate ?? -1,  // Default to -1 if null
-            q1: item.q1 ?? -1,  // Default to -1 if null
-            q2: item.q2 ?? -1,
-            q3: item.q3 ?? -1,
-            q4: item.q4 ?? -1,
-            q5: item.q5 ?? -1,
+            type: item.type || "N/A",
+            channel: item.channel || "N/A",
+            status: item.status || "N/A",
+            star_rate: item.star_rate ?? "N/A",  // Default to -1 if null
+            q1: item.q1 ?? "N/A",  // Default to -1 if null
+            q2: item.q2 ?? "N/A",
+            q3: item.q3 ?? "N/A",
+            q4: item.q4 ?? "N/A",
+            q5: item.q5 ?? "N/A",
         }));
 
         return formattedData;
