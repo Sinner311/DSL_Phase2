@@ -13,6 +13,7 @@ export async function getHistoryQueueData() {
         });
 
         const formattedData = queueData.map(item => ({
+            historyid: item.historyid || "N/A",
             studentid: item.users?.studentid || "N/A",
             type: item.type || "N/A",
             channel: item.channel || "N/A",

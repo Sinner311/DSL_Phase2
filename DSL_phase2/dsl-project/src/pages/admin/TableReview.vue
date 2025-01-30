@@ -5,6 +5,7 @@ import Navbar from "@/components/admin/Navbaradmin.vue";
 import AdminBackbutton from "@/components/admin/AdminBackbutton.vue";
 
 interface TableData {
+  historyid: number;
   studentid: number;
   type: number;
   channel: number;
@@ -52,6 +53,7 @@ const downloadCSV = () => {
   }
 
   const headers = [
+    "ลำดับ",
     "รหัสนักศึกษา",
     "ประเภท",
     "ช่องบริการ",
@@ -65,6 +67,7 @@ const downloadCSV = () => {
   ];
 
   const rows = tableData.value.map((row) => [
+    row.historyid,
     row.studentid,
     row.type,
     row.channel,
@@ -116,6 +119,7 @@ const downloadCSV = () => {
       <table class="w-full border-collapse border border-gray-300">
         <thead>
           <tr class="bg-gray-100">
+            <th class="border border-gray-300 p-2 text-sm font-medium">ลำดับ</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">รหัสนักศึกษา</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">ประเภท</th>
             <th class="border border-gray-300 p-2 text-sm font-medium">ช่องบริการ</th>
@@ -130,6 +134,7 @@ const downloadCSV = () => {
         </thead>
         <tbody>
           <tr v-for="(row, index) in tableData" :key="index">
+            <td class="border border-gray-300 p-2 text-center">{{ row.historyid }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.studentid }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.type }}</td>
             <td class="border border-gray-300 p-2 text-center">{{ row.channel }}</td>
