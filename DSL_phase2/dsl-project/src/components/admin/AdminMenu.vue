@@ -24,7 +24,7 @@ const item = reactive({
     title: 'คะแนนการประเมิน',
     image: '/src/assets/img/option_1.jpg',
     icon: 'fas fa-star', 
-    link: '#' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/admin/tablereview' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_5: {
     title: 'เพิ่ม staff',

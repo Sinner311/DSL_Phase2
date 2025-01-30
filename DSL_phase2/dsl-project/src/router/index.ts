@@ -20,6 +20,8 @@ import Editday from "../pages/staff/StaffDateSlot.vue";
 import Mainaddmin from "../pages/admin/Mainadmin.vue";
 import Addstaff from "../pages/admin/Addstaff.vue";
 import Adminsetting from "../pages/admin/Adminsetting.vue";
+import Tablereview from "../pages/admin/TableReview.vue";
+
 
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
@@ -99,6 +101,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/setting",
     name: "adminsetting",
     component: Adminsetting,
+    meta: { role: ["ADMIN"] as string[] },
+  },
+  {
+    path: "/admin/tablereview",
+    name: "tablereview",
+    component: Tablereview,
     meta: { role: ["ADMIN"] as string[] },
   },
   {
@@ -238,7 +246,7 @@ router.beforeEach(async (to, from, next) => {
   const isAuth = await isAuthenticated();
   const userToken = isAuth ? parseJwt(cookies.get("accesstoken")) : null;
 
-  if (!isAuth && to.name !== "root") {
+  if (!isAuth && to.name !== "root" && to.name !== "queuelogin") {
     console.log("Not authenticated. Redirecting to login.");
     return next({ name: "root" });
   }
