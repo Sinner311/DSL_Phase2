@@ -1,18 +1,12 @@
 <script setup lang="ts">
-
-import { ref, onMounted, computed ,onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import axios from "axios";
-import { useCookies } from "vue3-cookies";
-import { useRouter } from "vue-router";
+
 const QueueWait = ref(0);
-const todaydateinfo = ref([]);
-const lastCalledChannel = ref([]);
-const lastCalledQueue = ref([]);
+const lastCalledQueue = ref(null);
 const calledQueueByChannel = ref([[], [], [], []]);
-const channel1QueueId = ref("");
-const channel2QueueId = ref("");
-const channel3QueueId = ref("");
-let intervalId: NodeJS.Timeout | null = null; // Store interval ID\
+const channelQueueIds = ref(["-", "-", "-"]);
+let intervalId: NodeJS.Timeout | null = null;
 
 async function fetchDashboardData() {
   try {
@@ -23,9 +17,7 @@ async function fetchDashboardData() {
     });
 
     if (response.data.success) {
-      // Match frontend variable names with backend response
-      QueueWait.value = response.data.data.QueueWait; // Fix name
-       // Fix name
+      QueueWait.value = response.data.data.QueueWait;
     } else {
       console.error("Failed to fetch dashboard data:", response.data.message);
     }
@@ -34,78 +26,65 @@ async function fetchDashboardData() {
   }
 }
 
-
-async function getTodaydate() {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getTodayDate`
-    );
-    if (res.status !== 200) {
-      throw Error(res.statusText);
-    }
-    if (res.data === null) {
-      throw Error;
-    }
-    return res.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 async function getAllqueue() {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getAllQueue`
-    );
-    if (res.status !== 200) {
-      throw Error(res.statusText);
-    }
-    if (res.data === null) {
-      throw Error;
-    }
+    const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/queue/getAllQueue`);
+    if (res.status !== 200) throw new Error(res.statusText);
     return res.data;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching queue data:", error);
+    return [];
   }
 }
 
 async function getuserinfo() {
-  const todaydateinfoData = await getTodaydate();
-  todaydateinfo.value = todaydateinfoData;
   const allqueueinfoData = await getAllqueue();
-  
-  lastCalledQueue.value = allqueueinfoData
-    .filter((item) => item.status === "CALL" || item.status === "CALLED")
-    .sort((a, b) => b.queueid - a.queueid)[0];
 
-  for (let i = 1; i <= 3; i++) {
-    calledQueueByChannel.value[i] = allqueueinfoData.filter(
-      (item) =>
-        item.channel === i &&
-        (item.status === "CALL" || item.status === "CALLED")
-    );
+  // Get last called queue
+  const lastQueue = allqueueinfoData
+    .filter((item) => item.status === "CALL" || item.status === "CALLED")
+    .sort((a, b) => b.queueid - a.queueid)[0] || null;
+
+  if (lastQueue && (!lastCalledQueue.value || lastQueue.queueid !== lastCalledQueue.value.queueid)) {
+    lastCalledQueue.value = lastQueue;
   }
 
-  channel1QueueId.value =
-    calledQueueByChannel.value[1] && calledQueueByChannel.value[1].length > 0
-      ? calledQueueByChannel.value[1][0].queueid
-      : "-";
-  channel2QueueId.value =
-    calledQueueByChannel.value[2] && calledQueueByChannel.value[2].length > 0
-      ? calledQueueByChannel.value[2][0].queueid
-      : "-";
-  channel3QueueId.value =
-    calledQueueByChannel.value[3] && calledQueueByChannel.value[3].length > 0
-      ? calledQueueByChannel.value[3][0].queueid
-      : "-";
+  // Update queues for each channel
+  for (let i = 1; i <= 3; i++) {
+    calledQueueByChannel.value[i] = allqueueinfoData.filter(
+      (item) => item.channel === i && (item.status === "CALL" || item.status === "CALLED")
+    );
+
+    channelQueueIds.value[i - 1] =
+      calledQueueByChannel.value[i] && calledQueueByChannel.value[i].length > 0
+        ? calledQueueByChannel.value[i][0].queueid
+        : "-";
+  }
 }
+
+function speakThai(message: string) {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = "th-TH";
+    utterance.rate = 0.7;
+    window.speechSynthesis.speak(utterance);
+  } else {
+    console.warn("Speech Synthesis API ไม่รองรับในเบราว์เซอร์นี้");
+  }
+}
+
+// Watch for changes in lastCalledQueue and automatically announce it
+watch(lastCalledQueue, (newQueue) => {
+  if (newQueue) {
+    const message = `เชิญหมายเลข ${newQueue.queueid} ที่ช่องบริการ ${newQueue.channel}`;
+    speakThai(message);
+  }
+});
 
 onMounted(() => {
   fetchDashboardData();
-  getuserinfo(); // เรียกใช้งานเมื่อคอมโพเนนต์ถูก mount
-  intervalId = setInterval(() => {
-    getuserinfo();
-  }, 2000); // Set interval to 2 seconds
+  getuserinfo();
+  intervalId = setInterval(getuserinfo, 2000);
 });
 
 onUnmounted(() => {
@@ -114,60 +93,49 @@ onUnmounted(() => {
     intervalId = null;
   }
 });
-
 </script>
 
 <template>
   <div class="bg-blue-900 h-[650px] flex flex-col items-center py-16 pr-16">
     <div class="flex space-x-10">
-      <!-- กล่องแสดงหมายเลขคิวและจำนวนคนรอ -->
+      <!-- Queue Info -->
       <div class="flex flex-col space-y-12">
-        <!-- คิวหมายเลข -->
+        <!-- Last Called Queue -->
         <div class="bg-white rounded-xl shadow-md p-8 text-center w-[320px] h-[300px] flex flex-col justify-between border-2 border-black">
-          <p class="text-2xl font-bold text-black ">คิวหมายเลข</p>
-          <p class="text-7xl font-bold text-blue-900">{{
-                lastCalledQueue.queueid }}</p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
+          <p class="text-2xl font-bold text-black">คิวหมายเลข</p>
+          <p class="text-7xl font-bold text-blue-900">{{ lastCalledQueue?.queueid || "-" }}</p>
           <p class="text-xl font-bold text-black">ช่องบริการ</p>
-          <p class="text-6xl font-bold text-blue-900">{{ lastCalledQueue.channel }}</p>
+          <p class="text-6xl font-bold text-blue-900">{{ lastCalledQueue?.channel || "-" }}</p>
         </div>
-        <!-- จำนวนคนรอ -->
+
+        <!-- Queue Waiting Count -->
         <div class="bg-white rounded-xl shadow-md p-6 text-center w-[320px] h-[180px] flex flex-col justify-center border-2 border-black">
           <p class="text-3xl font-bold text-black">จำนวนคนรอคิว</p>
           <p class="text-6xl font-bold text-blue-900">{{ QueueWait }}</p>
         </div>
       </div>
 
-      <!-- ตารางช่องบริการ -->
+      <!-- Service Channels Table -->
       <div class="bg-white rounded-xl shadow-md w-[900px] border-2 border-black">
-        <!-- Header ตาราง -->
-        <div class="flex justify-around items-center  text-white p-6 rounded-t-xl">
+        <div class="flex justify-around items-center text-white p-6 rounded-t-xl">
           <p class="font-bold text-5xl text-black">ช่องบริการ</p>
           <p class="font-bold text-5xl text-black">หมายเลขคิว</p>
         </div>
-        <!-- เนื้อหาในตาราง -->
-        <div class="divide-y divide-gray-600 ">
-          <!-- แถว 1 -->
+        <div class="divide-y divide-gray-600">
+          <!-- Channel 1 -->
           <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">1</p>
-            <p class="text-8xl font-bold text-blue-900">{{ channel1QueueId === null ? ' ' : channel1QueueId }}</p>
+            <p class="text-8xl font-bold text-blue-900">{{ channelQueueIds[0] }}</p>
           </div>
-          <!-- แถว 2 -->
+          <!-- Channel 2 -->
           <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">2</p>
-            <p class="text-8xl font-bold text-blue-900">{{ channel2QueueId === null ? ' ' : channel2QueueId }}</p>
+            <p class="text-8xl font-bold text-blue-900">{{ channelQueueIds[1] }}</p>
           </div>
-          <!-- แถว 3 -->
+          <!-- Channel 3 -->
           <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">3</p>
-            <p class="text-8xl font-bold text-blue-900">{{ channel3QueueId === null ? ' ' : channel3QueueId }}</p>
+            <p class="text-8xl font-bold text-blue-900">{{ channelQueueIds[2] }}</p>
           </div>
         </div>
       </div>
