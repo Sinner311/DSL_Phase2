@@ -22,6 +22,12 @@ const tableData = ref<TableData[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
+// Function to escape CSV values
+const escapeCsvValue = (value: string | number): string => {
+  const escaped = `${value}`.replace(/"/g, '""');  // Escape quotes by doubling them
+  return `"${escaped}"`;  // Enclose in quotes to handle commas or newlines
+};
+
 // Fetch data from the backend API
 const fetchData = async () => {
   try {
@@ -80,13 +86,20 @@ const downloadCSV = () => {
     row.q5,
   ]);
 
-  let csvContent =
+  // Prepare CSV content
+  const csvContent =
     "data:text/csv;charset=utf-8," +
-    [headers, ...rows].map((e) => e.join(",")).join("\n");
+    [
+      headers.map(escapeCsvValue), // Escape headers
+      ...rows.map((row) => row.map(escapeCsvValue)) // Escape data rows
+    ]
+      .map((e) => e.join(","))
+      .join("\n");
 
-  const encodedUri = encodeURI(csvContent);
+  // Create a Blob and generate a download link
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
   const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
+  link.href = URL.createObjectURL(blob);
   link.setAttribute("download", "review_data.csv");
   document.body.appendChild(link);
   link.click();
