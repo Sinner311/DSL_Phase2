@@ -33,8 +33,8 @@ model history_booking {
   bookingdateid Int?
   status        String?   @db.VarChar(20)
   type          Int?      @db.TinyInt
-  days          days?     @relation(fields: [bookingdateid], references: [dateid], onDelete: Restrict, onUpdate: Restrict, map: "history_booking_ibfk_2")
   users         users?    @relation(fields: [studentid], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "history_booking_ibfk_1")
+  days          days?     @relation(fields: [bookingdateid], references: [dateid], onDelete: Restrict, onUpdate: Restrict, map: "history_booking_ibfk_2")
 
   @@index([bookingdateid], map: "bookingdateid")
   @@index([studentid], map: "studentid")
@@ -54,8 +54,8 @@ model history_queue {
   q3        Boolean?
   q4        Boolean?
   q5        Boolean?
-  queues    queues?   @relation(fields: [queueid], references: [queueid], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_2")
   users     users?    @relation(fields: [studentid], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_1")
+  queues    queues?   @relation(fields: [queueid], references: [queueid], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_2")
 
   @@index([queueid], map: "queueid")
   @@index([studentid], map: "studentid")
@@ -63,7 +63,7 @@ model history_queue {
 
 model list_of_round {
   Listid                             Int            @id @default(autoincrement())
-  Document_Amendment_Submission_Date String?        @db.Date
+  Document_Amendment_Submission_Date String?        @db.VarChar(20)
   year                               Int?           @db.Year
   semester                           Int?           @db.TinyInt
   rounds                             rounds[]
