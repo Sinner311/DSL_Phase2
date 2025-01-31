@@ -1,9 +1,11 @@
 <script setup lang="ts">
-
-import { ref, onMounted, computed ,onUnmounted } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
 import { useRouter } from "vue-router";
+
+const { cookies } = useCookies();
+const accesstoken = cookies.get("accesstoken");
 const QueueWait = ref(0);
 const todaydateinfo = ref([]);
 const lastCalledChannel = ref([]);
@@ -16,16 +18,19 @@ let intervalId: NodeJS.Timeout | null = null; // Store interval ID\
 
 async function fetchDashboardData() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/queue/getDashboard`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
-      },
-    });
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/queue/getDashboard`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+        },
+      }
+    );
 
     if (response.data.success) {
       // Match frontend variable names with backend response
       QueueWait.value = response.data.data.QueueWait; // Fix name
-       // Fix name
+      // Fix name
     } else {
       console.error("Failed to fetch dashboard data:", response.data.message);
     }
@@ -33,7 +38,6 @@ async function fetchDashboardData() {
     console.error("Error fetching dashboard data:", error);
   }
 }
-
 
 async function getTodaydate() {
   try {
@@ -69,11 +73,76 @@ async function getAllqueue() {
   }
 }
 
+async function getAllCallQueue() {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/queue/getAllCallQueue`
+    );
+    if (res.status !== 200) {
+      throw Error(res.statusText);
+    }
+    if (res.data === null) {
+      throw Error;
+    }
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function speakThai(message: string) {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = "th-TH"; // ตั้งค่าเป็นภาษาไทย
+    utterance.rate = 0.6;
+    window.speechSynthesis.speak(utterance);
+  } else {
+    console.warn("Speech Synthesis API ไม่รองรับในเบราว์เซอร์นี้");
+  }
+}
+
+async function getCallQueue(queueid: number, channel: number) {
+  try {
+    const res = await axios.put(
+      `${import.meta.env.VITE_APP_IP}/api/queue/getEditQueue`,
+      {
+        queueid: queueid,
+        channel: channel,
+        status: "CALLED",
+      },
+
+      {
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
+      }
+    );
+
+    if (res.status === 200) {
+    } else {
+      throw new Error("Failed to Call.");
+    }
+  } catch (error) {
+    console.error("Error to Call:", error);
+  }
+}
+
 async function getuserinfo() {
   const todaydateinfoData = await getTodaydate();
   todaydateinfo.value = todaydateinfoData;
   const allqueueinfoData = await getAllqueue();
-  
+  const allcallqueueinfoData = await getAllCallQueue();
+  console.log(allcallqueueinfoData, allcallqueueinfoData.channel);
+  if (allcallqueueinfoData) {
+    await speakThai(
+      `ขอเชิญหมายเลข${allcallqueueinfoData.queueid}ที่ช่องบริการ${allcallqueueinfoData.channel}`
+    );
+    await getCallQueue(
+      allcallqueueinfoData.queueid,
+      allcallqueueinfoData.channel
+    );
+  }
+
   lastCalledQueue.value = allqueueinfoData
     .filter((item) => item.status === "CALL" || item.status === "CALLED")
     .sort((a, b) => b.queueid - a.queueid)[0];
@@ -114,7 +183,6 @@ onUnmounted(() => {
     intervalId = null;
   }
 });
-
 </script>
 
 <template>
@@ -123,10 +191,13 @@ onUnmounted(() => {
       <!-- กล่องแสดงหมายเลขคิวและจำนวนคนรอ -->
       <div class="flex flex-col space-y-12">
         <!-- คิวหมายเลข -->
-        <div class="bg-white rounded-xl shadow-md p-8 text-center w-[320px] h-[300px] flex flex-col justify-between border-2 border-black">
-          <p class="text-2xl font-bold text-black ">คิวหมายเลข</p>
-          <p class="text-7xl font-bold text-blue-900">{{
-                lastCalledQueue.queueid }}</p>
+        <div
+          class="bg-white rounded-xl shadow-md p-8 text-center w-[320px] h-[300px] flex flex-col justify-between border-2 border-black"
+        >
+          <p class="text-2xl font-bold text-black">คิวหมายเลข</p>
+          <p class="text-7xl font-bold text-blue-900">
+            {{ lastCalledQueue.queueid }}
+          </p>
           <p></p>
           <p></p>
           <p></p>
@@ -136,42 +207,55 @@ onUnmounted(() => {
           <p></p>
           <p></p>
           <p class="text-xl font-bold text-black">ช่องบริการ</p>
-          <p class="text-6xl font-bold text-blue-900">{{ lastCalledQueue.channel }}</p>
+          <p class="text-6xl font-bold text-blue-900">
+            {{ lastCalledQueue.channel }}
+          </p>
         </div>
         <!-- จำนวนคนรอ -->
-        <div class="bg-white rounded-xl shadow-md p-6 text-center w-[320px] h-[180px] flex flex-col justify-center border-2 border-black">
+        <div
+          class="bg-white rounded-xl shadow-md p-6 text-center w-[320px] h-[180px] flex flex-col justify-center border-2 border-black"
+        >
           <p class="text-3xl font-bold text-black">จำนวนคนรอคิว</p>
           <p class="text-6xl font-bold text-blue-900">{{ QueueWait }}</p>
         </div>
       </div>
 
       <!-- ตารางช่องบริการ -->
-      <div class="bg-white rounded-xl shadow-md w-[900px] border-2 border-black">
+      <div
+        class="bg-white rounded-xl shadow-md w-[900px] border-2 border-black"
+      >
         <!-- Header ตาราง -->
-        <div class="flex justify-around items-center  text-white p-6 rounded-t-xl">
+        <div
+          class="flex justify-around items-center text-white p-6 rounded-t-xl"
+        >
           <p class="font-bold text-5xl text-black">ช่องบริการ</p>
           <p class="font-bold text-5xl text-black">หมายเลขคิว</p>
         </div>
         <!-- เนื้อหาในตาราง -->
-        <div class="divide-y divide-gray-600 ">
+        <div class="divide-y divide-gray-600">
           <!-- แถว 1 -->
           <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">1</p>
-            <p class="text-8xl font-bold text-blue-900">{{ channel1QueueId === null ? ' ' : channel1QueueId }}</p>
+            <p class="text-8xl font-bold text-blue-900">
+              {{ channel1QueueId === null ? " " : channel1QueueId }}
+            </p>
           </div>
           <!-- แถว 2 -->
           <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">2</p>
-            <p class="text-8xl font-bold text-blue-900">{{ channel2QueueId === null ? ' ' : channel2QueueId }}</p>
+            <p class="text-8xl font-bold text-blue-900">
+              {{ channel2QueueId === null ? " " : channel2QueueId }}
+            </p>
           </div>
           <!-- แถว 3 -->
           <div class="flex justify-around items-center p-6">
             <p class="text-8xl font-bold text-black">3</p>
-            <p class="text-8xl font-bold text-blue-900">{{ channel3QueueId === null ? ' ' : channel3QueueId }}</p>
+            <p class="text-8xl font-bold text-blue-900">
+              {{ channel3QueueId === null ? " " : channel3QueueId }}
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-

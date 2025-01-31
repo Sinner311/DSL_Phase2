@@ -287,3 +287,27 @@ export async function editSpecificDate(days: {
   return update_date;
 }
 
+
+export async function webSettings() {
+  return await prisma.web_settings.findUnique({
+    where: {
+      id: 1,
+    },
+  });
+}
+
+
+
+export async function editwebSettings(web_settings: {
+  // web_break_text: string;
+  web_status: string;
+}) {
+  const update_date = await prisma.web_settings.update({
+    where: { id: 1 },
+    data: {
+      // web_break_text: web_settings.web_break_text,
+      web_status: web_settings.web_status,
+    },
+  });
+  return update_date;
+}

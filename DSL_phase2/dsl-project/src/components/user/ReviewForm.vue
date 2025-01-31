@@ -1,4 +1,12 @@
 <script setup>
+import { defineProps } from 'vue'
+
+const props = defineProps({
+  rating: {
+    type: Number,
+    required: true
+  }
+})
 import { ref } from 'vue'
 
 const helpReceived = ref(null)

@@ -23,13 +23,26 @@ function handleBack() {
 </script>
 
 <template>
-  <div class="relative w-screen bg-gray-100 p-4">
+  <div class="relative w-screen m-8 flex items-center space-x-6">
     <!-- ปุ่มย้อนกลับ -->
     <button
       @click="handleBack"
-      class="bg-gray-300 text-black px-10 py-5 rounded-md hover:bg-gray-400"
+      class="bg-gray-300 text-black p-4 rounded-full hover:bg-gray-400"
     >
-      ย้อนกลับ
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
     </button>
   </div>
 </template>

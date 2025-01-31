@@ -14,6 +14,8 @@ import {
   TodayDate,
   RangeDate,
   editSpecificDate,
+  webSettings,
+  editwebSettings,
 } from "../services/round";
 
 export const getAllListOfRound = asynchandler(async (req: any, res: any) => {
@@ -117,4 +119,20 @@ export const geteditSpecificDate = asynchandler(async (req: any, res: any) => {
     endtime: endtime,
   });
   res.status(200).send(editSpecificdate);
+});
+
+
+export const getwebSettings = asynchandler(async (req: any, res: any) => {
+  const webSetting = await webSettings();
+  res.send(webSetting);
+});
+
+
+export const geteditwebSettings = asynchandler(async (req: any, res: any) => {
+  const { web_break_text, web_status} = req.body;
+  const editwebSetting = await editwebSettings({
+    // web_break_text:web_break_text,
+    web_status: web_status,
+  });
+  res.status(200).send(editwebSetting);
 });

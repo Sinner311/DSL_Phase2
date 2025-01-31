@@ -90,6 +90,26 @@ async function getMyqueue(studentid: number) {
   }
 }
 
+async function mynotreview(studentid: number): Promise<boolean> {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/history/mynotreview`
+    );
+
+    if (!res.data || res.data.length === 0) {
+      return false; // No data found
+    }
+
+    // Check if any record has a matching studentid
+    return res.data.some((record: any) => record.studentid === studentid);
+  } catch (error: any) {
+    console.error("Error fetching review:", error.message);
+    return false; // Return false on error
+  }
+}
+
+
+
 async function getuserinfo() {
   bookinginfo.value = [];
   const access_token_extract = parseJwt(accesstoken);
@@ -100,7 +120,16 @@ async function getuserinfo() {
     const myqueueinfoData = await getMyqueue(studentinfoData.id);
     if (myqueueinfoData) {
       router.push({ name: "usermyqueue", replace: true });
-    }
+    }studentinfoData.id
+    // Call the function and handle the result
+const hasReview = await mynotreview(studentinfoData.id);
+if (hasReview) {
+  router.push({ name: "userstatisfaction", replace: true });
+} else {
+  console.warn("No pending review for this student.");
+}
+
+   
     if (bookinginfoData) {
       console.log("Booking Info:", bookinginfoData); // ตรวจสอบข้อมูลที่ได้
       bookinginfo.value = bookinginfoData;

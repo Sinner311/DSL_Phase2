@@ -1,113 +1,132 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 const router = useRouter();
-// สถานะสำหรับแสดงหรือซ่อน Card
-const showCard = ref(false);
-const showConfirmationCard = ref(false); // ใช้สำหรับแสดง Card ที่ยืนยัน
-const userInput = ref(""); // เก็บข้อความที่ผู้ใช้พิมพ์
+const webSettings = ref(null);
+const isSystemActive = ref(null);
+const buttonText = ref("พักระบบ");
 
+// ดึง Token จาก localStorage (ถ้ามี)
+const accesstoken = localStorage.getItem("accessToken");
 
+// ฟังก์ชันย้อนกลับ
 function handleBack() {
-  console.log("ย้อนกลับ");
-  router.push({ path: "/staff" });
+  router.push({ path: "/admin" });
 }
 
-function handlePauseSystem() {
-  showCard.value = true; // แสดง Card
-}
+//  ฟังก์ชันอัปเดตข้อความและส่ง API
+const updateText = async () => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_APP_IP}/api/round/geteditwebSettings`,
+      {
+        // web_break_text: buttonText.value,
+        web_status: isSystemActive.value ? "normal" : "disable",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
+      }
+    );
 
-function handleCloseCard() {
-  showCard.value = false; // ซ่อน Card
-  userInput.value = ""; // ล้างข้อความที่ผู้ใช้พิมพ์
-}
-
-function handleSubmit() {
-  if (!userInput.value.trim()) {
-    alert("กรุณากรอกข้อมูลก่อนยืนยัน");
-    return; // หยุดการทำงานหากไม่มีการกรอกข้อมูล
+    if (response.status === 200) {
+      await Swal.fire({
+        icon: "success",
+        title: "แก้ไขสำเร็จ",
+        showConfirmButton: false,
+        timer: 1500,
+        position: "top-start", // ตำแหน่งแจ้งเตือนที่มุมซ้ายบน
+      });
+    } else {
+      throw new Error("Failed to update settings.");
+    }
+  } catch (error) {
+    console.error("Error updating settings:", error);
   }
+};
 
-  // แสดงการยืนยัน
-  showConfirmationCard.value = true;
+//  ดึงค่า webSettings จาก API
+async function getwebSettings() {
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`);
+    
+    if (res.status === 200 && res.data) {
+      webSettings.value = res.data;
+      buttonText.value = webSettings.value.web_break_text || "พักระบบ";
+      isSystemActive.value = webSettings.value.web_status === "normal";
+    } else {
+      throw new Error("Failed to fetch web settings.");
+    }
+  } catch (error) {
+    console.error("Error fetching web settings:", error);
+  }
 }
 
-function handleCloseConfirmationCard() {
-  showConfirmationCard.value = false;
-  handleCloseCard(); // ซ่อน Card หลังจากกดยกเลิก
-}
+//  อัปเดต API อัตโนมัติเมื่อเปลี่ยน Toggle Switch
+watch(isSystemActive, updateText);
+
+//  ดึงข้อมูลเมื่อโหลดหน้า
+onMounted(() => {
+  getwebSettings();
+});
 </script>
 
 <template>
-  <div class="relative w-screen  bg-gray-100 p-4">
+  <div class="relative w-screen m-8 flex items-center space-x-6">
     <!-- ปุ่มย้อนกลับ -->
     <button
       @click="handleBack"
-      class="bg-gray-300 text-black px-10 py-5 rounded-md hover:bg-gray-400"
+      class="bg-gray-300 text-black p-4 rounded-full hover:bg-gray-400"
     >
-      ย้อนกลับ
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
     </button>
 
     <!-- ปุ่มพักระบบ -->
-    <button
-      @click="handlePauseSystem"
-      class="bg-yellow-500 text-black px-10 py-5 rounded-md font-semibold hover:bg-yellow-600 ml-4"
-    >
-      พักระบบ
-    </button>
-
-    <!-- Card สำหรับกรอกข้อความ -->
-    <div
-      v-if="showCard"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-        <h3 class="text-xl font-bold mb-4">ระบุหัวข้อในการพักระบบพร้อมระบุเวลาที่จะมาเปิดอีกครั้ง</h3>
-        
-        <!-- ช่องให้ผู้ใช้พิมพ์ -->
-        <textarea
-          v-model="userInput"
-          rows="4"
-          class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          placeholder="เช่น เจ้าหน้าที่กำลังพักกลางวัน จะกลับมาให้บริการอีกครั้ง 13.30 pm"
-        ></textarea>
-
-        <!-- ปุ่มใน Card -->
-        <div class="flex justify-end mt-4">
-          <button
-            @click="handleCloseCard"
-            class="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 mr-2"
-          >
-            ยกเลิก
-          </button>
-          <button
-            @click="handleSubmit"
-            class="bg-green-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-yellow-600"
-          >
-            ยืนยัน
-          </button>
+    <div class="flex items-center space-x-4  px-16">
+      <!-- Toggle Switch -->
+       <div class="flex flex-col">
+        <div class="flex flex-row"><label class="text-gray-600 ms-9 px-11">พักระบบ</label><label class="text-gray-600">เปิดระบบ</label></div>
+      <label class="flex items-center cursor-pointer ps-16 ms-16">
+        <input type="checkbox" v-model="isSystemActive" class="hidden" />
+        <div
+          class="relative w-16 h-8 bg-gray-300 rounded-full transition-all"
+          :class="{ 'bg-green-500': isSystemActive }"
+        >
+          <div
+            class="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-all"
+            :class="{ 'translate-x-8': isSystemActive }"
+          ></div>
         </div>
-      </div>
-    </div>
+      </label></div>
 
-    <!-- Card สำหรับการยืนยัน -->
-    <div
-      v-if="showConfirmationCard"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-        <h3 class="text-xl font-bold mb-4">กำลังพักระบบในเรื่อง....</h3>
-        <p class="mb-4">{{ userInput }}</p>
-        <div class="flex justify-end">
-          <button
-            @click="handleCloseConfirmationCard"
-            class="bg-red-600 text-black px-4 py-2 rounded-md hover:bg-gray-400 mr-2"
-          >
-            ยกเลิกพักระบบ
-          </button>
+ <!-- Editable Text -->
+ <!-- <div class="flex flex-col">
+        <label class="text-gray-600 mb-1">ข้อความพักระบบ</label>
+        <div
+          class="border-b border-gray-500 px-2 py-1 w-40 cursor-text"
+          contenteditable="true"
+          @input="buttonText"
+        >
+          {{ buttonText }}
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

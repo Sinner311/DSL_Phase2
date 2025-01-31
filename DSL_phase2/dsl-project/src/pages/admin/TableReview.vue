@@ -96,8 +96,9 @@ const downloadCSV = () => {
       .map((e) => e.join(","))
       .join("\n");
 
+      const bom = "\uFEFF";
   // Create a Blob and generate a download link
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+  const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.setAttribute("download", "review_data.csv");

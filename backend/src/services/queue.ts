@@ -294,7 +294,7 @@ export async function getStaffQueue() {
   
       // Get the number of queues still waiting (status = 'wait')
       const inQueue = await prisma.queues.count({
-        where: { status: "wait" },
+        where: { status: "WAIT" },
       });
   
       // Fetch data
@@ -321,3 +321,13 @@ export async function getStaffQueue() {
   getTVdata().then((data) => {
     console.log("TV Data:", data);
   });
+
+
+  
+  export async function getCallQueue() {
+    return await prisma.queues.findFirst({
+      where:{
+        status: "CALL"
+      }
+    });
+  }

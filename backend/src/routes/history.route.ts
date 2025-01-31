@@ -1,12 +1,10 @@
 import express from 'express';
 
-import {getSpecifichistory} from '../controllers/history.controller';
+import {getSpecifichistory,sendreview,mynotreview} from '../controllers/history.controller';
 import { getHistoryQueueData } from "../services/history";
 const router = express.Router();
 
 router.get("/getSpecifichistory",getSpecifichistory)
-
-
 router.get("/getHistoryQueueData", async (req, res) => {
     try {
         const data = await getHistoryQueueData(); // Call the service to fetch the data
@@ -16,6 +14,11 @@ router.get("/getHistoryQueueData", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch history queue data" }); // Error handling
     }
 });
+router.put("/sendreview",sendreview)
+router.get("/mynotreview",mynotreview)
+
+
+
 
 module.exports = router;
 

@@ -12,6 +12,7 @@ import {
   FinishQueue,
   getDashboardData,
   getTVdata,
+  getCallQueue,
 } from "../services/queue";
 
 export const queueaddQueue = asynchandler(async (req: any, res: any) => {
@@ -123,3 +124,11 @@ export const getTVDataController = async (req: any, res: any) => {
     });
   }
 };
+
+
+
+
+export const getAllCallQueue = asynchandler(async (req: any, res: any) => {
+  const AllQueue = await getCallQueue();
+  res.send(AllQueue);
+});
