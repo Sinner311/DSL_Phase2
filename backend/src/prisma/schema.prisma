@@ -48,7 +48,7 @@ model history_queue {
   type      Int?      @db.TinyInt
   channel   Int?      @db.TinyInt
   status    String?   @db.VarChar(20)
-  star_rate Boolean?
+  star_rate Int?
   q1        Boolean?
   q2        Boolean?
   q3        Boolean?
@@ -63,7 +63,7 @@ model history_queue {
 
 model list_of_round {
   Listid                             Int            @id @default(autoincrement())
-  Document_Amendment_Submission_Date DateTime?      @db.Date
+  Document_Amendment_Submission_Date String?        @db.Date
   year                               Int?           @db.Year
   semester                           Int?           @db.TinyInt
   rounds                             rounds[]
