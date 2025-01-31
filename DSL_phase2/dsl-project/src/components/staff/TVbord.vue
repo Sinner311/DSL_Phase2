@@ -16,7 +16,7 @@ let intervalId: NodeJS.Timeout | null = null; // Store interval ID\
 
 async function fetchDashboardData() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/dashboard/getDashboard`, {
+    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/queue/getDashboard`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
       },
