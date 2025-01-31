@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {getAllListOfRound,createListOfRound,changeWebShowList,getDate,createRound,getRound,getSpecificDate,DeleteRound,getTodayDate} from '../controllers/round.controller';
+import {getAllListOfRound,createListOfRound,changeWebShowList,getDate,createRound,getRound,getSpecificDate,DeleteRound,getTodayDate,getRangeDate,geteditSpecificDate} from '../controllers/round.controller';
 
 const router = express.Router();
 
@@ -13,6 +13,8 @@ router.get("/getRound",getRound);
 router.get("/getSpecificDate",getSpecificDate)
 router.delete("/DeleteRound",DeleteRound)
 router.get("/getTodayDate",getTodayDate);
+router.get("/getRangeDate",getRangeDate)
+router.put("/geteditSpecificDate",geteditSpecificDate)
 
 
 

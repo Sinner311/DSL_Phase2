@@ -5,7 +5,7 @@ const router = useRouter();
 const route = useRoute();
 
 function handleBack() {
-  console.log("ย้อนกลับ");
+  // console.log("ย้อนกลับ");
 
   // ตรวจสอบว่า URL ปัจจุบันคือ "/staff/daysetting"
   if (route.path === "/staff/daysetting") {

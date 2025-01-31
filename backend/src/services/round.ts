@@ -248,3 +248,42 @@ export async function TodayDate(days: { date: string }) {
   });
   return res;
 }
+
+
+export async function RangeDate() { // ไม่จำเป็นต้องรับ parameter days
+  const today = new Date();
+  const yesterday = new Date(today); // Create a copy of today's date
+  yesterday.setDate(today.getDate() - 1); // Subtract one day
+  const res = await prisma.days.findMany({
+    where: {
+      date: {
+        gt: yesterday, 
+      },
+    },
+    orderBy: {
+      date: 'asc',
+    },
+  });
+  return res;
+}
+
+
+export async function editSpecificDate(days: {
+  dateid: number;
+  status: string;
+  maxuser: number;
+  starttime: string;
+  endtime: string;
+}) {
+  const update_date = await prisma.days.update({
+    where: { dateid: days.dateid },
+    data: {
+      status: days.status,
+      maxuser: days.maxuser,
+      starttime: days.starttime,
+      endtime: days.endtime,
+    },
+  });
+  return update_date;
+}
+
