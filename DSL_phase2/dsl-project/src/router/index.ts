@@ -21,6 +21,14 @@ import Mainaddmin from "../pages/admin/Mainadmin.vue";
 import Addstaff from "../pages/admin/Addstaff.vue";
 import Adminsetting from "../pages/admin/Adminsetting.vue";
 import Tablereview from "../pages/admin/TableReview.vue";
+import AdminCallQueue from "../pages/admin/AdminCallQueue.vue";
+import AdminDaysetting from "../pages/admin/AdminDaysetting.vue";
+import AdminEditDayRepairdoc from "../pages/admin/AdminEditDayRepairdoc.vue";
+import AdminEditdaysendDoc1 from "../pages/admin/AdminEditdaysendDoc1.vue";
+import AdminEditdaysendDoc2 from "../pages/admin/AdminEditdaysendDoc2.vue";
+import AdminTVshow from "../pages/admin/AdminTVshow.vue";
+import AdminEditday from "../pages/admin/AdminDateSlot.vue";
+
 
 
 import axios from "axios";
@@ -108,6 +116,48 @@ const routes: Array<RouteRecordRaw> = [
     name: "tablereview",
     component: Tablereview,
     meta: { role: ["ADMIN"] as string[] },
+  },
+  {
+    path: "/admin/callqueue",
+    name: "admincallqueue",
+    component: AdminCallQueue,
+    meta: { role: ["ADMIN"] as string[] }, 
+  },
+  {
+    path: "/admin/daysetting",
+    name: "admindaysetting",
+    component: AdminDaysetting,
+    meta: { role: ["ADMIN"] as string[] }, 
+  },
+  {
+    path: "/admin/daysetting/editdocamendmentday",
+    name: "admineditdocamendmentday",
+    component: AdminEditDayRepairdoc,
+    meta: { role: ["ADMIN"] as string[] }, 
+  },
+  {
+    path: "/admin/daysetting/editday1",
+    name: "admineditday1",
+    component: AdminEditdaysendDoc1,
+    meta: { role: ["ADMIN"] as string[] }, 
+  },
+  {
+    path: "/admin/daysetting/editday2",
+    name: "admineditday2",
+    component: AdminEditdaysendDoc2,
+    meta: { role: ["ADMIN"] as string[] }, 
+  },
+  {
+    path: "/admin/dashboard",
+    name: "admindashboard",
+    component: AdminTVshow,
+    meta: { role: ["ADMIN"] as string[] }, 
+  },
+  {
+    path: "/admin/editday",
+    name: "admineditday",
+    component: AdminEditday,
+    meta: { role: ["ADMIN"] as string[] }, 
   },
   {
     path: "/staff",

@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import { useCookies } from "vue3-cookies";
 import { useRoute } from "vue-router";
@@ -22,7 +22,9 @@ const todaydateinfo = ref([]);
 async function getBookingCount(dateid) {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/booking/getcountBookingByDate?dateid=${dateid}`
+      `${
+        import.meta.env.VITE_APP_IP
+      }/api/booking/getcountBookingByDate?dateid=${dateid}`
     );
     return response.data.total || 0;
   } catch (error) {
@@ -51,7 +53,9 @@ async function getTodaydate() {
 async function getAllDate() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getSpecificDate?roundid=${requestRoundid}`,
+      `${
+        import.meta.env.VITE_APP_IP
+      }/api/round/getSpecificDate?roundid=${requestRoundid}`,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -63,32 +67,36 @@ async function getAllDate() {
       const dateData = response.data;
       const todaydateinfoData = await getTodaydate();
       todaydateinfo.value = todaydateinfoData;
-      
+
       // console.log(todaydateinfo.value.date)
       timeSlots.value = await Promise.all(
-        dateData.map(async (day) => {
-          const bookedCount = await getBookingCount(day.dateid); // ดึงจำนวนการจองที่มีอยู่
-          let remaining = day.maxuser - bookedCount - 50;
-          remaining = Math.max(remaining, 0);
-           // แปลงวันที่ให้อยู่ในรูปแบบที่ JavaScript เข้าใจได้
-      const dayDate = new Date(day.date);
-      const todayDate = new Date(todaydateinfo.value.date);
+        dateData
+          .filter((day) => day.status === "normal")
+          .map(async (day) => {
+            const bookedCount = await getBookingCount(day.dateid); // ดึงจำนวนการจองที่มีอยู่
+            let remaining = day.maxuser - bookedCount - 50;
+            remaining = Math.max(remaining, 0);
+            // แปลงวันที่ให้อยู่ในรูปแบบที่ JavaScript เข้าใจได้
+            const dayDate = new Date(day.date);
+            const todayDate = new Date(todaydateinfo.value.date);
 
-      // เพิ่ม 3 วันให้กับ todayDate
-      const threeDaysLater = new Date(todayDate);
-      threeDaysLater.setDate(todayDate.getDate() + 3);
+            // เพิ่ม 3 วันให้กับ todayDate
+            const threeDaysLater = new Date(todayDate);
+            threeDaysLater.setDate(todayDate.getDate() + 3);
 
-      // ตรวจสอบว่า day.date ผ่านไปแล้วหรือไม่
-          return {
-            dateid: day.dateid,
-            type: requestType,
-            date: `${new Date(day.date).getDate()} ${formatDate(day.date).month} ${formatDate(day.date).year}`,
-            time: `${formatTime(day.starttime)} - ${formatTime(day.endtime)}`,
-            remaining,
-            isFull: remaining <= 0, // ถ้าเหลือ 0 ให้เป็นเต็ม
-            isPast: dayDate < threeDaysLater,// ต้องจองล่วงหน้าก่อน3วัน
-          };
-        })
+            // ตรวจสอบว่า day.date ผ่านไปแล้วหรือไม่
+            return {
+              dateid: day.dateid,
+              type: requestType,
+              date: `${new Date(day.date).getDate()} ${
+                formatDate(day.date).month
+              } ${formatDate(day.date).year}`,
+              time: `${formatTime(day.starttime)} - ${formatTime(day.endtime)}`,
+              remaining,
+              isFull: remaining <= 0, // ถ้าเหลือ 0 ให้เป็นเต็ม
+              isPast: dayDate < threeDaysLater, // ต้องจองล่วงหน้าก่อน3วัน
+            };
+          })
       );
     } else {
       throw new Error("Failed to fetch data.");
@@ -114,18 +122,16 @@ function formatDate(dateString) {
     "พฤศจิกายน",
     "ธันวาคม",
   ];
-  
+
   const year = date.getFullYear() + 543; // Convert to Buddhist year
   const month = monthNames[date.getMonth()]; // Get Thai month name
   return { month, year };
 }
 
-
 // ฟังก์ชันจัดการการเลือกช่องเวลา
 function handleSlotSelection(slot) {
   selectedSlot.value = slot;
 }
-
 
 // ฟังก์ชันยกเลิกการเลือก
 function handleCancel() {
@@ -134,12 +140,17 @@ function handleCancel() {
 
 // ฟังก์ชันยืนยันการเลือก
 async function handleConfirm(id) {
-  console.log("ยืนยันการเลือก:", selectedSlot.value.type, selectedSlot.value.dateid ,id);
-  if (selectedSlot.value.type&&selectedSlot.value.dateid&&id) {
+  console.log(
+    "ยืนยันการเลือก:",
+    selectedSlot.value.type,
+    selectedSlot.value.dateid,
+    id
+  );
+  if (selectedSlot.value.type && selectedSlot.value.dateid && id) {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_APP_IP}/api/booking/makebooking`,
-        { 
+        {
           id: id,
           type: selectedSlot.value.type,
           dateid: selectedSlot.value.dateid,
@@ -186,7 +197,6 @@ async function handleConfirm(id) {
   selectedSlot.value = null;
 }
 
-
 // ฟังก์ชันช่วยจัดรูปแบบเวลา
 function formatTime(timeString, timeZone = "Africa/Abidjan") {
   const options = {
@@ -225,7 +235,9 @@ getAllDate();
                 slot.isFull || slot.isPast
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   : 'hover:bg-green-100 hover:text-black bg-indigo-700 text-white',
-                selectedSlot === slot ? 'bg-green-500 text-white' : 'border-gray-300',
+                selectedSlot === slot
+                  ? 'bg-green-500 text-white'
+                  : 'border-gray-300',
               ]"
               :disabled="slot.isFull || slot.isPast"
               @click="handleSlotSelection(slot)"

@@ -4,8 +4,8 @@ import Swal from "sweetalert2";
 import { ref, onMounted } from "vue";
 import { useCookies } from "vue3-cookies";
 import { useRoute } from "vue-router";
-import Navbar from "@/components/staff/NavbarStaff.vue";
-import StaffBackbutton from "@/components/staff/StaffBackbutton.vue";
+import Navbar from "@/components/admin/NavbarAdmin.vue";
+import Backbutton from "@/components/admin/AdminBackbutton.vue";
 
 const { cookies } = useCookies();
 const accesstoken = cookies.get("accesstoken");
@@ -214,7 +214,7 @@ onMounted(() => {
 <template>
   <div :class="{ 'blur-background': selectedSlot !== null }">
     <Navbar />
-    <StaffBackbutton />
+    <Backbutton />
 
     <div class="w-full max-w-2xl mx-auto mt-14">
       <div class="bg-white rounded-lg shadow-md p-6">

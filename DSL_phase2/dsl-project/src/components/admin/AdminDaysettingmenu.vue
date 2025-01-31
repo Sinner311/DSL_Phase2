@@ -3,45 +3,30 @@ import { reactive } from 'vue';
 
 const item = reactive({
   option_1: {
-    title: 'ระบบเรียกคิว',
+    title: 'แบบคำขอกู้ยืม',
     image: '/src/assets/img/option_1.jpg',
-    icon: 'fa-solid fa-volume-high', 
-    link: '/admin/callqueue' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/admin/daysetting/editday1' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_2: {
-    title: 'ตั้งค่าวันที่',
+    title: 'สัญญากู้ยืม และ แบบเบิกเงินกู้ยืม',
     image: '/src/assets/img/option_2.jpg',
-    icon: 'fa-solid fa-cog', 
-    link: '/admin/daysetting' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/admin/daysetting/editday2' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_3: {
-    title: 'หน้าจอแสดงคิวใน TV',
-    image: '/src/assets/img/option_3.jpg',
-    icon: 'fa-solid fa-tv', 
-    link: '/admin/dashboard' //ไปหน้าไหนมากำหนดตรงนี้
-  },
+    title: 'เปลี่ยนแปลงวันที่สำหรับส่งเอกสารแก้ไข',
+    image: '/src/assets/img/option_3.jpg', 
+    link: '/admin/daysetting/editdocamendmentday' //ไปหน้าไหนมากำหนดตรงนี้
+  }, 
   option_4: {
-    title: 'คะแนนการประเมิน',
+    title: 'วันที่ทั้งหมด',
     image: '/src/assets/img/option_1.jpg',
-    icon: 'fas fa-star', 
-    link: '/admin/tablereview' //ไปหน้าไหนมากำหนดตรงนี้
-  },
-  option_5: {
-    title: 'เพิ่ม staff',
-    image: '/src/assets/img/option_2.jpg',
-    icon: 'fas fa-plus', 
-    link: '/admin/addstaff' //ไปหน้าไหนมากำหนดตรงนี้
-  },
-  option_6: {
-    title: 'ตั้งค่าระบบ',
-    image: '/src/assets/img/option_2.jpg',
-    icon: 'fa-solid fa-cog', 
-    link: '/admin/setting' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/admin/editday' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
 </script>
 
 <template>
+    <p class="text-center mt-20 mb-10 text-8xl font-bold">ตั้งค่าวันที่</p>
   <section class="py-10 mb-4">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -75,3 +60,4 @@ const item = reactive({
     </div>
   </section>
 </template>
+

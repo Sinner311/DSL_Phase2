@@ -1,7 +1,7 @@
 <template>
     <div 
       class="min-h-screen bg-gray-100 flex items-center justify-center p-4" 
-      style="background-image: url('/src/assets/img/bg.jpg'); background-size: cover; background-position: center;">
+      style="background-image: url('/src/assets/img/background.jpg'); background-size: cover; background-position: center;">
       <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
         <!-- Logo Section -->
         <div class="text-center mb-8">

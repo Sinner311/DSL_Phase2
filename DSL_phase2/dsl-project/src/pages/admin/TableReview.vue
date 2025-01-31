@@ -26,7 +26,7 @@ const error = ref<string | null>(null);
 const fetchData = async () => {
   try {
     const response = await axios.get<TableData[]>(
-      "http://localhost:7777/api/review/getHistoryQueueData"
+      `${import.meta.env.VITE_APP_IP}/api/history/getHistoryQueueData`
     ); // Replace with your actual backend URL
     tableData.value = response.data;
   } catch (err) {

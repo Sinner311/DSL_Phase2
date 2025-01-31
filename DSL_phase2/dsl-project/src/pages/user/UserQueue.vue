@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Navbar from "@/components/user/Navbar.vue";
-import { ref, onMounted, computed ,onUnmounted } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { ClockIcon } from "lucide-vue-next";
@@ -113,7 +113,7 @@ async function getuserinfo() {
     studentinfo.value = studentinfoData; // อัพเดตข้อมูล studentinfo
     const myqueueinfoData = await getMyqueue(studentinfoData.id);
     if (myqueueinfoData) {
-      if(myqueueinfoData.status=="FINISH"){
+      if (myqueueinfoData.status == "FINISH") {
         router.push({ name: "userqueue", replace: true });
       }
       // console.log("myqueue:", myqueueinfoData.status); // ตรวจสอบข้อมูลที่ได้
@@ -232,7 +232,9 @@ onUnmounted(() => {
             เหลืออีก
             <span class="text-blue-600 font-semibold">
               {{
-                myqueueinfo.queueid - lastCalledQueue.queueid - 1 < 0
+                lastCalledQueue.queueid == null
+                  ? 0
+                  : myqueueinfo.queueid - lastCalledQueue.queueid - 1 < 0
                   ? 0
                   : myqueueinfo.queueid - lastCalledQueue.queueid - 1
               }}
@@ -271,19 +273,19 @@ onUnmounted(() => {
               <h1
                 class="col-span-1 text-blue-600 font-semibold text-center text-3xl"
               >
-              {{ channel1QueueId === null ? ' ' : channel1QueueId }}
+                {{ channel1QueueId === null ? " " : channel1QueueId }}
                 <hr />
               </h1>
               <h1
                 class="col-span-1 text-blue-600 font-semibold text-center text-3xl"
               >
-              {{ channel2QueueId === null ? ' ' : channel2QueueId }}
+                {{ channel2QueueId === null ? " " : channel2QueueId }}
                 <hr />
               </h1>
               <h1
                 class="col-span-1 text-blue-600 font-semibold text-center text-3xl"
               >
-              {{ channel3QueueId === null ? ' ' : channel3QueueId }}
+                {{ channel3QueueId === null ? " " : channel3QueueId }}
                 <hr />
               </h1>
             </div>
