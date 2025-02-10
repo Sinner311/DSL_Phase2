@@ -122,7 +122,7 @@ const item = reactive({
       link: '/user/myappointment'
     },option_4:{
         title: 'รับคิว',
-      subtitle: 'ผู้กู้ยืม กดเพื่อรับคิวหน้าห้องกยศ. กรุณามาที่หน้าห้องกยศ.ก่อนกดรับคิว',
+      subtitle: 'ผู้กู้ยืม กดเพื่อรับคิวหน้าห้องกยศ. กรุณามาที่หน้าห้องกยศ.ก่อนกดรับคิว เริ่มรับคิวได้ตั้งแต่ 7:00 น.',
       image: '/src/assets/img/option_4.jpg',
       link: '/user/queue'
     }
