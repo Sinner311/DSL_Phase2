@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2025 at 07:34 AM
+-- Generation Time: Feb 10, 2025 at 09:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -172,20 +172,15 @@ CREATE TABLE `history_queue` (
   `type` tinyint(4) DEFAULT NULL,
   `channel` tinyint(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
-  `star_rate` varchar(11) DEFAULT NULL,
-  `q1` varchar(3) DEFAULT NULL,
-  `q2` varchar(3) DEFAULT NULL,
-  `q3` varchar(3) DEFAULT NULL,
-  `q4` varchar(3) DEFAULT NULL,
-  `q5` varchar(3) DEFAULT NULL
+  `star_rate` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `history_queue`
 --
 
-INSERT INTO `history_queue` (`historyid`, `datetime`, `studentid`, `queueid`, `type`, `channel`, `status`, `star_rate`, `q1`, `q2`, `q3`, `q4`, `q5`) VALUES
-(1, '2025-01-31 03:46:59', 12, 16, 3, 3, 'finish', '5', '0', '0', '0', '0', '0');
+INSERT INTO `history_queue` (`historyid`, `datetime`, `studentid`, `queueid`, `type`, `channel`, `status`, `star_rate`) VALUES
+(1, '2025-01-31 03:46:59', 12, 16, 3, 3, 'finish', '5');
 
 -- --------------------------------------------------------
 
@@ -280,7 +275,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `studentid`, `name`, `role`, `channel`, `refresh`) VALUES
-(1, 'nemopop148@gmail.com', NULL, 'JATESADA LEESUWAN', 'ADMIN', 3, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5lbW9wb3AxNDhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM4MzAzOTU4LCJleHAiOjE3MzgzOTAzNTh9.4EJu9XjFjSKWp4JiojOaAu7pbuYo_IHZjmJyZtTElxk'),
+(1, 'nemopop148@gmail.com', NULL, 'JATESADA LEESUWAN', 'ADMIN', 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5lbW9wb3AxNDhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM4MzAzOTU4LCJleHAiOjE3MzgzOTAzNTh9.4EJu9XjFjSKWp4JiojOaAu7pbuYo_IHZjmJyZtTElxk'),
+(2, 'bawornluk18@gmail.com', NULL, 'John Cena', 'ADMIN', 2, NULL),
+(3, 'pasupat39786@gmail.com', NULL, 'Ohm หล่อเท่', 'ADMIN', 3, NULL),
 (11, 'pimsiri814@gmail.com', '6587864046', '', 'TEACHER', 0, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBpbXNpcmk4MTRAZ21haWwuY29tIiwicm9sZSI6IlRFQUNIRVIiLCJpYXQiOjE3MzgxNDUyMjYsImV4cCI6MTczODIzMTYyNn0.VLFSdJ8bhie3RO8wIPw9YtZG6PKkopimWxvCFQto09M'),
 (12, '6531501141@lamduan.mfu.ac.th', '6531501141', 'JATESADA LEESUWAN', 'STUDENT', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjY1MzE1MDExNDFAbGFtZHVhbi5tZnUuYWMudGgiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTczODMwMTA5MCwiZXhwIjoxNzM4Mzg3NDkwfQ.zErPfjt7osJ-d2tDiFrVeE_oXp_BJ7T9K6CzZoK_ZAg');
 
