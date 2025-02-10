@@ -59,7 +59,7 @@ export async function autoCreateDay() {
         data: {
           date: currentDate,
           status: 'normal', // คุณสามารถกำหนดค่าอื่นๆ ได้ตามต้องการ
-          maxuser: 350, // ตัวอย่าง: จำนวนผู้ใช้สูงสุด
+          maxuser: 400, // ตัวอย่าง: จำนวนผู้ใช้สูงสุด
           starttime: new Date(currentDate.setHours(15, 30, 0)), // ตัวอย่าง: เวลาเริ่มต้น 9:00 AM
           endtime: new Date(currentDate.setHours(23, 0, 0)), // ตัวอย่าง: เวลาสิ้นสุด 5:00 PM
         },
