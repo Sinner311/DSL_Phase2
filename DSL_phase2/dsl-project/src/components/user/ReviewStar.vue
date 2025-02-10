@@ -16,7 +16,12 @@ const handleNext = () => {
 </script>
 
 <template>
+
   <div class="flex flex-col items-center p-28 max-w-sm mx-auto bg-white rounded-lg shadow-lg">
+       <!-- Counter -->
+  <div class="flex items-center space-x-4 mb-2">
+    <p class="font-bold text-l mt-4">Review</p>
+  </div>
     <!-- Service Icon -->
     <div class="bg-gray-100 p-4 rounded-full mb-6">
       <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
@@ -50,29 +55,14 @@ const handleNext = () => {
       ></i>
     </div>
 
-    <!-- Counter -->
-    <div class="flex items-center space-x-4 mb-6">
-      <button
-        @click="rating > 1 && setRating(rating - 1)"
-        class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300"
-      >
-        -
-      </button>
-      <span class="text-2xl font-semibold">{{ rating }}</span>
-      <button
-        @click="rating < 5 && setRating(rating + 1)"
-        class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300"
-      >
-        +
-      </button>
-    </div>
+  
 
     <!-- Next Button -->
     <button
       @click="handleNext"
       class="w-full bg-gradient-to-r from-indigo-600 via-indigo-800 to-indigo-900 text-white py-3 rounded-md shadow-lg hover:scale-105 hover:from-indigo-700 hover:to-indigo-800 transition-all duration-300 ease-in-out transform"
     >
-      NEXT
+      SUBMIT
     </button>
     <p class="font-bold text-sm mt-4">กดให้คะแนนการให้บริการ</p>
   </div>

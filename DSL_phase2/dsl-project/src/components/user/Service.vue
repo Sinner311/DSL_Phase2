@@ -120,6 +120,11 @@ const item = reactive({
       subtitle: 'ตรวจสอบ เปลี่ยนแปลง ยกเลิก รายการจองของคุณ',
       image: '/src/assets/img/option_3.jpg',
       link: '/user/myappointment'
+    },option_4:{
+        title: 'รับคิว',
+      subtitle: 'ผู้กู้ยืม กดเพื่อรับคิวหน้าห้องกยศ. กรุณามาที่หน้าห้องกยศ.ก่อนกดรับคิว',
+      image: '/src/assets/img/option_4.jpg',
+      link: '/user/queue'
     }
 })
 </script>
