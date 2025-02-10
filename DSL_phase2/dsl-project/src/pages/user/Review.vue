@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 import Navbar from '@/components/user/Navbar.vue'
 import ReviewStar from '@/components/user/ReviewStar.vue'
-import ReviewForm from '@/components/user/ReviewForm.vue'
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useCookies } from "vue3-cookies";
@@ -44,34 +43,20 @@ async function getMystudentID(email: string) {
   }
 }
 
-const currentStep = ref(1)
 const rating = ref(5)
-const formData = ref({
-  helpReceived: null,
-  selectedServices: []
-})
 
-const moveToNextStep = (data) => {
-  if (currentStep.value === 1) {
-    rating.value = data
-    currentStep.value = 2
-  }
-}
+
 
 const submitReview = async (data) => {
   const completeReview = {
     rating: rating.value,
     ...data
   }
-  console.log('Complete Review:', completeReview.rating, completeReview.helpReceived, completeReview.selectedServices)
+  console.log('Complete Review:', completeReview.rating)
 
-  const q1 = completeReview.helpReceived === 'yes' ? 1 : 0;
-  const q2 = completeReview.selectedServices.includes('speed') ? 1 : 0;
-  const q3 = completeReview.selectedServices.includes('problem_solving') ? 1 : 0;
-  const q4 = completeReview.selectedServices.includes('communication') ? 1 : 0;
-  const q5 = completeReview.selectedServices.includes('politeness') ? 1 : 0;
+
   
-  console.log(studentid.value, completeReview.rating, q1, q2, q3, q4, q5);
+  console.log(studentid.value, completeReview.rating);
 
   // Check for missing studentid or accesstoken
   if (!studentid.value || !accesstoken) {
@@ -85,11 +70,6 @@ const submitReview = async (data) => {
       {
         studentid: studentid.value,
         star_rate: completeReview.rating,
-        q1: q1,
-        q2: q2,
-        q3: q3,
-        q4: q4,
-        q5: q5,
       },
     );
 
@@ -137,11 +117,6 @@ async function getuserinfo() {
   <Navbar/>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <ReviewStar 
-      v-if="currentStep === 1" 
-      @next="moveToNextStep"
-    />
-    <ReviewForm 
-      v-if="currentStep === 2" 
       @submit="submitReview"
     />
   </div>

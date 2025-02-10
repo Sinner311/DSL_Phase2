@@ -15,6 +15,7 @@ export default defineConfig({
   //   "process.env.VUE_APP_IP":JSON.stringify(process.env.VUE_APP_IP)
   // },
   server:{
+    host: '0.0.0.0',
     port:3000,
     historyApiFallback: true,
   },

@@ -19,17 +19,13 @@ export const getSpecifichistory = asynchandler(async (req: any, res: any) => {
 
 export const sendreview = asynchandler(async (req: any, res: any) => {
   try {
-    const { studentid, star_rate, q1, q2, q3, q4, q5 } = req.body;
+    const { studentid, star_rate} = req.body;
 
     // เรียกใช้ฟังก์ชัน getreview เพื่ออัปเดตข้อมูล
     const review = await getreview({
       studentid: studentid,
       star_rate: star_rate,
-      q1: q1,
-      q2: q2,
-      q3: q3,
-      q4: q4,
-      q5: q5,
+
     });
 
     // ส่งข้อมูลกลับไปยัง client

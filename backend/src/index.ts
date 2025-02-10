@@ -41,9 +41,10 @@ app.use("/api/booking", bookingRouter);
 app.use("/api/queue", queueRouter);
 app.use("/api/history", historyRouter);
 
-app.listen(port, function () {
+app.listen(port, "0.0.0.0", function () {
   console.log("Server is ready at ", port);
 });
+
 
 async function ringout() {
   setInterval(async () => {

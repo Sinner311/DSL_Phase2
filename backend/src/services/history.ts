@@ -39,11 +39,6 @@ export async function getHistoryQueueData() {
       channel: item.channel || "N/A",
       status: item.status || "N/A",
       star_rate: item.star_rate ?? "N/A", // Default to -1 if null
-      q1: item.q1 ?? "N/A", // Default to -1 if null
-      q2: item.q2 ?? "N/A",
-      q3: item.q3 ?? "N/A",
-      q4: item.q4 ?? "N/A",
-      q5: item.q5 ?? "N/A",
     }));
 
     return formattedData;
@@ -59,11 +54,6 @@ export async function getHistoryQueueData() {
 export async function getreview(history_queue: {
   studentid: number;
   star_rate: string;
-  q1: string | number;  // Can be either string or number
-  q2: string | number;
-  q3: string | number;
-  q4: string | number;
-  q5: string | number;
 }) {
   try {
     // ค้นหาข้อมูล history_queue โดยใช้ studentid
@@ -80,22 +70,12 @@ export async function getreview(history_queue: {
 
     // Convert star_rate and other fields to strings
     const star_rate = String(history_queue.star_rate);
-    const q1 = String(history_queue.q1);
-    const q2 = String(history_queue.q2);
-    const q3 = String(history_queue.q3);
-    const q4 = String(history_queue.q4);
-    const q5 = String(history_queue.q5);
 
     // อัปเดตข้อมูลด้วยข้อมูลใหม่
     const update_date = await prisma.history_queue.update({
       where: { historyid: historyRecord.historyid },
       data: {
         star_rate: star_rate,  // Ensure it's a string
-        q1: q1,                // Ensure it's a string
-        q2: q2,                // Ensure it's a string
-        q3: q3,                // Ensure it's a string
-        q4: q4,                // Ensure it's a string
-        q5: q5,                // Ensure it's a string
         status: "finish",      // เปลี่ยน status เป็น "finish"
       },
     });

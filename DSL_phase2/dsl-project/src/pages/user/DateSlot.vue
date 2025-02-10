@@ -74,7 +74,7 @@ async function getAllDate() {
           .filter((day) => day.status === "normal")
           .map(async (day) => {
             const bookedCount = await getBookingCount(day.dateid); // ดึงจำนวนการจองที่มีอยู่
-            let remaining = day.maxuser - bookedCount - 50;
+            let remaining = day.maxuser - bookedCount;
             remaining = Math.max(remaining, 0);
             // แปลงวันที่ให้อยู่ในรูปแบบที่ JavaScript เข้าใจได้
             const dayDate = new Date(day.date);

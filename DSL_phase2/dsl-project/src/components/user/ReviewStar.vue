@@ -8,11 +8,13 @@ const setRating = (star) => {
   rating.value = star
 }
 
-const emit = defineEmits(['next'])
+const emit = defineEmits(['submit'])
 
-const handleNext = () => {
-  emit('next', rating.value)
-}
+const handleSubmit = () => {
+  emit('submit', { rating: rating.value }); // ส่งเป็น object แทนค่าเดียว
+};
+
+
 </script>
 
 <template>
@@ -59,7 +61,7 @@ const handleNext = () => {
 
     <!-- Next Button -->
     <button
-      @click="handleNext"
+      @click="handleSubmit"
       class="w-full bg-gradient-to-r from-indigo-600 via-indigo-800 to-indigo-900 text-white py-3 rounded-md shadow-lg hover:scale-105 hover:from-indigo-700 hover:to-indigo-800 transition-all duration-300 ease-in-out transform"
     >
       SUBMIT

@@ -49,11 +49,6 @@ model history_queue {
   channel   Int?      @db.TinyInt
   status    String?   @db.VarChar(20)
   star_rate String?   @db.VarChar(11)
-  q1        String?   @db.VarChar(3)
-  q2        String?   @db.VarChar(3)
-  q3        String?   @db.VarChar(3)
-  q4        String?   @db.VarChar(3)
-  q5        String?   @db.VarChar(3)
   queues    queues?   @relation(fields: [queueid], references: [queueid], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_2")
   users     users?    @relation(fields: [studentid], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "history_queue_ibfk_1")
 
