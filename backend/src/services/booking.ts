@@ -16,13 +16,45 @@ export async function addBooking(history_booking: {
   });
 
   if (existingBooking) {
-    throw new Error("Active booking exists"); // ขว้าง Error หากพบการจองซ้ำ
+    throw new Error("Active booking exists");
   }
 
-  // หากไม่มีการจองซ้ำ ให้สร้างรายการใหม่
-  const res = await prisma.history_booking.create({ data: history_booking });
-  return res;
+  // ดึงค่า maxuser ของวันนั้น
+  const dayInfo = await prisma.days.findUnique({
+    where: { dateid: history_booking.bookingdateid },
+    select: { maxuser: true },
+  });
+
+  if (!dayInfo || dayInfo.maxuser === null) {
+    throw new Error("Invalid booking date or maxuser not set");
+  }
+
+  const maxType1 = Math.floor(dayInfo.maxuser / 3); // 1/3 ของ maxuser
+  const maxType2 = dayInfo.maxuser - maxType1; // 2/3 ของ maxuser
+
+  // นับจำนวนการจองของแต่ละ type
+  const countType1 = await prisma.history_booking.count({
+    where: { bookingdateid: history_booking.bookingdateid, type: 1 },
+  });
+
+  const countType2 = await prisma.history_booking.count({
+    where: { bookingdateid: history_booking.bookingdateid, type: 2 },
+  });
+
+  // ตรวจสอบว่าประเภทการจองเกินลิมิตหรือไม่
+  if (history_booking.type === 1 && countType1 >= maxType1) {
+    throw new Error(`Booking limit reached for type 1 (max ${maxType1})`);
+  }
+
+  if (history_booking.type === 2 && countType2 >= maxType2) {
+    throw new Error(`Booking limit reached for type 2 (max ${maxType2})`);
+  }
+
+  // หากยังไม่เต็ม ให้สร้างรายการใหม่
+  return await prisma.history_booking.create({ data: history_booking });
 }
+
+
 
 export async function myBooking(studentid: number) {
   const studentidNumber = Number(studentid);

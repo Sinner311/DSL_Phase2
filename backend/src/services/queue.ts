@@ -8,9 +8,21 @@ export async function resetQueueOrder() {
   console.log("Queue reset successfully, and AUTO_INCREMENT set to 1!");
 }
 
+function isWithinQueueHours(): boolean {
+  const now = new Date();
+  const hours = now.getHours();
+  console.log(`Current Hour: ${hours}`);
+  return hours >= 7 && hours < 16; // 7:00 AM - 3:59 PM
+}
+
 
 export async function addQueue(queues: { studentid: number; type: number; date: string }) {
   try {
+    // Check if the current time is within allowed queue hours
+    if (!isWithinQueueHours()) {
+      throw new Error("Queue registration is only allowed between 7:00 AM and 4:00 PM.");
+    }
+
     const existingQueue = await prisma.queues.findFirst({
       where: {
         studentid: queues.studentid,
@@ -21,7 +33,7 @@ export async function addQueue(queues: { studentid: number; type: number; date: 
     });
 
     if (existingQueue) {
-      throw new Error('Student is already in the queue.');
+      throw new Error("Student is already in the queue.");
     }
 
     if (queues.type === 3) {
@@ -32,7 +44,7 @@ export async function addQueue(queues: { studentid: number; type: number; date: 
       });
 
       if (!day) {
-        throw new Error('Date not found.');
+        throw new Error("Date not found.");
       }
 
       const bookedCount = await prisma.history_booking.count({
@@ -48,9 +60,10 @@ export async function addQueue(queues: { studentid: number; type: number; date: 
       });
 
       const remaining = (day?.maxuser ?? 0) - bookedCount - queueCount;
-console.log(remaining)
+      console.log(remaining);
+
       if (remaining <= 0) {
-        throw new Error('full');
+        throw new Error("Queue is full.");
       }
     }
 
@@ -61,6 +74,8 @@ console.log(remaining)
         status: "WAIT",
       },
     });
+
+    
 
     return res;
   } catch (error) {
