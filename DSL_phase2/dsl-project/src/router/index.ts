@@ -8,15 +8,6 @@ import UserAppointment from "../pages/user/UserAppointment.vue";
 import QueueUpView from "../pages/user/QueueUpView.vue";
 import UserQueue from "../pages/user/UserQueue.vue";
 import Review from "../pages/user/Review.vue";
-import Mainstaff from "../pages/staff/Mainstaff.vue";
-import StaffCallQueue from "../pages/staff/StaffCallQueue.vue";
-import TVshow from "../pages/staff/TVshow.vue";
-import Daysetting from "../pages/staff/Daysetting.vue";
-import StaffSetting from "../pages/staff/Setting.vue";
-import EditDayRepairdoc from "../pages/staff/EditDayRepairdoc.vue";
-import EditdaysendDoc1 from "../pages/staff/EditdaysendDoc1.vue";
-import EditdaysendDoc2 from "../pages/staff/EditdaysendDoc2.vue";
-import Editday from "../pages/staff/StaffDateSlot.vue";
 import Mainaddmin from "../pages/admin/Mainadmin.vue";
 import Addstaff from "../pages/admin/Addstaff.vue";
 import Adminsetting from "../pages/admin/Adminsetting.vue";
@@ -28,6 +19,7 @@ import AdminEditdaysendDoc1 from "../pages/admin/AdminEditdaysendDoc1.vue";
 import AdminEditdaysendDoc2 from "../pages/admin/AdminEditdaysendDoc2.vue";
 import AdminTVshow from "../pages/admin/AdminTVshow.vue";
 import AdminEditday from "../pages/admin/AdminDateSlot.vue";
+import AdminBookingList from "../pages/admin/AdminBookingList.vue";
 
 
 
@@ -160,58 +152,10 @@ const routes: Array<RouteRecordRaw> = [
     meta: { role: ["ADMIN"] as string[] }, 
   },
   {
-    path: "/staff",
-    name: "staff",
-    component: Mainstaff,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/callqueue",
-    name: "staffcallqueue",
-    component: StaffCallQueue,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/daysetting",
-    name: "staffdaysetting",
-    component: Daysetting,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/daysetting/editdocamendmentday",
-    name: "staffeditdocamendmentday",
-    component: EditDayRepairdoc,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/daysetting/editday1",
-    name: "staffeditday1",
-    component: EditdaysendDoc1,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/daysetting/editday2",
-    name: "staffeditday2",
-    component: EditdaysendDoc2,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/dashboard",
-    name: "staffdashboard",
-    component: TVshow,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/editday",
-    name: "staffeditday",
-    component: Editday,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
-  },
-  {
-    path: "/staff/setting",
-    name: "staffsetting",
-    component: StaffSetting,
-    meta: { role: ["ADMIN", "TEACHER"] as string[] }, 
+    path: "/admin/bookinglist",
+    name: "adminbookinglist",
+    component: AdminBookingList,
+    meta: { role: ["ADMIN"] as string[] }, 
   },
 ];
 

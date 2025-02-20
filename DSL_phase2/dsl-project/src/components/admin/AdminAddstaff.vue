@@ -87,6 +87,19 @@ async function getStaff() {
   }
 }
 
+
+const myemail = ref('');
+
+async function getuserinfo() {
+  const accesstoken = cookies.get("accesstoken");
+  if (accesstoken) {
+    const access_token_extract = parseJwt(accesstoken);
+    myemail.value = access_token_extract.email; // กำหนดค่าให้ myemail
+    console.log(myemail.value);
+  }
+}
+
+
 // เพิ่ม staff
 const confirmAddStaff = async () => {
   if (newEmail.value && newChannel.value) {
@@ -130,20 +143,10 @@ const confirmAddStaff = async () => {
 const confirmDeleteStaff = async () => {
   console.log(staffs.value[selectedStaffIndex.value].email);
   try {
-    if(staffs.value[selectedStaffIndex.value].role === "ADMIN"){
-      const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
-      email:staffs.value[selectedStaffIndex.value].email,
-      data:{
-        channel:0,
-      }
-    })
-    isMonitor.value = false;
-    return;
-    }
     const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
       email:staffs.value[selectedStaffIndex.value].email,
       data:{
-        channel:0,
+        channel:null,
         role:"STUDENT"
       }
     })
@@ -196,6 +199,7 @@ const confirmEditStaff = async () => {
 
 // เรียกข้อมูลเมื่อคอมโพเนนต์โหลด
 onMounted(() => {
+  getuserinfo()
   getStaff();
 });
 </script>
@@ -236,7 +240,7 @@ onMounted(() => {
           <p class="text-lg font-medium">{{ staff.email }}</p>
           <p class="mt-2">ช่องบริการที่ : <strong>{{ staff.channel }}</strong></p>
           <div class="mt-4 flex justify-center space-x-4">
-            <button @click="openDeleteCard(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">ลบ</button>
+            <button @click="openDeleteCard(index)" v-if="staff.email!==myemail" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">ลบ</button>
             <button @click="openChangeServiceCard(index)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">เปลี่ยนช่องบริการ</button>
           </div>
         </div>

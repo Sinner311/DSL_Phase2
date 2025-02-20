@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Navbar from "@/components/user/Navbar.vue";
+import UserBackbutton from '../../components/user/UserBackbutton.vue';
 import { ref, onMounted, computed } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -247,7 +248,7 @@ async function joinQueue(id: number, type: number | null) {
 
 <template>
   <Navbar />
-
+  <UserBackbutton />
   <section class="flex justify-center p-4 m-8">
     <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-6">
       <!-- User Profile Section -->

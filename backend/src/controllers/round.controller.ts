@@ -16,6 +16,8 @@ import {
   editSpecificDate,
   webSettings,
   editwebSettings,
+  DASDSettings,
+  editDASDSettings,
 } from "../services/round";
 
 export const getAllListOfRound = asynchandler(async (req: any, res: any) => {
@@ -131,8 +133,22 @@ export const getwebSettings = asynchandler(async (req: any, res: any) => {
 export const geteditwebSettings = asynchandler(async (req: any, res: any) => {
   const { web_break_text, web_status} = req.body;
   const editwebSetting = await editwebSettings({
-    // web_break_text:web_break_text,
+    web_break_text:web_break_text,
     web_status: web_status,
   });
   res.status(200).send(editwebSetting);
+});
+
+export const getDASDSettings = asynchandler(async (req: any, res: any) => {
+  const DASDSetting = await DASDSettings();
+  res.send(DASDSetting);
+});
+
+
+export const geteditDASDSettings = asynchandler(async (req: any, res: any) => {
+  const { dasd_text} = req.body;
+  const editDASDSetting = await editDASDSettings({
+    dasd_text:dasd_text,
+  });
+  res.status(200).send(editDASDSetting);
 });

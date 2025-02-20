@@ -299,14 +299,66 @@ export async function webSettings() {
 
 
 export async function editwebSettings(web_settings: {
-  // web_break_text: string;
+  web_break_text: string;
   web_status: string;
 }) {
   const update_date = await prisma.web_settings.update({
     where: { id: 1 },
     data: {
-      // web_break_text: web_settings.web_break_text,
+      web_break_text: web_settings.web_break_text,
       web_status: web_settings.web_status,
+    },
+  });
+  return update_date;
+}
+
+export async function DASDSettings() {
+  // Find the current show_list from web_settings where id = 1
+  const webSettings = await prisma.web_settings.findUnique({
+    where: {
+      id: 1,
+    },
+    select: {
+      show_list: true,
+    },
+  });
+
+  if (!webSettings || !webSettings.show_list) {
+    throw new Error('Unable to find show_list from web_settings with id = 1.');
+  }
+
+  const showList = webSettings.show_list;
+
+  return await prisma.list_of_round.findUnique({
+    where: {
+      Listid: showList,
+    },
+  });
+}
+
+export async function editDASDSettings(list_of_round: {
+  dasd_text: string;
+}) {
+  // Find the current show_list from web_settings where id = 1
+  const webSettings = await prisma.web_settings.findUnique({
+    where: {
+      id: 1,
+    },
+    select: {
+      show_list: true,
+    },
+  });
+
+  if (!webSettings || !webSettings.show_list) {
+    throw new Error('Unable to find show_list from web_settings with id = 1.');
+  }
+
+  const showList = webSettings.show_list;
+
+  const update_date = await prisma.list_of_round.update({
+    where: { Listid: showList },
+    data: {
+      Document_Amendment_Submission_Date: list_of_round.dasd_text,
     },
   });
   return update_date;

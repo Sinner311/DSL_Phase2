@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Navbar from "@/components/user/Navbar.vue";
+import UserBackbutton from '../../components/user/UserBackbutton.vue';
 import { ref, onMounted, computed, onUnmounted } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -35,6 +36,31 @@ function parseJwt(token: string) {
   );
   return JSON.parse(jsonPayload);
 }
+
+
+const webSettings = ref(null);
+const isSystemActive = ref(null);
+const buttonText = ref("ระบบปิดพักอยู่");
+
+async function getwebSettings() {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`
+    );
+
+    if (res.status === 200 && res.data) {
+      webSettings.value = res.data;
+      buttonText.value = webSettings.value.web_break_text || "ระบบปิดพักอยู่";
+      isSystemActive.value = webSettings.value.web_status === "normal";
+    } else {
+      throw new Error("Failed to fetch web settings.");
+    }
+  } catch (error) {
+    console.error("Error fetching web settings:", error);
+  }
+}
+
+
 
 async function getMystudentID(email: string) {
   try {
@@ -136,17 +162,17 @@ async function getuserinfo() {
       channel1QueueId.value =
         calledQueueByChannel.value[1] &&
         calledQueueByChannel.value[1].length > 0
-          ? calledQueueByChannel.value[1][0].queueid
+          ? calledQueueByChannel.value[1][0].queue_no
           : "-";
       channel2QueueId.value =
         calledQueueByChannel.value[2] &&
         calledQueueByChannel.value[2].length > 0
-          ? calledQueueByChannel.value[2][0].queueid
+          ? calledQueueByChannel.value[2][0].queue_no
           : "-";
       channel3QueueId.value =
         calledQueueByChannel.value[3] &&
         calledQueueByChannel.value[3].length > 0
-          ? calledQueueByChannel.value[3][0].queueid
+          ? calledQueueByChannel.value[3][0].queue_no
           : "-";
     } else {
       console.error("myqueue data found.");
@@ -168,7 +194,9 @@ function formatTime(timeString: any, timeZone = "Africa/Abidjan") {
 
 onMounted(() => {
   getuserinfo(); // เรียกใช้งานเมื่อคอมโพเนนต์ถูก mount
+  getwebSettings()
   intervalId = setInterval(() => {
+    getwebSettings()
     getuserinfo();
   }, 2000); // Set interval to 2 seconds
 });
@@ -182,6 +210,7 @@ onUnmounted(() => {
 
 <template>
   <Navbar />
+  <UserBackbutton />
   <div class="flex justify-center items-center min-h-screen bg-gray-200">
     <div class="w-full max-w-md bg-white shadow-lg">
       <div class="p-6">
@@ -222,25 +251,18 @@ onUnmounted(() => {
 
         <!-- Queue Status Section -->
         <div class="text-center mb-6">
-          <h2 class="text-green-500 text-xl font-semibold mb-4">
+          <h2 v-if="isSystemActive" class="text-green-500 text-xl font-semibold mb-4">
             ระบบเปิดเรียกคิวปกติ
           </h2>
-          <div class="text-6xl font-bold mb-2">
-            {{ myqueueinfo.queueid }}
-          </div>
+          <h2 v-if="!isSystemActive" class="text-red-500 text-xl font-semibold mb-4">
+            {{ buttonText }}
+          </h2>
           <p class="text-gray-600">
-            เหลืออีก
-            <span class="text-blue-600 font-semibold">
-              {{
-                lastCalledQueue.queueid == null
-                  ? 0
-                  : myqueueinfo.queueid - lastCalledQueue.queueid - 1 < 0
-                  ? 0
-                  : myqueueinfo.queueid - lastCalledQueue.queueid - 1
-              }}
-            </span>
-            คิวที่ต้องรอคิวอยู่
+            คิวหมายเลข
           </p>
+          <div class="text-6xl font-bold mb-2">
+            {{ myqueueinfo.queue_no }}
+          </div>
         </div>
 
         <!-- Service Points Section -->

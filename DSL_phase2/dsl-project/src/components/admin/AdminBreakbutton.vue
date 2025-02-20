@@ -1,13 +1,15 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 const webSettings = ref(null);
 const isSystemActive = ref(null);
 const buttonText = ref("พักระบบ");
+const isTextEdited = ref(false); // ตรวจสอบว่ามีการแก้ไขข้อความหรือไม่
 
 // ดึง Token จาก localStorage (ถ้ามี)
 const accesstoken = localStorage.getItem("accessToken");
@@ -17,13 +19,12 @@ function handleBack() {
   router.push({ path: "/admin" });
 }
 
-//  ฟังก์ชันอัปเดตข้อความและส่ง API
-const updateText = async () => {
+// ฟังก์ชันอัปเดต Toggle Switch
+const updateStatus = async () => {
   try {
     const response = await axios.put(
       `${import.meta.env.VITE_APP_IP}/api/round/geteditwebSettings`,
       {
-        // web_break_text: buttonText.value,
         web_status: isSystemActive.value ? "normal" : "disable",
       },
       {
@@ -34,13 +35,6 @@ const updateText = async () => {
     );
 
     if (response.status === 200) {
-      await Swal.fire({
-        icon: "success",
-        title: "แก้ไขสำเร็จ",
-        showConfirmButton: false,
-        timer: 1500,
-        position: "top-start", // ตำแหน่งแจ้งเตือนที่มุมซ้ายบน
-      });
     } else {
       throw new Error("Failed to update settings.");
     }
@@ -49,14 +43,48 @@ const updateText = async () => {
   }
 };
 
-//  ดึงค่า webSettings จาก API
+// ฟังก์ชันอัปเดตข้อความเมื่อกด Save
+const updateText = async () => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_APP_IP}/api/round/geteditwebSettings`,
+      {
+        web_break_text: buttonText.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      isTextEdited.value = false; // ซ่อนปุ่ม Save หลังจากบันทึกสำเร็จ
+    } else {
+      throw new Error("Failed to update text.");
+    }
+  } catch (error) {
+    console.error("Error updating text:", error);
+  }
+};
+
+// ฟังก์ชันอัปเดตข้อความจาก Editable Text
+const updateButtonText = (event) => {
+  buttonText.value = event.target.innerText.trim();
+  isTextEdited.value = true; // แสดงปุ่ม Save เมื่อมีการแก้ไขข้อความ
+};
+
+// ดึงค่า webSettings จาก API
 async function getwebSettings() {
   try {
     const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`);
     
     if (res.status === 200 && res.data) {
       webSettings.value = res.data;
-      buttonText.value = webSettings.value.web_break_text || "พักระบบ";
+      // ใช้ค่าเริ่มต้นจาก API หากยังไม่ได้แก้ไขข้อความ
+      if (!isTextEdited.value) {
+        buttonText.value = webSettings.value.web_break_text || "พักระบบ";
+      }
       isSystemActive.value = webSettings.value.web_status === "normal";
     } else {
       throw new Error("Failed to fetch web settings.");
@@ -66,12 +94,17 @@ async function getwebSettings() {
   }
 }
 
-//  อัปเดต API อัตโนมัติเมื่อเปลี่ยน Toggle Switch
-watch(isSystemActive, updateText);
+// อัปเดต API อัตโนมัติเมื่อเปลี่ยน Toggle Switch
+watch(isSystemActive, updateStatus);
 
-//  ดึงข้อมูลเมื่อโหลดหน้า
+// ดึงข้อมูลเมื่อโหลดหน้า
 onMounted(() => {
-  getwebSettings();
+  getwebSettings(); // เรียกครั้งแรกเมื่อโหลดหน้า
+
+  // ใช้ setInterval เพื่อดึงข้อมูลทุก 10 วินาที
+  setInterval(() => {
+    getwebSettings();
+  }, 10000); // 10000ms = 10 วินาที
 });
 </script>
 
@@ -98,35 +131,47 @@ onMounted(() => {
       </svg>
     </button>
 
-    <!-- ปุ่มพักระบบ -->
-    <div class="flex items-center space-x-4  px-16">
-      <!-- Toggle Switch -->
-       <div class="flex flex-col">
-        <div class="flex flex-row"><label class="text-gray-600 ms-9 px-11">พักระบบ</label><label class="text-gray-600">เปิดระบบ</label></div>
-      <label class="flex items-center cursor-pointer ps-16 ms-16">
-        <input type="checkbox" v-model="isSystemActive" class="hidden" />
-        <div
-          class="relative w-16 h-8 bg-gray-300 rounded-full transition-all"
-          :class="{ 'bg-green-500': isSystemActive }"
-        >
-          <div
-            class="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-all"
-            :class="{ 'translate-x-8': isSystemActive }"
-          ></div>
+    <!-- Toggle Switch -->
+    <div class="flex items-center space-x-4 px-16">
+      <div class="flex flex-col">
+        <div class="flex flex-row">
+          <label class="text-gray-600 ms-9 px-11">พักระบบ</label>
+          <label class="text-gray-600">เปิดระบบ</label>
         </div>
-      </label></div>
+        <label class="flex items-center cursor-pointer ps-16 ms-16">
+          <input type="checkbox" v-model="isSystemActive" class="hidden" />
+          <div
+            class="relative w-16 h-8 bg-gray-300 rounded-full transition-all"
+            :class="{ 'bg-green-500': isSystemActive }"
+          >
+            <div
+              class="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-all"
+              :class="{ 'translate-x-8': isSystemActive }"
+            ></div>
+          </div>
+        </label>
+      </div>
 
- <!-- Editable Text -->
- <!-- <div class="flex flex-col">
+      <!-- Editable Text -->
+      <div class="flex flex-col">
         <label class="text-gray-600 mb-1">ข้อความพักระบบ</label>
         <div
-          class="border-b border-gray-500 px-2 py-1 w-40 cursor-text"
+          class="border-b border-gray-500 px-2 py-1 min-w-[300px] w-80 cursor-text"
           contenteditable="true"
-          @input="buttonText"
+          @input="updateButtonText"
         >
           {{ buttonText }}
         </div>
-      </div> -->
+
+        <!-- ปุ่ม Save -->
+        <button
+          v-if="isTextEdited"
+          @click="updateText"
+          class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-3xl hover:bg-blue-600 transition w-32"
+        >
+          บันทึกข้อความ
+        </button>
+      </div>
     </div>
   </div>
 </template>

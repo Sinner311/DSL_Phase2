@@ -6,25 +6,43 @@ const item = reactive({
     title: 'ระบบเรียกคิว',
     image: '/src/assets/img/option_1.jpg',
     icon: 'fa-solid fa-volume-high', 
-    link: '/staff/callqueue' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/admin/callqueue' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_2: {
     title: 'ตั้งค่าวันที่',
     image: '/src/assets/img/option_2.jpg',
-    icon: 'fa-solid fa-cog', 
-    link: '/staff/daysetting' //ไปหน้าไหนมากำหนดตรงนี้
+    icon: 'fa-solid fa-calendar-days', 
+    link: '/admin/daysetting' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_3: {
     title: 'หน้าจอแสดงคิวใน TV',
     image: '/src/assets/img/option_3.jpg',
     icon: 'fa-solid fa-tv', 
-    link: '/staff/dashboard' //ไปหน้าไหนมากำหนดตรงนี้
-  },  
+    link: '/admin/dashboard' //ไปหน้าไหนมากำหนดตรงนี้
+  },
   option_4: {
+    title: 'คะแนนการประเมิน',
+    image: '/src/assets/img/option_1.jpg',
+    icon: 'fas fa-star', 
+    link: '/admin/tablereview' //ไปหน้าไหนมากำหนดตรงนี้
+  },
+  option_5: {
+    title: 'เพิ่มเจ้าหน้าที่',
+    image: '/src/assets/img/option_2.jpg',
+    icon: 'fas fa-plus', 
+    link: '/admin/addstaff' //ไปหน้าไหนมากำหนดตรงนี้
+  },
+  option_6: {
     title: 'ตั้งค่าระบบ',
     image: '/src/assets/img/option_2.jpg',
     icon: 'fa-solid fa-cog', 
-    link: '/staff/setting' //ไปหน้าไหนมากำหนดตรงนี้
+    link: '/admin/setting' //ไปหน้าไหนมากำหนดตรงนี้
+  },
+  option_7: {
+    title: 'รายการจอง',
+    image: '/src/assets/img/option_3.jpg',
+    icon: 'fa-solid fa-list', 
+    link: '/admin/bookinglist' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
 </script>

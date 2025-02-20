@@ -1,7 +1,7 @@
 const asynchandler = require("express-async-handler");
 
 import { $Enums } from "@prisma/client";
-import { addBooking,myBooking,countBookingByDate,deleteBooking } from "../services/booking";
+import { addBooking,myBooking,countBookingByDate,deleteBooking,RangeDateBooking } from "../services/booking";
 
 export const makeBooking = asynchandler(async (req: any, res: any) => {
   const { id, type, dateid } = req.body;
@@ -88,4 +88,10 @@ export const getmyBooking = asynchandler(async (req: any, res: any) => {
       console.error("Error deleting booking:", error);
       res.status(500).json({ message: "เกิดข้อผิดพลาดในการยกเลิกการจอง" });
     }
+  });
+
+  
+  export const getRangeDateBooking = asynchandler(async (req: any, res: any) => {
+    const RangeDayBooking = await RangeDateBooking();
+    res.status(200).send(RangeDayBooking);
   });

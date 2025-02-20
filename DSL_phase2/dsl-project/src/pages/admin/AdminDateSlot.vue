@@ -240,9 +240,9 @@ onMounted(() => {
               @click="handleSlotSelection(slot)"
             >
               <div class="flex justify-between items-center w-full">
-                <span>{{ slot.date }}</span>
-                <span>{{ slot.time }}</span>
-                <span>ผู้รับบริการสูงสุด {{ slot.maxuser }} คน</span>
+                <span class="flex-1">{{ slot.date }}</span>
+                <span class="flex-1">{{ slot.time }}</span>
+                <span class="flex-1">ผู้รับบริการสูงสุด {{ slot.maxuser }} คน</span>
               </div>
             </button>
           </div>

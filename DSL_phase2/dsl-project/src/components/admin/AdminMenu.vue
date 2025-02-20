@@ -11,7 +11,7 @@ const item = reactive({
   option_2: {
     title: 'ตั้งค่าวันที่',
     image: '/src/assets/img/option_2.jpg',
-    icon: 'fa-solid fa-cog', 
+    icon: 'fa-solid fa-calendar-days', 
     link: '/admin/daysetting' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_3: {
@@ -27,7 +27,7 @@ const item = reactive({
     link: '/admin/tablereview' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_5: {
-    title: 'เพิ่ม staff',
+    title: 'เพิ่มเจ้าหน้าที่',
     image: '/src/assets/img/option_2.jpg',
     icon: 'fas fa-plus', 
     link: '/admin/addstaff' //ไปหน้าไหนมากำหนดตรงนี้
@@ -37,6 +37,12 @@ const item = reactive({
     image: '/src/assets/img/option_2.jpg',
     icon: 'fa-solid fa-cog', 
     link: '/admin/setting' //ไปหน้าไหนมากำหนดตรงนี้
+  },
+  option_7: {
+    title: 'รายการจอง',
+    image: '/src/assets/img/option_3.jpg',
+    icon: 'fa-solid fa-list', 
+    link: '/admin/bookinglist' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
 </script>

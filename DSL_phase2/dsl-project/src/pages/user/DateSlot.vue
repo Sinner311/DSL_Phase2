@@ -26,10 +26,14 @@ async function getBookingCount(dateid) {
         import.meta.env.VITE_APP_IP
       }/api/booking/getcountBookingByDate?dateid=${dateid}`
     );
-    return response.data.total || 0;
+    return [
+      response.data.maxpercentage,
+      response.data.total1 || 0,
+      response.data.total2 || 0,
+    ];
   } catch (error) {
     console.error("Error fetching booking count:", error);
-    return 0; // ถ้า error ให้ถือว่าไม่มีการจอง
+    return [false, 0, 0]; // ถ้า error ให้คืนค่าเริ่มต้น
   }
 }
 
@@ -73,9 +77,25 @@ async function getAllDate() {
         dateData
           .filter((day) => day.status === "normal")
           .map(async (day) => {
-            const bookedCount = await getBookingCount(day.dateid); // ดึงจำนวนการจองที่มีอยู่
-            let remaining = day.maxuser - bookedCount;
+            const bookedCount = await getBookingCount(day.dateid);
+            const [maxpercentage, total1, total2] = bookedCount; // ดึงค่าจาก array
+
+            let remaining;
+
+            if (maxpercentage) {
+              const maxType1 = Math.floor(day.maxuser / 3); // 1/3 ของ maxuser
+              const maxType2 = day.maxuser - maxType1; // 2/3 ของ maxuser
+
+              remaining =
+                requestType === 1 ? maxType1 - total1 : maxType2 - total2;
+            } else {
+              remaining =
+                requestType === 1 ? day.maxuser - total1 : day.maxuser - total2;
+            }
+
+            // ทำให้ remaining ไม่ติดลบ
             remaining = Math.max(remaining, 0);
+
             // แปลงวันที่ให้อยู่ในรูปแบบที่ JavaScript เข้าใจได้
             const dayDate = new Date(day.date);
             const todayDate = new Date(todaydateinfo.value.date);
@@ -243,9 +263,9 @@ getAllDate();
               @click="handleSlotSelection(slot)"
             >
               <div class="flex justify-between items-center w-full">
-                <span>{{ slot.date }}</span>
-                <span>{{ slot.time }}</span>
-                <span>เหลือ {{ slot.remaining }} คิว</span>
+                <span class="flex-1">{{ slot.date }}</span>
+                <span class="flex-1">{{ slot.time }}</span>
+                <span class="flex-1">เหลือ {{ slot.remaining }} คิว</span>
               </div>
             </button>
           </div>

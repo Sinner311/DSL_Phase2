@@ -12,8 +12,11 @@
         class="w-64 border rounded-lg shadow-lg text-center p-6 flex flex-col justify-between h-[320px] relative"
       >
         <div class="flex flex-col items-center mt-4">
+          <p class="text-gray-600">
+            คิวหมายเลข
+          </p>
           <div class="text-7xl font-bold">
-            {{ currentItemInService.queueid }}
+            {{ currentItemInService.queue_no }}
           </div>
           <div class="custom-topic mt-4">
             {{
@@ -65,7 +68,10 @@
       class="w-64 border rounded-lg shadow-lg text-center p-6 flex flex-col justify-between h-[320px]"
     >
       <div class="flex flex-col items-center">
-        <div class="text-4xl font-bold">{{ item.queueid }}</div>
+        <p class="text-gray-600">
+            คิวหมายเลข
+          </p>
+        <div class="text-4xl font-bold">{{ item.queue_no }}</div>
         <div class="custom-topic mt-4">
           {{
             item.type === 1
@@ -204,6 +210,7 @@ async function getQueue() {
           console.log(queue.users.studentid);
           return {
             queueid: queue.queueid,
+            queue_no: queue.queue_no,
             type: queue.type,
             user: queue.studentid,
             studentid: queue.users.studentid,
@@ -229,7 +236,7 @@ const openConfirmModal = async (type: string, item: TimeSlot) => {
     await Swal.fire({
     icon: 'warning',
     title: `ไม่สามารถเรียกคิวใหม่ได้`,
-    text: `เนื่องจากมีคิว ${currentItemInService.value.queueid} อยู่ในช่องบริการ กรุณากด "เสร็จสิ้น" ก่อน`,
+    text: `เนื่องจากมีคิว ${currentItemInService.value.queue_no} อยู่ในช่องบริการ กรุณากด "เสร็จสิ้น" ก่อน`,
     timer: 4000, // Automatically close the alert after 1.5 seconds
     showConfirmButton: false, // Remove the confirm button to auto-close
     position: 'top-start', // Position the alert in the top-left corner
@@ -243,8 +250,8 @@ const openConfirmModal = async (type: string, item: TimeSlot) => {
   currentItem.value = item;
   modalMessage.value =
     type === "call"
-      ? `คุณแน่ใจที่จะ เรียก คิว ${item.queueid}`
-      : `คุณแน่ใจที่จะ ข้าม คิว ${item.queueid}`;
+      ? `คุณแน่ใจที่จะ เรียก คิว ${item.queue_no}`
+      : `คุณแน่ใจที่จะ ข้าม คิว ${item.queue_no}`;
   isModalOpen.value = true;
 };
 

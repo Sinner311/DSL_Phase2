@@ -93,8 +93,8 @@ async function getAllCallQueue() {
 async function speakThai(message: string) {
   if ("speechSynthesis" in window) {
     const utterance = new SpeechSynthesisUtterance(message);
-    utterance.lang = "th-TH"; // ตั้งค่าเป็นภาษาไทย
-    utterance.rate = 0.6;
+    utterance.lang = "th-TH"; // ตั้งค่าเป็นภาษาไทยเปลี่ยนเสียงไม่ได้
+    utterance.rate = 0.4;
     window.speechSynthesis.speak(utterance);
   } else {
     console.warn("Speech Synthesis API ไม่รองรับในเบราว์เซอร์นี้");
@@ -135,8 +135,11 @@ async function getuserinfo() {
   console.log(allcallqueueinfoData, allcallqueueinfoData.channel);
   if (allcallqueueinfoData) {
     await speakThai(
-      `ขอเชิญหมายเลข${allcallqueueinfoData.queueid}ที่ช่องบริการ${allcallqueueinfoData.channel}`
+      `ขอเชิญหมายเลข${allcallqueueinfoData.queue_no}ที่ช่องบริการ${allcallqueueinfoData.channel}`
     );
+
+
+    
     await getCallQueue(
       allcallqueueinfoData.queueid,
       allcallqueueinfoData.channel
@@ -157,15 +160,15 @@ async function getuserinfo() {
 
   channel1QueueId.value =
     calledQueueByChannel.value[1] && calledQueueByChannel.value[1].length > 0
-      ? calledQueueByChannel.value[1][0].queueid
+      ? calledQueueByChannel.value[1][0].queue_no
       : "-";
   channel2QueueId.value =
     calledQueueByChannel.value[2] && calledQueueByChannel.value[2].length > 0
-      ? calledQueueByChannel.value[2][0].queueid
+      ? calledQueueByChannel.value[2][0].queue_no
       : "-";
   channel3QueueId.value =
     calledQueueByChannel.value[3] && calledQueueByChannel.value[3].length > 0
-      ? calledQueueByChannel.value[3][0].queueid
+      ? calledQueueByChannel.value[3][0].queue_no
       : "-";
 }
 
@@ -196,7 +199,7 @@ onUnmounted(() => {
         >
           <p class="text-2xl font-bold text-black">คิวหมายเลข</p>
           <p class="text-7xl font-bold text-blue-900">
-            {{ lastCalledQueue.queueid }}
+            {{ lastCalledQueue.queue_no }}
           </p>
           <p></p>
           <p></p>
@@ -211,13 +214,15 @@ onUnmounted(() => {
             {{ lastCalledQueue.channel }}
           </p>
         </div>
+
         <!-- จำนวนคนรอ -->
-        <div
+
+        <!-- <div
           class="bg-white rounded-xl shadow-md p-6 text-center w-[320px] h-[180px] flex flex-col justify-center border-2 border-black"
         >
           <p class="text-3xl font-bold text-black">จำนวนคนรอคิว</p>
           <p class="text-6xl font-bold text-blue-900">{{ QueueWait }}</p>
-        </div>
+        </div> -->
       </div>
 
       <!-- ตารางช่องบริการ -->
@@ -234,23 +239,23 @@ onUnmounted(() => {
         <!-- เนื้อหาในตาราง -->
         <div class="divide-y divide-gray-600">
           <!-- แถว 1 -->
-          <div class="flex justify-around items-center p-6">
-            <p class="text-8xl font-bold text-black">1</p>
-            <p class="text-8xl font-bold text-blue-900">
+          <div class="flex items-center p-6">
+            <p class="flex-1 text-center text-8xl font-bold text-black">1</p>
+            <p class="flex-1 text-center text-8xl font-bold text-blue-900">
               {{ channel1QueueId === null ? " " : channel1QueueId }}
             </p>
           </div>
           <!-- แถว 2 -->
-          <div class="flex justify-around items-center p-6">
-            <p class="text-8xl font-bold text-black">2</p>
-            <p class="text-8xl font-bold text-blue-900">
+          <div class="flex items-center p-6">
+            <p class="flex-1 text-center text-8xl font-bold text-black">2</p>
+            <p class="flex-1 text-center text-8xl font-bold text-blue-900">
               {{ channel2QueueId === null ? " " : channel2QueueId }}
             </p>
           </div>
           <!-- แถว 3 -->
-          <div class="flex justify-around items-center p-6">
-            <p class="text-8xl font-bold text-black">3</p>
-            <p class="text-8xl font-bold text-blue-900">
+          <div class="flex items-center p-6">
+            <p class="flex-1 text-center text-8xl font-bold text-black">3</p>
+            <p class="flex-1 text-center text-8xl font-bold text-blue-900">
               {{ channel3QueueId === null ? " " : channel3QueueId }}
             </p>
           </div>

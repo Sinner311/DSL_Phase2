@@ -40,7 +40,7 @@ const validatePositiveNumber = (event: Event) => {
 };
 const item = ref({
   option_1: {
-    title: 'สร้างรอบของเทอมใหม่',
+    title: 'เพิ่มรอบภาคการศึกษาใหม่',
     image: '/src/assets/img/option_2.jpg',
     action: openAddCard ,
   },
@@ -127,7 +127,7 @@ async function getlistOfRound() {
         serviceNumber: index + 1, // เพิ่ม serviceNumber อัตโนมัติ
       }));
     } else {
-      throw new Error('กิดข้อผิดพลาดในการดึงข้อมูล');
+      throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูล');
     }
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -171,7 +171,7 @@ onMounted(getlistOfRound);
       <!-- Add List of round Card -->
       <div v-if="showAddCard" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center">
-        <h2 class="text-xl font-bold mb-4">เพิ่มรอบของเทอมใหม่</h2>
+        <h2 class="text-xl font-bold mb-4">เพิ่มรอบภาคการศึกษาใหม่</h2>
         <input v-model.number="newYear" @input="validatePositiveNumber"  type="number" min="0" placeholder="ใส่ปีใหม่" class="border border-gray-300 p-2 rounded w-full mb-4" />
         <input
   v-model.number="newSemester"

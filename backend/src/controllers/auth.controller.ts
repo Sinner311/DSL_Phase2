@@ -53,17 +53,7 @@ export const googleauth = asynchandler(
     if (users !== null) {
       // ! gen token
       const token = await genToken({ email: users.email, role: users.role });
-      if (users.role === "TEACHER") {
-        if (users.name === "") {
-          const editTeacher = await editSpecificuser({
-            email: users.email,
-            data: {
-              name: users.name,
-              refresh: token.refresh_token,
-            },
-          });
-        }
-      } else {
+
         // ! send refresh token to database
         const refresh_token_user = await editSpecificuser({
           email: users.email,
@@ -75,7 +65,7 @@ export const googleauth = asynchandler(
         }
         res.cookie("accesstoken", token.access_token, { HttpOnly: true });
         res.cookie("refeshtoken", token.refresh_token, { HttpOnly: true });
-      }
+      
       // ! send accesstoken && refreshtoken to client
       return res.status(200).json(token);
     }

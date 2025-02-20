@@ -59,7 +59,7 @@ export async function getStaff() {
   return await prisma.users.findMany({
     where: {
       role: {
-        in: ["ADMIN", "TEACHER"],
+        in: ["ADMIN"],
       },
     },
   });

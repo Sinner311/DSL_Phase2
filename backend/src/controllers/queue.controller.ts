@@ -3,7 +3,7 @@ import moment from "moment-timezone";
 
 import { $Enums } from "@prisma/client";
 import {
-  resetQueueOrder,
+
   addQueue,
   Specificqueue,
   getQueue,
@@ -29,16 +29,15 @@ export const queueaddQueue = asynchandler(async (req: any, res: any) => {
     res.status(200).send(getqueueaddQueue);
   } catch (error: any) {
     // ดักจับข้อผิดพลาด
-    if (error.message === "full") {
-      return res.status(400).json({ message: "ขออภัยคิววันนี้เต็มแล้ว" });
+    if (error.message === "close") {
+      return res.status(400).json({ message: "ระบบคิวเปิดระหว่างเวลา 07:00 น. ถึง 16:00 น. เท่านั้น" });
+    }
+    if (error.message === "inqueue") {
+      return res.status(400).json({ message: "ขออภัยคุณอยู่ในคิวอยู่แล้ว" });
     }
   }
 });
 
-export const resetQueue = asynchandler(async (req: any, res: any) => {
-  await resetQueueOrder();
-  return res.status(200).send({ message: "Reset completed!" });
-});
 
 export const getSpecificqueue = asynchandler(async (req: any, res: any) => {
   const { studentid } = req.query;

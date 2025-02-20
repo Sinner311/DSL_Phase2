@@ -1,23 +1,35 @@
 <template>
-    <div class="text-center mt-20">
-      <!-- ตัวอักษรที่สามารถเปลี่ยนค่าได้ -->
-      <p v-if="isSystemActive" class="font-bold text-6xl text-black animate-marquee">{{ dynamicText }}</p>
-      <p v-if="!isSystemActive" class="font-bold text-6xl text-black animate-marquee">{{ buttonText }}</p>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref,onMounted } from 'vue'
-  import axios from "axios";
+  <div class="text-center mt-20">
+    <!-- ตัวอักษรที่สามารถเปลี่ยนค่าได้ -->
+    <p
+      v-if="isSystemActive"
+      class="font-bold text-6xl text-black animate-marquee"
+    >
+      {{ dynamicText }}
+    </p>
+    <p
+      v-if="!isSystemActive"
+      class="font-bold text-6xl text-black animate-marquee"
+    >
+      {{ buttonText }}
+    </p>
+  </div>
+</template>
 
-  const webSettings = ref(null);
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import axios from "axios";
+
+const webSettings = ref(null);
 const isSystemActive = ref(null);
 const buttonText = ref("พักระบบ");
 
-  async function getwebSettings() {
+async function getwebSettings() {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`);
-    
+    const res = await axios.get(
+      `${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`
+    );
+
     if (res.status === 200 && res.data) {
       webSettings.value = res.data;
       buttonText.value = webSettings.value.web_break_text || "พักระบบ";
@@ -30,28 +42,39 @@ const buttonText = ref("พักระบบ");
   }
 }
 
-  const dynamicText = ref('ระบบเปิดเรียกคิวปกติ')
+const dynamicText = ref("ระบบเปิดเรียกคิวปกติ");
 
-  onMounted(() => {
-  getwebSettings();
+// อัปเดต API ทุกๆ 10 วินาที
+onMounted(() => {
+  getwebSettings(); // เรียก API ครั้งแรกเมื่อเริ่มต้น
+
+  // ตั้งเวลาให้เรียก API ทุกๆ 10 วินาที
+  const interval = setInterval(getwebSettings, 10000);
+
+  // ทำความสะอาดเมื่อ component ถูกทำลาย
+  onBeforeUnmount(() => {
+    clearInterval(interval);
+  });
 });
-  </script>
-  
-  <style scoped>
-  /* Animation for left-to-right marquee */
-  @keyframes marquee {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
+</script>
+
+<style scoped>
+/* Animation for left-to-right marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(-100%);
   }
-  
-  .animate-marquee {
-    display: inline-block;
-    white-space: nowrap;
-    animation: marquee 11s linear infinite; /* Adjust time for speed */
+  100% {
+    transform: translateX(100%);
   }
-  </style>
-  
+}
+
+/* ใช้แอนิเมชั่นเลื่อนข้อความ */
+.animate-marquee {
+  display: flex;
+  white-space: nowrap; /* ข้อความไม่ต้องการขึ้นบรรทัดใหม่ */
+  padding-left: 50rem;
+  width: max-content;
+  animation: marquee 10s linear infinite; /* ใช้แอนิเมชั่น, 15s คือความเร็ว */
+}
+</style>

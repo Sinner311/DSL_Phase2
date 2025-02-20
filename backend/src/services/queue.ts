@@ -1,28 +1,24 @@
 import prisma from "../prisma/client";
 import { history_booking, web_settings } from "@prisma/client";
 
+function isWithinQueueHours(): boolean {
+  const now = new Date();
+  const hours = now.getHours();
+  console.log(`Current Hour: ${hours}`);
+  // return hours >= 7 && hours < 16; // 7:00 AM - 3:59 PM
+  return true;
+}
+
 export async function resetQueueOrder() {
-  // 🚀 ลบข้อมูลทั้งหมดใน queue ก่อนรีเซ็ต AUTO_INCREMENT
+  // ลบข้อมูลทั้งหมดใน queue ก่อนรีเซ็ต AUTO_INCREMENT
   await prisma.$executeRawUnsafe(`DELETE FROM queues;`);
   await prisma.$executeRawUnsafe(`ALTER TABLE queues AUTO_INCREMENT = 1;`);
   console.log("Queue reset successfully, and AUTO_INCREMENT set to 1!");
 }
 
-function isWithinQueueHours(): boolean {
-  const now = new Date();
-  const hours = now.getHours();
-  console.log(`Current Hour: ${hours}`);
-  return hours >= 7 && hours < 16; // 7:00 AM - 3:59 PM
-}
-
 
 export async function addQueue(queues: { studentid: number; type: number; date: string }) {
   try {
-    // Check if the current time is within allowed queue hours
-    if (!isWithinQueueHours()) {
-      throw new Error("Queue registration is only allowed between 7:00 AM and 4:00 PM.");
-    }
-
     const existingQueue = await prisma.queues.findFirst({
       where: {
         studentid: queues.studentid,
@@ -32,55 +28,60 @@ export async function addQueue(queues: { studentid: number; type: number; date: 
       },
     });
 
+    if (!isWithinQueueHours()) {
+      throw new Error("close");
+    }
+
     if (existingQueue) {
-      throw new Error("Student is already in the queue.");
+      throw new Error("inqueue");
     }
 
     if (queues.type === 3) {
       const day = await prisma.days.findFirst({
-        where: {
-          date: queues.date, // ตรวจสอบว่า queues.date ถูกต้องและมีรูปแบบที่ตรงกับในตาราง days
-        },
+        where: { date: queues.date },
       });
 
       if (!day) {
         throw new Error("Date not found.");
       }
-
-      const bookedCount = await prisma.history_booking.count({
-        where: {
-          bookingdateid: day.dateid,
-        },
-      });
-
-      const queueCount = await prisma.queues.count({
-        where: {
-          type: 3,
-        },
-      });
-
-      const remaining = (day?.maxuser ?? 0) - bookedCount - queueCount;
-      console.log(remaining);
-
-      if (remaining <= 0) {
-        throw new Error("Queue is full.");
-      }
     }
 
-    const res = await prisma.queues.create({
-      data: {
-        studentid: queues.studentid,
-        type: queues.type,
-        status: "WAIT",
-      },
+    //  ใช้ Transaction ป้องกันเลขคิวซ้ำ
+    const result = await prisma.$transaction(async (prisma) => {
+      // ค้นหาหมายเลขคิวล่าสุดของประเภทนั้น
+      const lastQueue = await prisma.queues.findFirst({
+        where: { type: queues.type },
+        orderBy: { queueid: "desc" }, // หาเลขคิวที่มากที่สุด
+        select: { queue_no: true },
+      });
+
+      // กำหนด Prefix ตามประเภทคิว
+      const queuePrefix = queues.type === 1 ? "A" : queues.type === 2 ? "B" : "C";
+
+      // คำนวณหมายเลขใหม่
+      let nextQueueNumber = 1;
+      if (lastQueue && lastQueue.queue_no) {
+        const lastNumber = parseInt(lastQueue.queue_no.slice(1), 10);
+        nextQueueNumber = lastNumber + 1;
+      }
+
+      const queueNumber = `${queuePrefix}${nextQueueNumber}`;
+
+      //  สร้างคิวใหม่
+      return await prisma.queues.create({
+        data: {
+          studentid: queues.studentid,
+          type: queues.type,
+          status: "WAIT",
+          queue_no: queueNumber,
+        },
+      });
     });
 
-    
-
-    return res;
+    return result;
   } catch (error) {
     console.error(error);
-    throw error; // ส่งข้อผิดพลาดกลับไปยัง caller
+    throw error;
   }
 }
 

@@ -4,8 +4,8 @@ import Swal from "sweetalert2";
 import { ref, onMounted } from "vue";
 import { useCookies } from "vue3-cookies";
 import { useRoute } from "vue-router";
-import Navbar from "@/components/staff/NavbarStaff.vue";
-import StaffBackbutton from "@/components/staff/StaffBackbutton.vue";
+import Navbar from "@/components/admin/NavbarAdmin.vue";
+import Backbutton from "@/components/admin/AdminBackbutton.vue";
 
 const { cookies } = useCookies();
 const accesstoken = cookies.get("accesstoken");
@@ -14,11 +14,6 @@ const selectedSlot = ref(null);
 const showEditCard = ref(false);
 const route = useRoute();
 const requestRoundid = Number(route.query.roundid);
-const newDateid = ref("");
-const newStatus = ref("");
-const newMaxuser = ref("");
-const newStarttime = ref("");
-const newEndtime = ref("");
 
 async function getAllDate() {
   if (requestRoundid) {
@@ -130,10 +125,6 @@ function handleSlotSelection(slot) {
   showEditCard.value = true;
 }
 
-// ฟังก์ชันยกเลิกการเลือก
-function handleCancel() {
-  selectedSlot.value = null;
-}
 
 // ฟังก์ชันช่วยจัดรูปแบบเวลา
 function formatTime(timeString, timeZone = "Africa/Abidjan") {
@@ -147,63 +138,7 @@ function formatTime(timeString, timeZone = "Africa/Abidjan") {
   return formatter.format(new Date(timeString));
 }
 
-const cancelEditday = () => {
-  showEditCard.value = false;
-};
 
-const confirmEditday = async () => {
-  if (
-    newDateid.value &&
-    newStatus.value &&
-    newMaxuser.value &&
-    newStarttime.value &&
-    newEndtime.value
-  ) {
-    try {
-      // แปลงเวลาให้เป็นรูปแบบเต็ม
-      const formattedStartTime = `1970-01-01T${newStarttime.value}:00Z`;
-      const formattedEndTime = `1970-01-01T${newEndtime.value}:00Z`;
-
-      const response = await axios.put(
-        `${import.meta.env.VITE_APP_IP}/api/round/geteditSpecificDate`,
-        {
-          dateid: newDateid.value,
-          status: newStatus.value,
-          maxuser: newMaxuser.value,
-          starttime: formattedStartTime,  
-          endtime: formattedEndTime,      
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accesstoken}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        showEditCard.value = false;
-        await Swal.fire({
-          icon: "success",
-          title: "แก้ไขวันสำเร็จ",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        getAllDate();
-      } else {
-        throw new Error("Failed to add staff.");
-      }
-    } catch (error) {
-      console.error("Error adding staff:", error);
-    }
-  }
-};
-
-const validatePositiveNumber = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (Number(target.value) < 0) {
-    target.value = ""; // ล้างค่าถ้าเป็นค่าลบ
-  }
-};
 
 // ดึงข้อมูลเมื่อ component ถูก mount
 onMounted(() => {
@@ -214,13 +149,13 @@ onMounted(() => {
 <template>
   <div :class="{ 'blur-background': selectedSlot !== null }">
     <Navbar />
-    <StaffBackbutton />
+    <Backbutton />
 
     <div class="w-full max-w-2xl mx-auto mt-14">
       <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center space-x-4 mb-6">
-          <i class="text-4xl fa-solid fa-cog"></i>
-          <h1 class="text-3xl font-bold text-center">ตั้งค่าวันที่</h1>
+          <i class="text-4xl fa-solid fa-list"></i>
+          <h1 class="text-3xl font-bold text-center">รายการจอง</h1>
         </div>
         <div>
           <div class="grid gap-4">
@@ -251,64 +186,5 @@ onMounted(() => {
     </div>
   </div>
 
-  <!-- Add Staff Card -->
-  <div
-    v-if="showEditCard"
-    class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50"
-  >
-    <div
-      class="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80 text-center"
-    >
-      <h2 class="text-xl font-bold mb-4">แก้ไขวัน</h2>
-      <!-- Dropdown สำหรับเลือกสถานะ -->
-      <label class="block text-left mb-2 font-medium">สถานะ:</label>
-      <select
-        v-model="newStatus"
-        class="border border-gray-300 p-2 rounded w-full mb-4"
-      >
-        <option value="normal">ปกติ</option>
-        <option value="disable">ปิดใช้งาน</option>
-      </select>
-
-      <!-- Input สำหรับแก้ไขจำนวนผู้ใช้สูงสุด -->
-      <label class="block text-left mb-2 font-medium">จำนวนผู้ใช้สูงสุด:</label>
-      <input
-        v-model.number="newMaxuser"
-        type="number"
-        placeholder="ใส่เลขช่องบริการ"
-        class="border border-gray-300 p-2 rounded w-full mb-4"
-      />
-
-      <!-- Input สำหรับเลือกเวลาเริ่มต้น -->
-      <label class="block text-left mb-2 font-medium">เวลาเริ่มต้น:</label>
-      <input
-        v-model="newStarttime"
-        type="time"
-        class="border border-gray-300 p-2 rounded w-full mb-4"
-      />
-
-      <!-- Input สำหรับเลือกเวลาสิ้นสุด -->
-      <label class="block text-left mb-2 font-medium">เวลาสิ้นสุด:</label>
-      <input
-        v-model="newEndtime"
-        type="time"
-        class="border border-gray-300 p-2 rounded w-full mb-4"
-      />
-
-      <div class="flex justify-around">
-        <button
-          @click="cancelEditday"
-          class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-        >
-          ยกเลิก
-        </button>
-        <button
-          @click="confirmEditday"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          เพิ่ม
-        </button>
-      </div>
-    </div>
-  </div>
+ 
 </template>

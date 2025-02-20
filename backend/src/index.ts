@@ -3,8 +3,10 @@ import "dotenv/config";
 import { jwtValidate } from "./middleware/jwt.middleware";
 import cookie from "cookie-parser";
 import session from "express-session";
-// import { resetQueueOrder } from "./services/queueRepository";
+import { resetQueueOrder } from "./services/queue";
 import { autoCreateDay } from "./services/round";
+import { autoDeletePastBooking } from "./services/booking";
+
 
 
 
@@ -52,13 +54,15 @@ async function ringout() {
     console.log(`${now.getHours()} : ${now.getMinutes()} : ${now.getSeconds()}`);
     if (
       now.getHours() === 23 &&
-      now.getMinutes() >= 22 &&
+      now.getMinutes() >= 30 &&
       now.getSeconds() >= 0
     ) {
       console.log("Resetting queue order...");
-      // await resetQueueOrder();
+      await resetQueueOrder();
       await autoCreateDay();
+      await autoDeletePastBooking();
     }
     // await autoCreateDay();
+    // await resetQueueOrder();
   }, 5000); // ตรวจสอบทุกๆ 1 วินาที (1000 มิลลิวินาที)
 }

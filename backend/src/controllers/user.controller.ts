@@ -47,7 +47,7 @@ async function randomstudentid(studentid: string, email: string) {
   }
 }
 
-export const addTeacher = asynchandler(async (req: any, res: any) => {
+export const addAdmin = asynchandler(async (req: any, res: any) => {
   const { email, channel } = req.body;
   const is_include = await getSpecificuser({ email: email });
   if (is_include !== null) {
@@ -65,7 +65,7 @@ export const addTeacher = asynchandler(async (req: any, res: any) => {
       email: email,
       data: {
         channel: channel,
-        role: "TEACHER",
+        role: "ADMIN",
       },
     });
     res.status(200).send(edituser);
@@ -75,7 +75,7 @@ export const addTeacher = asynchandler(async (req: any, res: any) => {
       email: email,
       channel: channel,
       name: "",
-      role: "TEACHER",
+      role: "ADMIN",
       studentid: studentid,
     });
     res.status(200).send(adduser)
