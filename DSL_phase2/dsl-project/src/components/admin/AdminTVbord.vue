@@ -189,50 +189,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="bg-blue-900 h-[650px] flex flex-col items-center py-16 pr-16">
-    <div class="flex space-x-10">
-      <!-- กล่องแสดงหมายเลขคิวและจำนวนคนรอ -->
-      <div class="flex flex-col space-y-12">
-        <!-- คิวหมายเลข -->
-        <div
-          class="bg-white rounded-xl shadow-md p-8 text-center w-[320px] h-[300px] flex flex-col justify-between border-2 border-black"
-        >
-          <p class="text-2xl font-bold text-black">คิวหมายเลข</p>
-          <p class="text-7xl font-bold text-blue-900">
-            {{ lastCalledQueue.queue_no }}
-          </p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p class="text-xl font-bold text-black">ช่องบริการ</p>
-          <p class="text-6xl font-bold text-blue-900">
-            {{ lastCalledQueue.channel }}
-          </p>
-        </div>
-
-        <!-- จำนวนคนรอ -->
-
-        <!-- <div
-          class="bg-white rounded-xl shadow-md p-6 text-center w-[320px] h-[180px] flex flex-col justify-center border-2 border-black"
-        >
-          <p class="text-3xl font-bold text-black">จำนวนคนรอคิว</p>
-          <p class="text-6xl font-bold text-blue-900">{{ QueueWait }}</p>
-        </div> -->
+  <div class="h-[510px] flex flex-col items-center py-5 w-full">
+    <div class="flex space-x-6 w-full justify-center">
+      <!-- รูปภาพด้านซ้าย (ไม่มีกรอบ) -->
+      <div class="w-[500px] h-[560px] flex items-center">
+        <img src="/src/assets/img/logo.jpg" alt="Logo" class="w-full h-auto object-cover rounded-xl shadow-md">
       </div>
 
-      <!-- ตารางช่องบริการ -->
-      <div
-        class="bg-white rounded-xl shadow-md w-[900px] border-2 border-black"
-      >
+      <!-- ตารางช่องบริการด้านขวา -->
+      <div class="bg-white rounded-xl shadow-md w-[900px] h-[560px] border-2 border-black">
         <!-- Header ตาราง -->
-        <div
-          class="flex justify-around items-center text-white p-6 rounded-t-xl"
-        >
+        <div class="flex justify-around items-center text-white p-6 rounded-t-xl">
           <p class="font-bold text-5xl text-black">ช่องบริการ</p>
           <p class="font-bold text-5xl text-black">หมายเลขคิว</p>
         </div>
@@ -240,22 +207,22 @@ onUnmounted(() => {
         <div class="divide-y divide-gray-600">
           <!-- แถว 1 -->
           <div class="flex items-center p-6">
-            <p class="flex-1 text-center text-8xl font-bold text-black">1</p>
-            <p class="flex-1 text-center text-8xl font-bold text-blue-900">
+            <p class="flex-1 text-center text-8xl font-bold text-black font-mono tabular-nums">1</p>
+            <p class="flex-1 text-center text-8xl font-bold text-blue-900 font-mono tabular-nums">
               {{ channel1QueueId === null ? " " : channel1QueueId }}
             </p>
           </div>
           <!-- แถว 2 -->
           <div class="flex items-center p-6">
-            <p class="flex-1 text-center text-8xl font-bold text-black">2</p>
-            <p class="flex-1 text-center text-8xl font-bold text-blue-900">
+            <p class="flex-1 text-center text-8xl font-bold text-black font-mono tabular-nums">2</p>
+            <p class="flex-1 text-center text-8xl font-bold text-blue-900 font-mono tabular-nums">
               {{ channel2QueueId === null ? " " : channel2QueueId }}
             </p>
           </div>
           <!-- แถว 3 -->
           <div class="flex items-center p-6">
-            <p class="flex-1 text-center text-8xl font-bold text-black">3</p>
-            <p class="flex-1 text-center text-8xl font-bold text-blue-900">
+            <p class="flex-1 text-center text-8xl font-bold text-black font-mono tabular-nums">3</p>
+            <p class="flex-1 text-center text-8xl font-bold text-blue-900 font-mono tabular-nums">
               {{ channel3QueueId === null ? " " : channel3QueueId }}
             </p>
           </div>
@@ -264,3 +231,4 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
+

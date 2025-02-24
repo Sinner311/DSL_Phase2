@@ -1,15 +1,15 @@
 <template>
-  <div class="text-center mt-20">
+  <div class="text-center mt-20 bg-blue-900 p-5">
     <!-- ตัวอักษรที่สามารถเปลี่ยนค่าได้ -->
     <p
       v-if="isSystemActive"
-      class="font-bold text-6xl text-black animate-marquee"
+      class="font-bold text-6xl text-white animate-marquee"
     >
       {{ dynamicText }}
     </p>
     <p
       v-if="!isSystemActive"
-      class="font-bold text-6xl text-black animate-marquee"
+      class="font-bold text-6xl text-white animate-marquee"
     >
       {{ buttonText }}
     </p>
@@ -75,6 +75,6 @@ onMounted(() => {
   white-space: nowrap; /* ข้อความไม่ต้องการขึ้นบรรทัดใหม่ */
   padding-left: 50rem;
   width: max-content;
-  animation: marquee 10s linear infinite; /* ใช้แอนิเมชั่น, 15s คือความเร็ว */
+  animation: marquee 10s linear infinite; /* ใช้แอนิเมชั่น */
 }
 </style>
