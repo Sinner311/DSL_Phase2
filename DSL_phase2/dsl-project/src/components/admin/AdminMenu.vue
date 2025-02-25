@@ -4,43 +4,43 @@ import { reactive } from 'vue';
 const item = reactive({
   option_1: {
     title: 'ระบบเรียกคิว',
-    image: '/src/assets/img/option_1.jpg',
+    image: '/src/assets/img/rekQ.jpg',
     icon: 'fa-solid fa-volume-high', 
     link: '/admin/callqueue' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_2: {
     title: 'ตั้งค่าวันที่',
-    image: '/src/assets/img/option_2.jpg',
+    image: '/src/assets/img/wantee.jpg',
     icon: 'fa-solid fa-calendar-days', 
     link: '/admin/daysetting' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_3: {
     title: 'หน้าจอแสดงคิวใน TV',
-    image: '/src/assets/img/option_3.jpg',
+    image: '/src/assets/img/TVQ.jpg',
     icon: 'fa-solid fa-tv', 
     link: '/admin/dashboard' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_4: {
     title: 'คะแนนการประเมิน',
-    image: '/src/assets/img/option_1.jpg',
+    image: '/src/assets/img/star.jpg',
     icon: 'fas fa-star', 
     link: '/admin/tablereview' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_5: {
     title: 'เพิ่มเจ้าหน้าที่',
-    image: '/src/assets/img/option_2.jpg',
+    image: '/src/assets/img/police.jpg',
     icon: 'fas fa-plus', 
     link: '/admin/addstaff' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_6: {
     title: 'ตั้งค่าระบบ',
-    image: '/src/assets/img/option_2.jpg',
+    image: '/src/assets/img/setting.jpg',
     icon: 'fa-solid fa-cog', 
     link: '/admin/setting' //ไปหน้าไหนมากำหนดตรงนี้
   },
   option_7: {
     title: 'รายการจอง',
-    image: '/src/assets/img/option_3.jpg',
+    image: '/src/assets/img/list.jpg',
     icon: 'fa-solid fa-list', 
     link: '/admin/bookinglist' //ไปหน้าไหนมากำหนดตรงนี้
   },

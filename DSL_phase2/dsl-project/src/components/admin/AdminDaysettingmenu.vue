@@ -14,12 +14,12 @@ const item = reactive({
   },
   option_3: {
     title: 'เปลี่ยนแปลงวันที่สำหรับส่งเอกสารแก้ไข',
-    image: '/src/assets/img/option_3.jpg', 
+    image: '/src/assets/img/setting.jpg', 
     link: '/admin/daysetting/editdocamendmentday' //ไปหน้าไหนมากำหนดตรงนี้
   }, 
   option_4: {
     title: 'วันที่ทั้งหมด',
-    image: '/src/assets/img/option_1.jpg',
+    image: '/src/assets/img/wantee.jpg',
     link: '/admin/editday' //ไปหน้าไหนมากำหนดตรงนี้
   },
 });
