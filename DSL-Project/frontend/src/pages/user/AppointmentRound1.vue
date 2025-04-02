@@ -15,7 +15,7 @@ const rounds = ref([]);
 async function getRound() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getRound`,
+      `${import.meta.env.VITE_APP_IP}/round/getRound`,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,

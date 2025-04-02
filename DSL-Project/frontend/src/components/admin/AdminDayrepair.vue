@@ -70,7 +70,7 @@ export default {
     const getDASDSettings = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_IP}/api/round/getDASDSettings`
+          `${import.meta.env.VITE_APP_IP}/round/getDASDSettings`
         );
         if (res.status === 200 && res.data) {
           const dayFromAPI = res.data.Document_Amendment_Submission_Date;
@@ -86,7 +86,7 @@ export default {
     const updateDay = async () => {
       try {
         const res =await axios.put(
-          `${import.meta.env.VITE_APP_IP}/api/round/geteditDASDSettings`,
+          `${import.meta.env.VITE_APP_IP}/round/geteditDASDSettings`,
           {
             dasd_text:
               selectedDays.value === "ไม่เลือกวัน" ? null : selectedDays.value,

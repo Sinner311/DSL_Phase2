@@ -1,18 +1,13 @@
-version: "3.8"
-
 services:
   db:
     image: mysql
     ports:
-      - '3306:3306'
-    environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_DATABASE=queue_system
-      - MYSQL_CHARSET=utf8mb4
-      - MYSQL_COLLATION=utf8mb4_general_ci
+      - '8031:3306'
+    env_file:
+      - .env
     networks:
       - mynetwork
-    restart: unless-stopped
+    restart: always
     volumes:
       - db_data:/var/lib/mysql
 
@@ -20,74 +15,42 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - '8081:80'
+      - '8041:80'
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: 
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       - db
     networks:
       - mynetwork
+    restart: always
  
   backend:
     build: 
       context: ./backend
-      args: 
-        DATABASE_URL: 
-        GOOGLE_CLIENT_ID: 
-        GOOGLE_CLIENT_SECRET: 
-        PORT: 7777
-        ACCESS_SECRET: 
-        REFRESH_SECRET: 
     container_name: expressjs_app
     restart: always
     depends_on:
       - db
-    environment:
-      DATABASE_URL: 
-      GOOGLE_CLIENT_ID: 
-      GOOGLE_CLIENT_SECRET: 
-      PORT: 7777
-      ACCESS_SECRET: 
-      REFRESH_SECRET: 
     networks:
       - mynetwork
     ports:
-      - "7777:7777"
+      - "8021:8021"
 
   frontend:
     build:
       context: ./frontend
-      args:
-        VITE_APP_IP: https://dslequeue.mfu.ac.th
-        VITE_APP_GOOGLE_CLIENT_ID: 
+    container_name: vue_app
     restart: always
     depends_on:
       - backend
-    environment:
-      VITE_APP_IP: https://dslequeue.mfu.ac.th
-      VITE_APP_GOOGLE_CLIENT_ID: 
     networks:
       - mynetwork
     volumes:
       - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "80:80"
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_server
-    restart: always
-    depends_on:
-      - frontend
-      - backend
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./frontend/dist:/usr/share/nginx/html
-    ports:
-      - "8080:80"
-    networks:
-      - mynetwork
+      - "8011:8011"
 
 volumes:
   db_data:

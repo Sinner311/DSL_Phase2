@@ -25,7 +25,7 @@ function parseJwt(token: string) {
 async function getMystudentID(email: string) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getSpecificuser?email=${email}`
+      `${import.meta.env.VITE_APP_IP}/user/getSpecificuser?email=${email}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);

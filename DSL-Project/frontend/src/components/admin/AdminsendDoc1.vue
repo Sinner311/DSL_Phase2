@@ -151,7 +151,7 @@ const confirmAddRound = async () => {
 
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_APP_IP}/api/round/createRound`,
+          `${import.meta.env.VITE_APP_IP}/round/createRound`,
           { 
             startdate: newStartDate.value,
             enddate: newEndDate.value,
@@ -193,7 +193,7 @@ const confirmAddRound = async () => {
 async function getRound() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getRound`,
+      `${import.meta.env.VITE_APP_IP}/round/getRound`,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -266,7 +266,7 @@ async function confirmRemoveCard(id:number) {
     if (result.isConfirmed) {
       // ส่งคำขอ DELETE ไปยัง API
       const response = await axios.delete(
-        `${import.meta.env.VITE_APP_IP}/api/round/DeleteRound?roundid=${id}`,
+        `${import.meta.env.VITE_APP_IP}/round/DeleteRound?roundid=${id}`,
         {
           headers: {
             Authorization: `Bearer ${accesstoken}`,

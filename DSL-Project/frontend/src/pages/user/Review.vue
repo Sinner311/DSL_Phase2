@@ -29,7 +29,7 @@ function parseJwt(token: string) {
 async function getMystudentID(email: string) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getSpecificuser?email=${email}`
+      `${import.meta.env.VITE_APP_IP}/user/getSpecificuser?email=${email}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -66,7 +66,7 @@ const submitReview = async (data) => {
 
   try {
     const response = await axios.put(
-      `${import.meta.env.VITE_APP_IP}/api/history/sendreview`,
+      `${import.meta.env.VITE_APP_IP}/history/sendreview`,
       {
         studentid: studentid.value,
         star_rate: completeReview.rating,

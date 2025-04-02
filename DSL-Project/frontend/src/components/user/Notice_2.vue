@@ -17,7 +17,7 @@ const dayColorClass = ref("text-gray-500"); // ค่าเริ่มต้น
 const getDASDSettings = async () => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getDASDSettings`
+      `${import.meta.env.VITE_APP_IP}/round/getDASDSettings`
     );
     if (res.status === 200 && res.data) {
       const dayFromAPI = res.data.Document_Amendment_Submission_Date;

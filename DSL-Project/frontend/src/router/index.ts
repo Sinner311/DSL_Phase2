@@ -182,7 +182,7 @@ function parseJwt(token: string) {
 async function refeshToken(refresh: string) {
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_APP_IP}/api/login/refresh`,
+      `${import.meta.env.VITE_APP_IP}/login/refresh`,
       null,
       {
         headers: {

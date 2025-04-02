@@ -68,7 +68,7 @@ const cancelDelete = () => {
 // ฟังก์ชันดึงข้อมูล Staff จาก backend
 async function getStaff() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/user/getAllstaff`, {
+    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/user/getAllstaff`, {
       headers: {
         Authorization: `Bearer ${accesstoken}`,
       },
@@ -105,7 +105,7 @@ const confirmAddStaff = async () => {
   if (newEmail.value && newChannel.value) {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_IP}/api/user/addAdmin`,
+        `${import.meta.env.VITE_APP_IP}/user/addAdmin`,
         { email: newEmail.value ,
           channel: newChannel.value
         },
@@ -143,7 +143,7 @@ const confirmAddStaff = async () => {
 const confirmDeleteStaff = async () => {
   console.log(staffs.value[selectedStaffIndex.value].email);
   try {
-    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/user/getusereditSpecificuser`,{
       email:staffs.value[selectedStaffIndex.value].email,
       data:{
         channel:null,
@@ -171,7 +171,7 @@ const confirmDeleteStaff = async () => {
 
 const confirmEditStaff = async () => {
   try {
-    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/user/getusereditSpecificuser`,{
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/user/getusereditSpecificuser`,{
       email:staffs.value[selectedStaffIndex.value].email,
       data:{
         channel:newEditChannel.value

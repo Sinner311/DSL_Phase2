@@ -66,7 +66,7 @@ async function sendCodeToBackend(code:string) {
           Authorization: code
         };
    
-        const response = await axios.post(`${import.meta.env.VITE_APP_IP}/api/auth/google`, null, { headers });
+        const response = await axios.post(`${import.meta.env.VITE_APP_IP}/auth/google`, null, { headers });
         const token = response.data;
         console.log("token: ", token);
         cookies.set("accesstoken",token.access_token);
@@ -126,7 +126,7 @@ function parseJwt(token: string) {
 
 async function getAdmin(access_token_extract:any) {
     try {
-        const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/user/getAlluser`);
+        const res = await axios.get(`${import.meta.env.VITE_APP_IP}/user/getAlluser`);
         if (res.status !==200) {
             throw Error(res.statusText);
         }

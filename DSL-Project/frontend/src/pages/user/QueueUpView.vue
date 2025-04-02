@@ -16,7 +16,7 @@ const currentDate = ref("");
 async function fetchCurrentDate() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getcurrentdate`
+      `${import.meta.env.VITE_APP_IP}/user/getcurrentdate`
     );
     if (response.status === 200 && response.data.dates) {
       currentDate.value = response.data.dates; // อัปเดตค่า currentDate
@@ -44,7 +44,7 @@ function parseJwt(token: string) {
 async function getMystudentID(email: string) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getSpecificuser?email=${email}`
+      `${import.meta.env.VITE_APP_IP}/user/getSpecificuser?email=${email}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -61,7 +61,7 @@ async function getMystudentID(email: string) {
 async function getMybooking(id: number) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/booking/getmyBooking?studentid=${id}`
+      `${import.meta.env.VITE_APP_IP}/booking/getmyBooking?studentid=${id}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -77,7 +77,7 @@ async function getMyqueue(studentid: number) {
     const res = await axios.get(
       `${
         import.meta.env.VITE_APP_IP
-      }/api/queue/getSpecificqueue?studentid=${studentid}`
+      }/queue/getSpecificqueue?studentid=${studentid}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -94,7 +94,7 @@ async function getMyqueue(studentid: number) {
 async function mynotreview(studentid: number): Promise<boolean> {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/history/mynotreview`
+      `${import.meta.env.VITE_APP_IP}/history/mynotreview`
     );
 
     if (!res.data || res.data.length === 0) {
@@ -206,7 +206,7 @@ async function joinQueue(id: number, type: number | null) {
     if (result.isConfirmed) {
       // ส่งคำขอ DELETE ไปยัง API
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_IP}/api/queue/getqueueaddQueue`,
+        `${import.meta.env.VITE_APP_IP}/queue/getqueueaddQueue`,
         {
           studentid: id,
           type: queueType,

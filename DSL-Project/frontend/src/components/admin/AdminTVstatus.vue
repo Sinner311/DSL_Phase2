@@ -27,7 +27,7 @@ const buttonText = ref("พักระบบ");
 async function getwebSettings() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`
+      `${import.meta.env.VITE_APP_IP}/round/getwebSettings`
     );
 
     if (res.status === 200 && res.data) {

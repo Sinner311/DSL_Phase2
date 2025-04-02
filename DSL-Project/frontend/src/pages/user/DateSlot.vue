@@ -24,7 +24,7 @@ async function getBookingCount(dateid) {
     const response = await axios.get(
       `${
         import.meta.env.VITE_APP_IP
-      }/api/booking/getcountBookingByDate?dateid=${dateid}`
+      }/booking/getcountBookingByDate?dateid=${dateid}`
     );
     return [
       response.data.maxpercentage,
@@ -40,7 +40,7 @@ async function getBookingCount(dateid) {
 async function getTodaydate() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getTodayDate`
+      `${import.meta.env.VITE_APP_IP}/round/getTodayDate`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -59,7 +59,7 @@ async function getAllDate() {
     const response = await axios.get(
       `${
         import.meta.env.VITE_APP_IP
-      }/api/round/getSpecificDate?roundid=${requestRoundid}`,
+      }/round/getSpecificDate?roundid=${requestRoundid}`,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -170,7 +170,7 @@ async function handleConfirm(id) {
   if (selectedSlot.value.type && selectedSlot.value.dateid && id) {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_IP}/api/booking/makebooking`,
+        `${import.meta.env.VITE_APP_IP}/booking/makebooking`,
         {
           id: id,
           type: selectedSlot.value.type,

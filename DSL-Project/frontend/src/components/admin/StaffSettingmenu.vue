@@ -55,7 +55,7 @@ const confirmAddListOfRound = async () => {
   if (newYear.value && newSemester.value) {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_IP}/api/round/createListOfRound`,
+        `${import.meta.env.VITE_APP_IP}/round/createListOfRound`,
         { 
           year: newYear.value,
           semester: newSemester.value,
@@ -90,7 +90,7 @@ const confirmAddListOfRound = async () => {
 const confirmEditWebShowList = async () => {
   console.log(newShowList.value)
   try {
-    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/api/round/changeWebShowList`,{
+    const res = await axios.put(`${import.meta.env.VITE_APP_IP}/round/changeWebShowList`,{
       show_list:newShowList.value
     })
     if (res.status !== 200) {
@@ -115,7 +115,7 @@ const confirmEditWebShowList = async () => {
 
 async function getlistOfRound() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/round/getListOfRound`, {
+    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/round/getListOfRound`, {
       headers: {
         Authorization: `Bearer ${accesstoken}`,
       },

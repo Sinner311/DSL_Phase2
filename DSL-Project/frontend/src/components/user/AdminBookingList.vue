@@ -21,7 +21,7 @@ async function getAllDate() {
       const response = await axios.get(
         `${
           import.meta.env.VITE_APP_IP
-        }/api/round/getSpecificDate?roundid=${requestRoundid}`,
+        }/round/getSpecificDate?roundid=${requestRoundid}`,
         {
           headers: {
             Authorization: `Bearer ${accesstoken}`,
@@ -56,7 +56,7 @@ async function getAllDate() {
   } else {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_APP_IP}/api/round/getRangeDate`,
+        `${import.meta.env.VITE_APP_IP}/round/getRangeDate`,
         {
           headers: {
             Authorization: `Bearer ${accesstoken}`,

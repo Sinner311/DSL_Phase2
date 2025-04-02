@@ -9,7 +9,7 @@ const skipped = ref(0);
 
 async function fetchDashboardData() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/api/queue/getDashboard`, {
+    const response = await axios.get(`${import.meta.env.VITE_APP_IP}/queue/getDashboard`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
       },

@@ -177,7 +177,7 @@ function parseJwt(token: string) {
 async function getMystudentID(email: string) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getSpecificuser?email=${email}`
+      `${import.meta.env.VITE_APP_IP}/user/getSpecificuser?email=${email}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -194,7 +194,7 @@ async function getMystudentID(email: string) {
 async function getQueue() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getAllStaffQueue`,
+      `${import.meta.env.VITE_APP_IP}/queue/getAllStaffQueue`,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -275,7 +275,7 @@ const confirmAction = () => {
 async function getCallQueue(queueid: number) {
   try {
     const res = await axios.put(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getEditQueue`,
+      `${import.meta.env.VITE_APP_IP}/queue/getEditQueue`,
       {
         queueid: queueid,
         channel: myuserinfo.value.channel,
@@ -310,7 +310,7 @@ async function getCallQueue(queueid: number) {
 async function getSkipQueue(queueid: number) {
   try {
     const res = await axios.put(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getEditQueue`,
+      `${import.meta.env.VITE_APP_IP}/queue/getEditQueue`,
       {
         queueid: queueid,
         channel: null,
@@ -345,7 +345,7 @@ async function getSkipQueue(queueid: number) {
 async function getFinishQueue(queuedata: any) {
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getFinishQueue`,
+      `${import.meta.env.VITE_APP_IP}/queue/getFinishQueue`,
       {
         queueid: queuedata.queueid,
         channel: myuserinfo.value.channel,

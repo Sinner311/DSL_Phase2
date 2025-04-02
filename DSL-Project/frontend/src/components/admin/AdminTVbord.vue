@@ -19,7 +19,7 @@ let intervalId: NodeJS.Timeout | null = null; // Store interval ID\
 async function fetchDashboardData() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getDashboard`,
+      `${import.meta.env.VITE_APP_IP}/queue/getDashboard`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
@@ -42,7 +42,7 @@ async function fetchDashboardData() {
 async function getTodaydate() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getTodayDate`
+      `${import.meta.env.VITE_APP_IP}/round/getTodayDate`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -59,7 +59,7 @@ async function getTodaydate() {
 async function getAllqueue() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getAllQueue`
+      `${import.meta.env.VITE_APP_IP}/queue/getAllQueue`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -76,7 +76,7 @@ async function getAllqueue() {
 async function getAllCallQueue() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getAllCallQueue`
+      `${import.meta.env.VITE_APP_IP}/queue/getAllCallQueue`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -104,7 +104,7 @@ async function speakThai(message: string) {
 async function getCallQueue(queueid: number, channel: number) {
   try {
     const res = await axios.put(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getEditQueue`,
+      `${import.meta.env.VITE_APP_IP}/queue/getEditQueue`,
       {
         queueid: queueid,
         channel: channel,

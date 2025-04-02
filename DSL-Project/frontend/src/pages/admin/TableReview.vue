@@ -93,7 +93,7 @@ const itemsPerPageOptions = [20, 100, 500, 1000]; // ตัวเลือกจ
 const fetchData = async () => {
   try {
     const response = await axios.get<TableData[]>(
-      `${import.meta.env.VITE_APP_IP}/api/history/getHistoryQueueData`
+      `${import.meta.env.VITE_APP_IP}/history/getHistoryQueueData`
     );
     tableData.value = response.data;
   } catch (err) {

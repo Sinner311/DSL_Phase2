@@ -26,7 +26,7 @@ async function getAllDate() {
       const response = await axios.get(
         `${
           import.meta.env.VITE_APP_IP
-        }/api/round/getSpecificDate?roundid=${requestRoundid}`,
+        }/round/getSpecificDate?roundid=${requestRoundid}`,
         {
           headers: {
             Authorization: `Bearer ${accesstoken}`,
@@ -61,7 +61,7 @@ async function getAllDate() {
   } else {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_APP_IP}/api/round/getRangeDate`,
+        `${import.meta.env.VITE_APP_IP}/round/getRangeDate`,
         {
           headers: {
             Authorization: `Bearer ${accesstoken}`,
@@ -165,7 +165,7 @@ const confirmEditday = async () => {
       const formattedEndTime = `1970-01-01T${newEndtime.value}:00Z`;
 
       const response = await axios.put(
-        `${import.meta.env.VITE_APP_IP}/api/round/geteditSpecificDate`,
+        `${import.meta.env.VITE_APP_IP}/round/geteditSpecificDate`,
         {
           dateid: newDateid.value,
           status: newStatus.value,

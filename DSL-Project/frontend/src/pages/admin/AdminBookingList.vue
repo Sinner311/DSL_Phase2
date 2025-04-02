@@ -15,7 +15,7 @@ const expandedDateId = ref<number | null>(null); // เก็บ dateid ขอ�
 async function getAllDate() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/booking/getRangeDateBooking`,
+      `${import.meta.env.VITE_APP_IP}/booking/getRangeDateBooking`,
       {
         headers: { Authorization: `Bearer ${accesstoken}` },
       }

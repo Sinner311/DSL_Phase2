@@ -30,7 +30,7 @@ function parseJwt(token: string) {
 async function getMystudentID(email: string) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getSpecificuser?email=${email}`
+      `${import.meta.env.VITE_APP_IP}/user/getSpecificuser?email=${email}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -47,7 +47,7 @@ async function getMystudentID(email: string) {
 async function getMybooking(id: number) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/booking/getmyBooking?studentid=${id}`
+      `${import.meta.env.VITE_APP_IP}/booking/getmyBooking?studentid=${id}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -127,7 +127,7 @@ async function confirmRemoveCard(id: number) {
       const response = await axios.delete(
         `${
           import.meta.env.VITE_APP_IP
-        }/api/booking/DeleteBooking?historyid=${id}`,
+        }/booking/DeleteBooking?historyid=${id}`,
         {
           headers: {
             Authorization: `Bearer ${accesstoken}`,

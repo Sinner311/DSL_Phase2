@@ -45,7 +45,7 @@ const buttonText = ref("ระบบปิดพักอยู่");
 async function getwebSettings() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`
+      `${import.meta.env.VITE_APP_IP}/round/getwebSettings`
     );
 
     if (res.status === 200 && res.data) {
@@ -65,7 +65,7 @@ async function getwebSettings() {
 async function getMystudentID(email: string) {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/user/getSpecificuser?email=${email}`
+      `${import.meta.env.VITE_APP_IP}/user/getSpecificuser?email=${email}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -84,7 +84,7 @@ async function getMyqueue(studentid: number) {
     const res = await axios.get(
       `${
         import.meta.env.VITE_APP_IP
-      }/api/queue/getSpecificqueue?studentid=${studentid}`
+      }/queue/getSpecificqueue?studentid=${studentid}`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -101,7 +101,7 @@ async function getMyqueue(studentid: number) {
 async function getTodaydate() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/round/getTodayDate`
+      `${import.meta.env.VITE_APP_IP}/round/getTodayDate`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);
@@ -118,7 +118,7 @@ async function getTodaydate() {
 async function getAllqueue() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_IP}/api/queue/getAllQueue`
+      `${import.meta.env.VITE_APP_IP}/queue/getAllQueue`
     );
     if (res.status !== 200) {
       throw Error(res.statusText);

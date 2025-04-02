@@ -23,7 +23,7 @@ function handleBack() {
 const updateStatus = async () => {
   try {
     const response = await axios.put(
-      `${import.meta.env.VITE_APP_IP}/api/round/geteditwebSettings`,
+      `${import.meta.env.VITE_APP_IP}/round/geteditwebSettings`,
       {
         web_status: isSystemActive.value ? "normal" : "disable",
       },
@@ -47,7 +47,7 @@ const updateStatus = async () => {
 const updateText = async () => {
   try {
     const response = await axios.put(
-      `${import.meta.env.VITE_APP_IP}/api/round/geteditwebSettings`,
+      `${import.meta.env.VITE_APP_IP}/round/geteditwebSettings`,
       {
         web_break_text: buttonText.value,
       },
@@ -77,7 +77,7 @@ const updateButtonText = (event) => {
 // ดึงค่า webSettings จาก API
 async function getwebSettings() {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_APP_IP}/api/round/getwebSettings`);
+    const res = await axios.get(`${import.meta.env.VITE_APP_IP}/round/getwebSettings`);
     
     if (res.status === 200 && res.data) {
       webSettings.value = res.data;
