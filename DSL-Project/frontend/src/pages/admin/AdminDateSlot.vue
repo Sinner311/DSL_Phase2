@@ -230,7 +230,7 @@ onMounted(() => {
               :class="[
                 'w-full p-4 border rounded-lg',
                 slot.status === 'disable'
-                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  ? 'bg-gray-200 text-gray-500'
                   : 'hover:bg-green-100 hover:text-black bg-indigo-700 text-white',
                 selectedSlot === slot
                   ? 'bg-green-500 text-white'
@@ -306,7 +306,7 @@ onMounted(() => {
           @click="confirmEditday"
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          เพิ่ม
+          บันทึก
         </button>
       </div>
     </div>

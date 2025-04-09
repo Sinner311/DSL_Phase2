@@ -75,7 +75,6 @@ async function getAllDate() {
       // console.log(todaydateinfo.value.date)
       timeSlots.value = await Promise.all(
         dateData
-          .filter((day) => day.status === "normal")
           .map(async (day) => {
             const bookedCount = await getBookingCount(day.dateid);
             const [maxpercentage, total1, total2] = bookedCount; // ดึงค่าจาก array
@@ -107,6 +106,7 @@ async function getAllDate() {
 
             // ตรวจสอบว่า day.date ผ่านไปแล้วหรือไม่
             return {
+              datestatus: day.status === 'disable',
               dateid: day.dateid,
               type: requestType,
               date: `${new Date(day.date).getDate()} ${
@@ -253,14 +253,14 @@ getAllDate();
               :key="index"
               :class="[
                 'w-full p-4 border rounded-lg',
-                slot.isFull || slot.isPast
+                slot.isFull || slot.isPast || slot.datestatus
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   : 'hover:bg-green-100 hover:text-black bg-indigo-700 text-white',
                 selectedSlot === slot
                   ? 'bg-green-500 text-white'
                   : 'border-gray-300',
               ]"
-              :disabled="slot.isFull || slot.isPast"
+              :disabled="slot.isFull || slot.isPast || slot.datestatus"
               @click="handleSlotSelection(slot)"
             >
               <div class="flex justify-between items-center w-full">

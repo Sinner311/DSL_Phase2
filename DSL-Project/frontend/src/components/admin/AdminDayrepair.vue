@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center justify-center p-6 space-y-4 mt-40">
     <div class="flex space-x-11">
       <h1
-        v-for="day in visibleDays.length > 0 ? visibleDays : ['ไม่เลือกวัน']"
+        v-for="day in visibleDays.length > 0 ? visibleDays : ['ไม่ได้เลือกวัน']"
         :key="day"
         :class="['text-7xl font-bold', days[day] || 'text-gray-500']"
       >
@@ -62,7 +62,7 @@ export default {
     };
 
     const selectedDays = ref([]);
-    const visibleDays = ref(["ไม่เลือกวัน"]);
+    const visibleDays = ref(["ไม่ได้เลือกวัน"]);
     const dropdownVisible = ref(false);
     const accesstoken = localStorage.getItem("accessToken");
 

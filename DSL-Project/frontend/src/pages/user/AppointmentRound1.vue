@@ -104,7 +104,7 @@ getRound();
             {{ new Date(card.startdate).getDate() }} - {{ new Date(card.enddate).getDate() }}
             {{ formatDate(card.startdate).month }} {{ formatDate(card.startdate).year }}
           </p>
-          <div
+          <!-- <div
             v-if="card.status === 'normal'"
             class="mt-2 text-green-400"
           >
@@ -112,7 +112,7 @@ getRound();
           </div>
           <div v-else class="mt-2 text-gray-400">
             Upcoming
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

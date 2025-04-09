@@ -82,7 +82,7 @@ getRound();
   <UserBackbutton />
   <div class="max-w-4xl mx-auto p-4 mt-10">
     <h1 class="text-2xl font-bold mb-6 text-center">
-      กรุณาเลือกรอบที่ต้องการส่งแบบคำขอกู้ยืม
+      กรุณาเลือกรอบที่ต้องการส่งสัญญากู้ยืม และ แบบเบิกเงินกู้ยืม
     </h1>
     
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -104,7 +104,7 @@ getRound();
             {{ new Date(card.startdate).getDate() }} - {{ new Date(card.enddate).getDate() }}
             {{ formatDate(card.startdate).month }} {{ formatDate(card.startdate).year }}
           </p>
-          <div
+          <!-- <div
             v-if="card.status === 'normal'"
             class="mt-2 text-green-400"
           >
@@ -112,7 +112,7 @@ getRound();
           </div>
           <div v-else class="mt-2 text-gray-400">
             Upcoming
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
