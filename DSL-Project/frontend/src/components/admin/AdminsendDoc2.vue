@@ -1,6 +1,6 @@
 <template>
   <p class="text-4xl font-bold mt-8 text-center">ตั้งค่าช่วงวันที่</p>
-  <p class="text-5xl font-bold mt-8 text-center">แบบคำขอกู้ยืม</p>
+  <p class="text-5xl font-bold mt-8 text-center">สัญญากู้ยืม และ แบบเบิกเงินกู้ยืม</p>
 
   <div class="flex justify-center mt-12">
     <!-- <button class="bg-orange-500 text-white font-bold text-3xl py-4 px-6 rounded-lg shadow-lg hover:bg-orange-600 mr-4" @click="addSpecialRound">
@@ -22,6 +22,7 @@
     v-model="newStartDate" 
     type="date" 
     :min="currentDate" 
+    :max="maxDate"
     placeholder="ใส่วันเริ่ม" 
     class="border border-gray-300 p-2 rounded w-full mb-4" 
   />
@@ -29,6 +30,7 @@
     v-model="newEndDate" 
     type="date" 
     :min="newStartDate || currentDate" 
+    :max="maxDate"
     placeholder="ใส่วันจบ" 
     class="border border-gray-300 p-2 rounded w-full mb-4" 
   />
@@ -112,9 +114,16 @@ const accesstoken = cookies.get("accesstoken");
 const showAddCard = ref(false);
 const newStartDate = ref('');
 const newEndDate = ref('');
-const currentDate = new Date().toISOString().split('T')[0];
 const rounds = ref([]);
 
+
+const today = new Date();
+const max = new Date();
+max.setMonth(max.getMonth() + 12);
+max.setDate(max.getDate() - 5);
+
+const currentDate = ref(today.toISOString().split('T')[0]);
+const maxDate = ref(max.toISOString().split('T')[0]);
 
 
 const openAddCard = () => {

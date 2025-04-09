@@ -34,9 +34,9 @@ export async function autoCreateDay() {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Start of the day
 
-  // Set the target end date (4 months from today)
+  // Set the target end date (12 months from today)
   const endDate = new Date(today);
-  endDate.setMonth(endDate.getMonth() + 4);
+  endDate.setMonth(endDate.getMonth() + 12);
 
   // Loop through each day from today to the end date
   for (let currentDate = new Date(today); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {

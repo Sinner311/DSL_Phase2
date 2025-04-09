@@ -36,7 +36,7 @@ async function randomstudentid(studentid: string, email: string) {
   console.log(studentid);
   const is_include =
     (await getSpecificuser({ studentid: studentid, email: email })) !== null;
-  let studentids = `${getRandomInt(100000000000)}`;
+  let studentids = `${getRandomInt(999999999)}`;
   console.log(`studentid : ${studentid}`);
   console.log(`studentids : ${studentids}`);
   console.log(`studentid is include in database : ` + is_include);

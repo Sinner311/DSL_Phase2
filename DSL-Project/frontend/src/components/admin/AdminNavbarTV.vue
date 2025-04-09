@@ -1,7 +1,12 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import router from "@/router";
 
 const currentDateTime = ref("");
+
+async function homePage() {
+  router.push({ name: "admin" });
+}
 
 const updateDateTime = () => {
   const now = new Date();
@@ -25,7 +30,7 @@ onMounted(() => {
   <nav class="bg-blue-900 shadow-md h-[150px] w-full flex flex-col justify-center px-10">
     <div class="flex justify-between items-center w-full">
       <!-- Title -->
-      <div class="text-left">
+      <div class="text-left cursor-pointer" @click="homePage">
         <p class="text-5xl font-bold">
           <span class="text-yellow-500">MFU</span> <!-- MFU สีทอง -->
           <span class="text-blue-400"> DSL EQUEUE</span> <!-- ส่วนที่เหลือเป็นสีน้ำเงินเข้ม -->

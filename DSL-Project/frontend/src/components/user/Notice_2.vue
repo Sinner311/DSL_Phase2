@@ -1,18 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 import axios from "axios";
 
-const DASDDays = ref(null);
-const dayColorClass = ref("text-gray-500"); // ค่าเริ่มต้นเป็นสีเทา
+const DASDDays = ref([]);
 
 // กำหนดสีของแต่ละวัน
-    const days = {
-      วันจันทร์: "text-yellow-400",
-      วันอังคาร: "text-pink-400",
-      วันพุธ: "text-green-400",
-      วันพฤหัสบดี: "text-orange-400",
-      วันศุกร์: "text-blue-400",
-    };
+const days = {
+  วันจันทร์: "text-yellow-400",
+  วันอังคาร: "text-pink-400",
+  วันพุธ: "text-green-400",
+  วันพฤหัสบดี: "text-orange-400",
+  วันศุกร์: "text-blue-400",
+};
 
 const getDASDSettings = async () => {
   try {
@@ -21,10 +20,7 @@ const getDASDSettings = async () => {
     );
     if (res.status === 200 && res.data) {
       const dayFromAPI = res.data.Document_Amendment_Submission_Date;
-      DASDDays.value = dayFromAPI;
-
-      // ตรวจสอบว่าค่าที่ได้มีอยู่ใน days หรือไม่ ถ้าใช่ให้ใช้สีที่กำหนด
-      dayColorClass.value = days[dayFromAPI] || "text-gray-500";
+      DASDDays.value = dayFromAPI ? dayFromAPI.split(",") : [];
     }
   } catch (error) {
     console.error("Error fetching settings:", error);
@@ -36,13 +32,25 @@ onMounted(getDASDSettings);
 
 <template>
   <section class="py-20 mb-2">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center"
+    >
       <div class="text-center" v-if="DASDDays">
-        <!-- กำหนดสีของข้อความตามวันที่ -->
-        <h1 :class="['text-xl sm:text-4xl md:text-6xl font-extrabold', dayColorClass]">
-          {{ DASDDays }}
+        <div class="flex items-center justify-center space-x-11">
+          <h1
+            v-for="day in DASDDays"
+            :key="day"
+            :class="[
+              'text-xl sm:text-4xl md:text-6xl font-extrabold',
+              days[day],
+            ]"
+          >
+            {{ day }}
+          </h1>
+        </div>
+        <h1 class="text-xl font-extrabold sm:text-4xl md:text-6xl">
+          เปิดรับเฉพาะเอกสารแก้ไข
         </h1>
-        <h1 class="text-xl font-extrabold sm:text-4xl md:text-6xl">เปิดรับเฉพาะเอกสารแก้ไข</h1>
       </div>
     </div>
   </section>

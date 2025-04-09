@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col items-center justify-center p-6 space-y-4 mt-40">
-    <div class="flex space-x-4">
+    <div class="flex space-x-11">
       <h1
-        v-for="day in visibleDays"
+        v-for="day in visibleDays.length > 0 ? visibleDays : ['ไม่เลือกวัน']"
         :key="day"
         :class="['text-7xl font-bold', days[day] || 'text-gray-500']"
       >
@@ -17,21 +17,22 @@
       เปลี่ยนวันที่ส่งเอกสารแก้ไข
     </button>
 
-    <!-- Dropdown เลือกวัน -->
+    <!-- Checkbox Dropdown -->
     <div
       v-if="dropdownVisible"
       class="mt-4 w-64 bg-white border rounded shadow-md p-4 space-y-2"
     >
       <label
-        v-for="(color, day) in daysWithNone"
+        v-for="(color, day) in days"
         :key="day"
         class="flex items-center space-x-2"
       >
         <input
-          type="radio"
-          v-model="selectedDays"
+          type="checkbox"
           :value="day"
-          class="form-radio h-5 w-5 text-indigo-600"
+          v-model="selectedDays"
+          class="form-checkbox h-5 w-5 text-indigo-600"
+          :disabled="selectedDays.length >= 2 && !selectedDays.includes(day)"
         />
         <span :class="color">{{ day }}</span>
       </label>
@@ -60,11 +61,10 @@ export default {
       วันศุกร์: "text-blue-400",
     };
 
-    const selectedDays = ref("ไม่เลือกวัน"); // ค่าเริ่มต้น
+    const selectedDays = ref([]);
     const visibleDays = ref(["ไม่เลือกวัน"]);
     const dropdownVisible = ref(false);
     const accesstoken = localStorage.getItem("accessToken");
-    const daysWithNone = ref({ ...days, ไม่เลือกวัน: "text-gray-500" }); // รวมตัวเลือก "ไม่เลือกวัน"
 
     // ดึงค่าจาก API
     const getDASDSettings = async () => {
@@ -74,8 +74,8 @@ export default {
         );
         if (res.status === 200 && res.data) {
           const dayFromAPI = res.data.Document_Amendment_Submission_Date;
-          selectedDays.value = days[dayFromAPI] ? dayFromAPI : "ไม่เลือกวัน";
-          visibleDays.value = [selectedDays.value];
+          selectedDays.value = dayFromAPI ? dayFromAPI.split(",") : [];
+          visibleDays.value = [...selectedDays.value];
         }
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -85,11 +85,13 @@ export default {
     // อัปเดตค่าผ่าน API
     const updateDay = async () => {
       try {
-        const res =await axios.put(
+        const res = await axios.put(
           `${import.meta.env.VITE_APP_IP}/round/geteditDASDSettings`,
           {
             dasd_text:
-              selectedDays.value === "ไม่เลือกวัน" ? null : selectedDays.value,
+              selectedDays.value.length === 0
+                ? null
+                : selectedDays.value.join(","), // แปลง array → string
           },
           { headers: { Authorization: `Bearer ${accesstoken}` } }
         );
@@ -111,7 +113,7 @@ export default {
 
     // ยืนยันและอัปเดต API
     const confirmSelection = async () => {
-      visibleDays.value = [selectedDays.value];
+      visibleDays.value = [...selectedDays.value]; // แสดงผล
       dropdownVisible.value = false;
       await updateDay();
     };
@@ -120,7 +122,6 @@ export default {
 
     return {
       days,
-      daysWithNone,
       selectedDays,
       visibleDays,
       dropdownVisible,

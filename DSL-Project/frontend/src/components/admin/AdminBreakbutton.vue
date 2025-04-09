@@ -109,11 +109,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative w-screen m-8 flex items-center space-x-6">
+  <div class="relative top-7 w-screen m-8 flex items-center space-x-6 mb-5">
     <!-- ปุ่มย้อนกลับ -->
     <button
       @click="handleBack"
-      class="bg-gray-300 text-black p-4 rounded-full hover:bg-gray-400"
+      class="bg-gray-300 text-black p-4 mt-5 rounded-full hover:bg-gray-400"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +132,7 @@ onMounted(() => {
     </button>
 
     <!-- Toggle Switch -->
-    <div class="flex items-center space-x-4 px-16">
+    <div class="flex items-center space-x-4 px-16 mt-5">
       <div class="flex flex-col">
         <div class="flex flex-row">
           <label class="text-gray-600 ms-9 px-11">พักระบบ</label>

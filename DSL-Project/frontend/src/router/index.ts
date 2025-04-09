@@ -8,7 +8,7 @@ import UserAppointment from "../pages/user/UserAppointment.vue";
 import QueueUpView from "../pages/user/QueueUpView.vue";
 import UserQueue from "../pages/user/UserQueue.vue";
 import Review from "../pages/user/Review.vue";
-import Mainaddmin from "../pages/admin/Mainadmin.vue";
+import Mainadmin from "../pages/admin/Mainadmin.vue";
 import Addstaff from "../pages/admin/Addstaff.vue";
 import Adminsetting from "../pages/admin/Adminsetting.vue";
 import Tablereview from "../pages/admin/TableReview.vue";
@@ -88,7 +88,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/admin",
     name: "admin",
-    component: Mainaddmin,
+    component: Mainadmin,
     meta: { role: ["ADMIN"] as string[] },
   },
   {
