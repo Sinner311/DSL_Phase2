@@ -1,9 +1,9 @@
 import prisma from "../prisma/client";
-import { list_of_round , web_settings } from "@prisma/client";
+import { list_of_round, web_settings } from "@prisma/client";
 
 export async function getListOfRound() {
-    return await prisma.list_of_round.findMany();
-  }
+  return await prisma.list_of_round.findMany();
+}
 
 export async function addListOfRound(list_of_round: {
   year: number;
@@ -13,21 +13,18 @@ export async function addListOfRound(list_of_round: {
   return res;
 }
 
-
 export async function editWebShowList(list_of_round: { show_list: string }) {
-    console.log(list_of_round.show_list)
-    const update_showlistofround = await prisma.web_settings.update({
-        where: {
-            id: 1,  // ระบุ id ของ record ที่ต้องการอัปเดต
-        },
-        data: {
-            show_list: parseInt(list_of_round.show_list),  // อัปเดตค่าของ show_list
-        },
-        
-    });
-    return update_showlistofround;
+  console.log(list_of_round.show_list);
+  const update_showlistofround = await prisma.web_settings.update({
+    where: {
+      id: 1, // ระบุ id ของ record ที่ต้องการอัปเดต
+    },
+    data: {
+      show_list: parseInt(list_of_round.show_list), // อัปเดตค่าของ show_list
+    },
+  });
+  return update_showlistofround;
 }
-
 
 export async function autoCreateDay() {
   // Get today's date and set it to the start of the day
@@ -39,7 +36,11 @@ export async function autoCreateDay() {
   endDate.setMonth(endDate.getMonth() + 12);
 
   // Loop through each day from today to the end date
-  for (let currentDate = new Date(today); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+  for (
+    let currentDate = new Date(today);
+    currentDate <= endDate;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
     // Skip weekends (Saturday: 6, Sunday: 0)
     const dayOfWeek = currentDate.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
@@ -49,16 +50,16 @@ export async function autoCreateDay() {
     // Check if the date already exists in the database
     const existingDay = await prisma.days.findFirst({
       where: {
-        date:new Date(currentDate.setHours(7, 0, 0)),
+        date: new Date(currentDate.setHours(7, 0, 0)),
       },
     });
-// console.log(existingDay,currentDate)
+    // console.log(existingDay,currentDate)
     // If the date does not exist, create it
     if (!existingDay) {
       await prisma.days.create({
         data: {
           date: currentDate,
-          status: 'normal', // คุณสามารถกำหนดค่าอื่นๆ ได้ตามต้องการ
+          status: "normal", // คุณสามารถกำหนดค่าอื่นๆ ได้ตามต้องการ
           maxuser: 400, // ตัวอย่าง: จำนวนผู้ใช้สูงสุด
           starttime: new Date(currentDate.setHours(15, 30, 0)), // ตัวอย่าง: เวลาเริ่มต้น 9:00 AM
           endtime: new Date(currentDate.setHours(23, 0, 0)), // ตัวอย่าง: เวลาสิ้นสุด 5:00 PM
@@ -67,15 +68,12 @@ export async function autoCreateDay() {
     }
   }
 
-  console.log('Days have been auto update!');
+  console.log("Days have been auto update!");
 }
-
 
 export async function getAllDate() {
   return await prisma.days.findMany();
 }
-
-
 
 export async function addRound(rounds: {
   startdate: string;
@@ -93,7 +91,7 @@ export async function addRound(rounds: {
   });
 
   if (!webSettings || !webSettings.show_list) {
-    throw new Error('Unable to find show_list from web_settings with id = 1.');
+    throw new Error("Unable to find show_list from web_settings with id = 1.");
   }
 
   const Listid = webSettings.show_list;
@@ -113,8 +111,10 @@ export async function addRound(rounds: {
 
   if (conflictingDays.length > 0) {
     throw new Error(
-      `Cannot add round. There are ${conflictingDays.length} days in the range with non-null ${
-        rounds.type === 1 ? 'roundid1' : 'roundid2'
+      `Cannot add round. There are ${
+        conflictingDays.length
+      } days in the range with non-null ${
+        rounds.type === 1 ? "roundid1" : "roundid2"
       } values.`
     );
   }
@@ -133,7 +133,7 @@ export async function addRound(rounds: {
       Listid: Listid,
       startdate: new Date(rounds.startdate), // Convert string to Date object
       enddate: new Date(rounds.enddate), // Convert string to Date object
-      status: 'normal',
+      status: "normal",
       roundnumber: existingRoundsCount + 1, // Increment the count for roundnumber
       type: rounds.type,
     },
@@ -160,9 +160,6 @@ export async function addRound(rounds: {
   return newRound;
 }
 
-
-
-
 export async function getAllRound() {
   // Find the current show_list from web_settings where id = 1
   const webSettings = await prisma.web_settings.findUnique({
@@ -175,7 +172,7 @@ export async function getAllRound() {
   });
 
   if (!webSettings || !webSettings.show_list) {
-    throw new Error('Unable to find show_list from web_settings with id = 1.');
+    throw new Error("Unable to find show_list from web_settings with id = 1.");
   }
 
   const showList = webSettings.show_list;
@@ -188,7 +185,6 @@ export async function getAllRound() {
   });
 }
 
-
 export async function SpecificDate(days: { roundid: number }) {
   const res = await prisma.days.findMany({
     where: {
@@ -198,15 +194,13 @@ export async function SpecificDate(days: { roundid: number }) {
       ],
     },
     orderBy: {
-      date: 'asc', // เรียงลำดับวันที่จากเก่าไปใหม่
+      date: "asc", // เรียงลำดับวันที่จากเก่าไปใหม่
     },
   });
   return res;
 }
 
-
-
-export async function deleteRound({ roundid }: { roundid: number }) {   
+export async function deleteRound({ roundid }: { roundid: number }) {
   // ตรวจสอบว่า roundid นั้นมีอยู่หรือไม่
   const existingRound = await prisma.rounds.findUnique({
     where: {
@@ -239,34 +233,57 @@ export async function deleteRound({ roundid }: { roundid: number }) {
   return { message: `ลบรอบที่มี ID ${roundid} สำเร็จแล้ว.` };
 }
 
-
 export async function TodayDate(days: { date: string }) {
   const res = await prisma.days.findUnique({
     where: {
-      date:days.date
+      date: days.date,
     },
   });
   return res;
 }
 
+export async function RangeDate() {
+  const webSettings = await prisma.web_settings.findUnique({
+    where: {
+      id: 1,
+    },
+    select: {
+      show_list: true,
+    },
+  });
 
-export async function RangeDate() { // ไม่จำเป็นต้องรับ parameter days
+  if (!webSettings || !webSettings.show_list) {
+    throw new Error("Unable to find show_list from web_settings with id = 1.");
+  }
+
+  const showList = webSettings.show_list;
+
+  const rounds = await prisma.rounds.findMany({
+    where: {
+      Listid: showList,
+    },
+    select: {
+      roundid: true,
+    },
+  });
+  const roundList = rounds.map((r) => r.roundid);
+
   const today = new Date();
-  const yesterday = new Date(today); // Create a copy of today's date
-  yesterday.setDate(today.getDate() - 1); // Subtract one day
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
   const res = await prisma.days.findMany({
     where: {
+      OR: [{ roundid1: { in: roundList } }, { roundid2: { in: roundList } }],
       date: {
-        gt: yesterday, 
+        gt: yesterday,
       },
     },
     orderBy: {
-      date: 'asc',
+      date: "asc",
     },
   });
   return res;
 }
-
 
 export async function editSpecificDate(days: {
   dateid: number;
@@ -287,7 +304,6 @@ export async function editSpecificDate(days: {
   return update_date;
 }
 
-
 export async function webSettings() {
   return await prisma.web_settings.findUnique({
     where: {
@@ -295,8 +311,6 @@ export async function webSettings() {
     },
   });
 }
-
-
 
 export async function editwebSettings(web_settings: {
   web_break_text: string;
@@ -313,7 +327,6 @@ export async function editwebSettings(web_settings: {
 }
 
 export async function DASDSettings() {
-  // Find the current show_list from web_settings where id = 1
   const webSettings = await prisma.web_settings.findUnique({
     where: {
       id: 1,
@@ -324,7 +337,7 @@ export async function DASDSettings() {
   });
 
   if (!webSettings || !webSettings.show_list) {
-    throw new Error('Unable to find show_list from web_settings with id = 1.');
+    throw new Error("Unable to find show_list from web_settings with id = 1.");
   }
 
   const showList = webSettings.show_list;
@@ -336,10 +349,7 @@ export async function DASDSettings() {
   });
 }
 
-export async function editDASDSettings(list_of_round: {
-  dasd_text: string;
-}) {
-  // Find the current show_list from web_settings where id = 1
+export async function editDASDSettings(list_of_round: { dasd_text: string }) {
   const webSettings = await prisma.web_settings.findUnique({
     where: {
       id: 1,
@@ -350,7 +360,7 @@ export async function editDASDSettings(list_of_round: {
   });
 
   if (!webSettings || !webSettings.show_list) {
-    throw new Error('Unable to find show_list from web_settings with id = 1.');
+    throw new Error("Unable to find show_list from web_settings with id = 1.");
   }
 
   const showList = webSettings.show_list;

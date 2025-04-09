@@ -185,6 +185,31 @@ export async function deleteBooking({ historyid }: { historyid: number }) {
 
 
 export async function RangeDateBooking() { 
+  const webSettings = await prisma.web_settings.findUnique({
+    where: {
+      id: 1,
+    },
+    select: {
+      show_list: true,
+    },
+  });
+
+  if (!webSettings || !webSettings.show_list) {
+    throw new Error("Unable to find show_list from web_settings with id = 1.");
+  }
+
+  const showList = webSettings.show_list;
+
+  const rounds = await prisma.rounds.findMany({
+    where: {
+      Listid: showList,
+    },
+    select: {
+      roundid: true,
+    },
+  });
+  const roundList = rounds.map((r) => r.roundid);
+  
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
@@ -192,8 +217,9 @@ export async function RangeDateBooking() {
   // ดึงข้อมูลวันที่จากตาราง days พร้อม starttime และ endtime
   const days = await prisma.days.findMany({
     where: {
+      OR: [{ roundid1: { in: roundList } }, { roundid2: { in: roundList } }],
       date: {
-        gt: yesterday, 
+        gt: yesterday,
       },
     },
     orderBy: {
